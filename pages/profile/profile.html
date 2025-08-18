@@ -4,83 +4,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chỉnh sửa thông tin cá nhân - CTSV</title>
-    <!-- Enhanced CSS System -->
-    <link rel="stylesheet" href="../../assets/css/global-enhanced.css">
-    <link rel="stylesheet" href="../../assets/css/components-enhanced.css">
-    <link rel="stylesheet" href="../../assets/css/responsive-comprehensive-enhanced.css">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../../assets/css/profile.css">
-    <link rel="stylesheet" href="profile-enhanced.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="color-scheme" content="light">
+    <title>Hồ sơ cá nhân - Hệ thống Chấm Công CTSV</title>
+    <meta name="description" content="Quản lý hồ sơ cá nhân và cài đặt tài khoản CTSV">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
+
+    <!-- Modern Profile Stylesheet -->
+    <link rel="stylesheet" href="profile-modern.css">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="logo">
-            <i class="fas fa-clock"></i>
-            <span>ECOUNT</span>
-        </div>
-        <nav class="nav-menu">
-            <a href="../../pages/dashboard/dashboard.html" class="nav-item">Dashboard</a>
-            <a href="../../pages/statistics/personal-stats.html" class="nav-item">Thống kê cá nhân</a>
-            <a href="../../index.html" class="nav-item">
-                <i class="fas fa-arrow-left"></i>
-                Quay lại trang chính
-            </a>
-        </nav>
-        <div class="user-actions">
-            <div class="user-profile-dropdown">
-                <i class="fas fa-user user-icon"></i>
+    <div class="dashboard-container">
+        <!-- Enhanced Header synchronized with Operations -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-user-circle"></i>
+                    <span>CTSV Profile</span>
+                </div>
             </div>
-        </div>
-    </header>
 
-    <!-- Main Container -->
-    <div class="profile-container">
-        <div class="profile-wrapper">
-            <!-- Sidebar Navigation -->
-            <div class="profile-sidebar">
-                <div class="profile-nav">
-                    <h3><i class="fas fa-user-cog"></i> Tài khoản của tôi</h3>
-                    <ul class="profile-nav-list">
+            <div class="header-center">
+                <div class="search-box">
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm cài đặt, tính năng..."
+                        autocomplete="off">
+                    <button type="button" id="searchBtn" title="Tìm kiếm">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <!-- Navigation Back -->
+                    <a href="../dashboard/dashboard.html" class="action-btn" title="Về Dashboard">
+                        <i class="fas fa-home"></i>
+                    </a>
+
+                    <!-- Operations -->
+                    <a href="../operations/operations.html" class="action-btn" title="Vận hành">
+                        <i class="fas fa-cogs"></i>
+                    </a>
+
+                    <!-- Theme Toggle -->
+                    <button class="action-btn" id="themeToggle" title="Chế độ sáng">
+                        <i class="fas fa-sun"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="action-btn" id="notificationBtn" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">2</span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="action-btn" id="settingsBtn" title="Cài đặt">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+
+                <!-- Enhanced User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <span class="user-name">Nguyễn Văn Admin</span>
+                        <span class="user-role">Quản trị hệ thống</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            <div>
+                                <div class="dropdown-name">Nguyễn Văn Admin</div>
+                                <div class="dropdown-email">admin@ctsv.edu.vn</div>
+                            </div>
+                        </div>
+                        <hr class="dropdown-divider">
+                        <a href="#personal-info" class="dropdown-item active">
+                            <i class="fas fa-user"></i> Hồ sơ cá nhân
+                        </a>
+                        <a href="#security" class="dropdown-item">
+                            <i class="fas fa-shield-alt"></i> Bảo mật
+                        </a>
+                        <a href="#preferences" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Tùy chọn
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a href="../operations/operations.html" class="dropdown-item">
+                            <i class="fas fa-cogs"></i> Vận hành hệ thống
+                        </a>
+                        <a href="../dashboard/dashboard.html" class="dropdown-item">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a href="../../index.html" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Hồ sơ cá nhân</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-user"></i>
+                        <span>Tài khoản</span>
+                    </div>
+                    <ul class="nav-list">
                         <li class="nav-item active">
-                            <a href="#personal-info" data-tab="personal-info">
-                                <i class="fas fa-user"></i>
-                                <span>Thông tin cá nhân</span>
+                            <a href="#personal-info" data-tab="personal-info" class="nav-link">
+                                <i class="fas fa-id-card"></i>
+                                <span class="nav-text">Thông tin cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#security" data-tab="security">
+                            <a href="#security" data-tab="security" class="nav-link">
                                 <i class="fas fa-shield-alt"></i>
-                                <span>Bảo mật</span>
+                                <span class="nav-text">Bảo mật</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#preferences" data-tab="preferences">
-                                <i class="fas fa-cog"></i>
-                                <span>Tùy chọn</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#notifications" data-tab="notifications">
-                                <i class="fas fa-bell"></i>
-                                <span>Thông báo</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#privacy" data-tab="privacy">
-                                <i class="fas fa-user-secret"></i>
-                                <span>Quyền riêng tư</span>
+                            <a href="#preferences" data-tab="preferences" class="nav-link">
+                                <i class="fas fa-sliders-h"></i>
+                                <span class="nav-text">Tùy chọn</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
                             </a>
                         </li>
                     </ul>
                 </div>
-            </div>
 
-            <!-- Main Content -->
-            <div class="profile-main">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-bell"></i>
+                        <span>Thông báo</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#notifications" data-tab="notifications" class="nav-link">
+                                <i class="fas fa-envelope"></i>
+                                <span class="nav-text">Cài đặt thông báo</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#privacy" data-tab="privacy" class="nav-link">
+                                <i class="fas fa-user-secret"></i>
+                                <span class="nav-text">Quyền riêng tư</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1><i class="fas fa-user"></i> Hồ sơ cá nhân</h1>
+                        <p class="page-subtitle">Quản lý thông tin cá nhân và cài đặt tài khoản</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" id="resetBtn">
+                            <i class="fas fa-undo"></i>
+                            Khôi phục mặc định
+                        </button>
+                        <button class="btn btn-secondary" onclick="profileManager.testModal()">
+                            <i class="fas fa-bug"></i>
+                            Test Modal
+                        </button>
+                        <button class="btn btn-primary" id="saveAllBtn">
+                            <i class="fas fa-save"></i>
+                            Lưu tất cả
+                        </button>
+                    </div>
+                </div>
                 <!-- Personal Information Tab -->
                 <div id="personal-info" class="tab-content active">
                     <div class="tab-header">
@@ -93,8 +220,8 @@
                         <div class="avatar-section">
                             <div class="avatar-upload">
                                 <div class="avatar-preview">
-                                    <img id="avatarPreview"
-                                        src="https://via.placeholder.com/120/4A90E2/ffffff?text=Avatar" alt="Avatar">
+                                    <img id="avatarPreview" src="../../assets/images/avata/avata_admin.jpg"
+                                        alt="Avatar">
                                     <div class="avatar-overlay">
                                         <i class="fas fa-camera"></i>
                                         <span>Thay đổi</span>
@@ -620,6 +747,13 @@
                         <div class="privacy-card">
                             <h3><i class="fas fa-database"></i> Dữ liệu cá nhân</h3>
 
+                            <div class="data-info">
+                                <p><i class="fas fa-info-circle"></i> <strong>Quyền của bạn:</strong></p>
+                                <p>• Tải xuống tất cả dữ liệu cá nhân của bạn</p>
+                                <p>• Yêu cầu xóa tài khoản và tất cả dữ liệu liên quan</p>
+                                <p>• Dữ liệu sẽ được lưu trữ theo quy định pháp luật Việt Nam</p>
+                            </div>
+
                             <div class="data-actions">
                                 <button class="btn btn-outline">
                                     <i class="fas fa-download"></i>
@@ -634,7 +768,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
+    </div>
+
     </div>
 
     <!-- Success/Error Messages -->
@@ -657,11 +793,8 @@
         </div>
     </div>
 
-    <!-- Enhanced Scripts -->
-    <script src="../../assets/js/app-enhanced.js"></script>
-    <script src="../../assets/js/navigation-enhanced.js"></script>
-    <script src="../../assets/js/profile.js"></script>
-    <script src="profile-enhanced.js"></script>
+    <!-- Modern Profile JavaScript -->
+    <script src="profile-modern.js"></script>
 </body>
 
 </html>
