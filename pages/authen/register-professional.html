@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Hệ thống Chấm Công CTSV</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+
+    <!-- Preload fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts - Professional fonts for attendance system -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="login-professional.css">
+    <link rel="stylesheet" href="register.css">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Đăng ký tài khoản mới cho hệ thống chấm công CTSV - Tham gia quản lý thời gian hiệu quả">
+    <meta name="keywords" content="đăng ký, CTSV, chấm công, tài khoản mới, registration">
+
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="../../manifest.json">
+</head>
+
+<body>
+    <!-- Background animated elements -->
+    <div class="bg-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Main container -->
+    <div class="login-container">
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb-nav">
+            <a href="../../index.html" class="breadcrumb-link">
+                <i class="fas fa-home"></i>
+                <span>Trang chủ</span>
+            </a>
+            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+            <a href="login-professional.html" class="breadcrumb-link">Đăng nhập</a>
+            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+            <span class="breadcrumb-current">Đăng ký</span>
+        </div>
+
+        <!-- Left side - Branding & Info -->
+        <div class="login-branding">
+            <div class="brand-content">
+                <!-- Logo and title -->
+                <div class="brand-header">
+                    <div class="logo-container">
+                        <i class="fas fa-user-plus brand-icon"></i>
+                        <div class="brand-text">
+                            <h1 class="brand-title">Tham gia CTSV</h1>
+                            <p class="brand-subtitle">Tạo tài khoản để bắt đầu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits list -->
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Bắt đầu nhanh chóng</h3>
+                            <p>Thiết lập tài khoản chỉ trong 2 phút</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Quản lý nhóm</h3>
+                            <p>Theo dõi chấm công cho toàn bộ team</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Truy cập mọi lúc</h3>
+                            <p>Ứng dụng web responsive, hoạt động mọi thiết bị</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Báo cáo thống kê</h3>
+                            <p>Phân tích dữ liệu thời gian làm việc chi tiết</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust indicators -->
+                <div class="trust-indicators">
+                    <div class="trust-item">
+                        <span class="trust-number">500+</span>
+                        <span class="trust-label">Công ty tin dùng</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-number">5⭐</span>
+                        <span class="trust-label">Đánh giá trung bình</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-number">24/7</span>
+                        <span class="trust-label">Hỗ trợ khách hàng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side - Register Form -->
+        <div class="login-form-container">
+            <div class="login-form-wrapper">
+                <!-- Back to login link -->
+                <div class="back-link">
+                    <a href="login-professional.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Đã có tài khoản?</span>
+                    </a>
+                </div>
+
+                <!-- Form header -->
+                <div class="form-header">
+                    <div class="welcome-back">
+                        <h2 class="form-title">Tạo tài khoản mới</h2>
+                        <p class="form-subtitle">Điền thông tin để bắt đầu sử dụng hệ thống</p>
+                    </div>
+
+                    <!-- Time display -->
+                    <div class="current-time">
+                        <div class="time-display" id="currentTime"></div>
+                        <div class="date-display" id="currentDate"></div>
+                    </div>
+                </div>
+
+                <!-- Registration form -->
+                <form id="registerForm" class="login-form" novalidate>
+                    <!-- Full name field -->
+                    <div class="form-group">
+                        <label for="fullName" class="form-label">
+                            <i class="fas fa-user"></i>
+                            <span>Họ và tên</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input type="text" id="fullName" name="fullName" class="form-input"
+                                placeholder="Nhập họ và tên đầy đủ" required autocomplete="name"
+                                aria-describedby="fullName-error" autocapitalize="none" spellcheck="false">
+                            <div class="input-border"></div>
+                            <div class="success-message" id="fullName-success">Hợp lệ</div>
+                        </div>
+                        <div id="fullName-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Email field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            <span>Địa chỉ Email</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input type="email" id="email" name="email" class="form-input"
+                                placeholder="Nhập email của bạn" required autocomplete="email"
+                                aria-describedby="email-error">
+                            <div class="input-border"></div>
+                            <div class="success-message" id="email-success">Hợp lệ</div>
+                        </div>
+                        <div id="email-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Phone field -->
+                    <div class="form-group">
+                        <label for="phone" class="form-label">
+                            <i class="fas fa-phone"></i>
+                            <span>Số điện thoại</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <input type="tel" id="phone" name="phone" class="form-input"
+                                placeholder="Nhập số điện thoại" required autocomplete="tel"
+                                aria-describedby="phone-error">
+                            <div class="input-border"></div>
+                            <div class="success-message" id="phone-success">Hợp lệ</div>
+                        </div>
+                        <div id="phone-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Department field -->
+                    <div class="form-group">
+                        <label for="department" class="form-label">
+                            <i class="fas fa-building"></i>
+                            <span>Phòng ban</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-container">
+                            <select id="department" name="department" class="form-input form-select" required
+                                aria-describedby="department-error">
+                                <option value="">Chọn phòng ban</option>
+                                <option value="hr">Nhân sự (HR)</option>
+                                <option value="it">Công nghệ thông tin (IT)</option>
+                                <option value="finance">Tài chính kế toán</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="sales">Kinh doanh</option>
+                                <option value="operations">Vận hành</option>
+                                <option value="other">Khác</option>
+                            </select>
+                            <div class="input-border"></div>
+                            <div class="success-message" id="department-success">Hợp lệ</div>
+                        </div>
+                        <div id="department-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Password field -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            <span>Mật khẩu</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="password-hint">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc
+                                biệt</span>
+                        </div>
+                        <div class="input-container password-container">
+                            <input type="password" id="password" name="password" class="form-input"
+                                placeholder="Tạo mật khẩu mạnh" required autocomplete="new-password"
+                                aria-describedby="password-error">
+                            <button type="button" class="password-toggle" id="passwordToggle"
+                                aria-label="Show password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div class="input-border"></div>
+                            <div class="success-message" id="password-success">Hợp lệ</div>
+                        </div>
+                        <div id="password-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Confirm Password field -->
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            <span>Xác nhận mật khẩu</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-container password-container">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                                placeholder="Nhập lại mật khẩu" required autocomplete="new-password"
+                                aria-describedby="confirmPassword-error">
+                            <button type="button" class="password-toggle" id="confirmPasswordToggle"
+                                aria-label="Show password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div class="input-border"></div>
+                            <div class="success-message" id="confirmPassword-success">Hợp lệ</div>
+                        </div>
+                        <div id="confirmPassword-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Password strength indicator -->
+                    <div class="password-strength">
+                        <div class="strength-header">
+                            <div class="strength-label">Độ mạnh mật khẩu</div>
+                            <div class="strength-text" id="strengthText">Yếu</div>
+                        </div>
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Privacy -->
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">
+                                Tôi đồng ý với
+                                <a href="#" onclick="showTermsModal()" class="link">Điều khoản sử dụng</a>
+                                và
+                                <a href="#" onclick="showPrivacyModal()" class="link">Chính sách bảo mật</a>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="receiveUpdates" name="receiveUpdates">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">
+                                Nhận thông báo về cập nhật sản phẩm và ưu đãi đặc biệt
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Register button -->
+                    <button type="submit" class="login-btn" id="registerBtn">
+                        <span class="btn-text">Tạo tài khoản</span>
+                        <div class="btn-loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <i class="fas fa-user-plus btn-icon"></i>
+                    </button>
+
+                    <!-- Or divider -->
+                    <div class="section-divider">
+                        <span>Hoặc đăng ký với</span>
+                    </div>
+
+                    <!-- Social login buttons -->
+                    <div class="social-login">
+                        <button type="button" class="social-btn google-btn">
+                            <i class="fab fa-google"></i>
+                            <span>Google</span>
+                        </button>
+                        <button type="button" class="social-btn microsoft-btn">
+                            <i class="fab fa-microsoft"></i>
+                            <span>Microsoft</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Footer links -->
+                <div class="form-footer">
+                    <p>Đã có tài khoản? <a href="login-professional.html">Đăng nhập ngay</a></p>
+                    <div class="footer-links">
+                        <a href="../../index.html">Trang chủ</a>
+                        <a href="#" onclick="showHelpModal()">Trợ giúp</a>
+                        <a href="#" onclick="showContactModal()">Liên hệ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error notifications -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Terms of Service Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Điều khoản sử dụng</h3>
+                <button class="modal-close" onclick="closeModal('termsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="terms-content">
+                    <h4>1. Chấp nhận điều khoản</h4>
+                    <p>Bằng việc sử dụng dịch vụ, bạn đồng ý tuân thủ các điều khoản và điều kiện này.</p>
+
+                    <h4>2. Sử dụng dịch vụ</h4>
+                    <p>Bạn cam kết sử dụng dịch vụ một cách hợp pháp và không vi phạm quyền của bên thứ ba.</p>
+
+                    <h4>3. Bảo mật tài khoản</h4>
+                    <p>Bạn có trách nhiệm bảo vệ thông tin đăng nhập và thông báo ngay lập tức nếu tài khoản bị xâm
+                        phạm.</p>
+
+                    <h4>4. Quyền riêng tư</h4>
+                    <p>Chúng tôi cam kết bảo vệ thông tin cá nhân theo chính sách bảo mật đã công bố.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chính sách bảo mật</h3>
+                <button class="modal-close" onclick="closeModal('privacyModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="privacy-content">
+                    <h4>Thu thập thông tin</h4>
+                    <p>Chúng tôi chỉ thu thập thông tin cần thiết để cung cấp dịch vụ chấm công hiệu quả.</p>
+
+                    <h4>Sử dụng thông tin</h4>
+                    <p>Thông tin được sử dụng để xác thực, quản lý tài khoản và cải thiện chất lượng dịch vụ.</p>
+
+                    <h4>Bảo vệ dữ liệu</h4>
+                    <p>Tất cả dữ liệu được mã hóa và lưu trữ an toàn trên server bảo mật cao.</p>
+
+                    <h4>Chia sẻ thông tin</h4>
+                    <p>Chúng tôi không chia sẻ thông tin cá nhân với bên thứ ba mà không có sự đồng ý của bạn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Trợ giúp đăng ký</h3>
+                <button class="modal-close" onclick="closeModal('helpModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="help-item">
+                    <h4>Email đã tồn tại?</h4>
+                    <p>Nếu email đã được sử dụng, vui lòng đăng nhập hoặc sử dụng chức năng khôi phục mật khẩu.</p>
+                </div>
+                <div class="help-item">
+                    <h4>Mật khẩu mạnh</h4>
+                    <p>Mật khẩu nên có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.</p>
+                </div>
+                <div class="help-item">
+                    <h4>Xác thực email</h4>
+                    <p>Sau khi đăng ký, kiểm tra email để xác thực tài khoản trước khi đăng nhập.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thông tin liên hệ</h3>
+                <button class="modal-close" onclick="closeModal('contactModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>Hotline: 1900 1234</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email: support@ctsv.edu.vn</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Thời gian hỗ trợ: 24/7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript files -->
+    <script src="login-professional.js"></script>
+    <script src="register.js"></script>
+
+    <script>
+        // Modal handling functions
+        function showTermsModal() {
+            document.getElementById('termsModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showPrivacyModal() {
+            document.getElementById('privacyModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showHelpModal() {
+            document.getElementById('helpModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showContactModal() {
+            document.getElementById('contactModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Event listener for clicking outside modal to close
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Event listener for ESC key to close modal
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const modals = document.getElementsByClassName('modal');
+                for (let modal of modals) {
+                    if (modal.classList.contains('show')) {
+                        modal.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

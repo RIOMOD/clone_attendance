@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Modal Fixed - CTSV Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .test-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .test-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-help {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-help:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-contact {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-contact:hover {
+            background: #059669;
+        }
+
+        .btn-login {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background: #d97706;
+        }
+
+        .fixes-list {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .fixes-list h3 {
+            color: #065f46;
+            margin-bottom: 15px;
+        }
+
+        .fixes-list ul {
+            color: #047857;
+            line-height: 1.6;
+        }
+
+        .fixes-list li {
+            margin-bottom: 8px;
+        }
+
+        .keyboard-hint {
+            text-align: center;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #1e40af;
+        }
+
+        @media (max-width: 600px) {
+            .test-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .test-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔧 Modal Fixed Testing</h1>
+            <div class="status-badge">✅ Fixed & Ready</div>
+        </div>
+
+        <div class="fixes-list">
+            <h3>🛠️ Lỗi đã được sửa:</h3>
+            <ul>
+                <li>✅ <strong>Modal position fixed</strong>: Modal hiện tại sẽ hiển thị ở chính giữa màn hình</li>
+                <li>✅ <strong>Responsive design</strong>: Modal hoạt động tốt trên mobile và desktop</li>
+                <li>✅ <strong>Click outside to close</strong>: Click bên ngoài modal để đóng</li>
+                <li>✅ <strong>ESC key support</strong>: Nhấn ESC để đóng modal</li>
+                <li>✅ <strong>Focus management</strong>: Tự động focus vào nút đóng modal</li>
+                <li>✅ <strong>Smooth animations</strong>: Animation mượt mà khi mở/đóng modal</li>
+            </ul>
+        </div>
+
+        <div class="test-buttons">
+            <button class="test-btn btn-help" onclick="window.open('../authen/login-professional.html', '_blank')">
+                🆔 Test Login Page
+            </button>
+        </div>
+
+        <div class="keyboard-hint">
+            💡 <strong>Tip:</strong> Trên trang login, click "Trợ giúp" hoặc "Liên hệ" để test modal đã sửa.<br>
+            Sử dụng ESC để đóng modal hoặc click bên ngoài.
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: #666;">
+            <p><strong>Technical Details:</strong></p>
+            <p>• CSS: Đã sửa `.modal` với `display: flex` và proper centering</p>
+            <p>• JavaScript: Thêm ESC key handler và click-outside-to-close</p>
+            <p>• Responsive: Modal adaptive cho mobile và desktop</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <!-- ===== THÔNG TIN META VÀ CẤU HÌNH TRANG ===== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Tổng Quan - Hệ thống chấm công CTSV</title>
+
+    <!-- Early compatibility & safe storage -->
+    <script src="../../assets/js/compat.js" defer></script>
+    <script src="../../utils/storage-safe.js" defer></script>
+
+    <!-- ===== LIÊN KẾT CSS VÀ FONT ===== -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../../assets/css/profile-avatar-fix.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../../assets/css/pwa-features.css">
+    <link rel="stylesheet" href="../../assets/css/avatar-fix.css">
+    <link rel="stylesheet" href="../../assets/css/calendar-overview.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="stylesheet" href="../../assets/css/responsive-desktop.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#1f314b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CTSV Attendance">
+
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/icons/icon-192x192.png">
+</head>
+
+<body>
+    <!-- ===== HEADER - THANH ĐIỀU HƯỚNG CHÍNH ===== -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-clock"></i>
+            <span>Attendance</span>
+        </div>
+        <nav class="nav-menu" aria-label="Điều hướng chính">
+            <a href="calendar-overview.html" class="nav-item active">Lịch tổng</a>
+            <a href="../index.html" class="nav-item">Lịch cá nhân</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle">
+                    Quản lý
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="operations.html" class="dropdown-item">
+                        <i class="fas fa-cogs"></i>
+                        Vận hành
+                    </a>
+                    <a href="clubs.html" class="dropdown-item">
+                        <i class="fas fa-users"></i>
+                        Tổng quan CLB
+                    </a>
+                    <a href="clubs-list.html" class="dropdown-item">
+                        <i class="fas fa-list"></i>
+                        Danh sách CLB
+                    </a>
+                    <a href="club-organizers.html" class="dropdown-item">
+                        <i class="fas fa-user-tie"></i>
+                        Ban chủ nhiệm
+                    </a>
+                    <a href="club-members.html" class="dropdown-item">
+                        <i class="fas fa-user-friends"></i>
+                        Thành viên
+                    </a>
+                    <a href="club-events.html" class="dropdown-item">
+                        <i class="fas fa-calendar-check"></i>
+                        Sự kiện CLB
+                    </a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle">
+                    Câu lạc bộ
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-code"></i>
+                        CLB CODEKING
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-star"></i>
+                        CLB YUME
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ===== SEARCH BAR ===== -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Tìm kiếm..." id="headerSearchInput">
+                <button class="search-clear" id="searchClearBtn" style="display: none;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-dropdown" id="searchDropdown">
+                <div class="search-suggestions">
+                    <div class="search-category">
+                        <h5>Gợi ý tìm kiếm</h5>
+                        <div class="suggestion-item" data-search="sự kiện hôm nay">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>Sự kiện hôm nay</span>
+                        </div>
+                        <div class="suggestion-item" data-search="lịch CLB">
+                            <i class="fas fa-users"></i>
+                            <span>Lịch CLB</span>
+                        </div>
+                        <div class="suggestion-item" data-search="họp định kỳ">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Họp định kỳ</span>
+                        </div>
+                        <div class="suggestion-item" data-search="sự kiện sắp tới">
+                            <i class="fas fa-clock"></i>
+                            <span>Sự kiện sắp tới</span>
+                        </div>
+                        <div class="suggestion-item" data-search="lịch tổng quan">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Lịch tổng quan</span>
+                        </div>
+                    </div>
+                    <div class="search-category">
+                        <h5>Tìm kiếm nhanh</h5>
+                        <div class="suggestion-item" data-action="add-event">
+                            <i class="fas fa-plus"></i>
+                            <span>Thêm sự kiện</span>
+                        </div>
+                        <div class="suggestion-item" data-action="export-calendar">
+                            <i class="fas fa-download"></i>
+                            <span>Xuất lịch</span>
+                        </div>
+                        <div class="suggestion-item" data-action="calendar-settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Cài đặt lịch</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-actions">
+            <div class="user-profile-dropdown">
+                <div class="user-avatar-btn" id="userProfileBtn">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="Admin Avatar" class="user-avatar-img">
+                    <i class="fas fa-user-circle user-avatar-fallback"></i>
+                </div>
+                <div class="profile-dropdown-menu" id="profileDropdown">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="../../assets/images/avata/avata_admin.jpg" alt="Admin Avatar"
+                                class="profile-avatar-img">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Nguyễn Văn Admin</h4>
+                            <p>admin@ctsv.edu.vn</p>
+                            <span class="profile-role">Quản trị viên</span>
+                        </div>
+                    </div>
+                    <div class="profile-divider"></div>
+                    <div class="profile-menu">
+                        <a href="profile.html" class="profile-menu-item">
+                            <i class="fas fa-user"></i>
+                            <span>Hồ sơ cá nhân</span>
+                        </a>
+                        <button type="button" class="profile-menu-item" onclick="openSettingsModal()">
+                            <i class="fas fa-cog"></i>
+                            <span>Cài đặt tài khoản</span>
+                        </button>
+                        <div class="profile-divider"></div>
+                        <button type="button" class="profile-menu-item" onclick="openHelpModal()">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Trợ giúp</span>
+                        </button>
+                        <button type="button" class="profile-menu-item" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Đăng xuất</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-dropdown">
+                <i class="fas fa-cog settings-icon" id="settingsBtn"></i>
+                <div class="settings-dropdown-menu" id="settingsDropdown">
+                    <div class="settings-header">
+                        <h4><i class="fas fa-cog"></i> Cài đặt lịch tổng quan</h4>
+                        <p>Tùy chỉnh giao diện và chức năng lịch</p>
+                    </div>
+
+                    <div class="settings-menu">
+                        <button type="button" class="settings-menu-item" onclick="openSettingsSection('calendar-view')">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Chế độ xem lịch</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="settings-menu-item" onclick="openSettingsSection('event-filters')">
+                            <i class="fas fa-filter"></i>
+                            <span>Bộ lọc sự kiện</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="settings-menu-item" onclick="openSettingsSection('notifications')">
+                            <i class="fas fa-bell"></i>
+                            <span>Thông báo sự kiện</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="settings-menu-item" onclick="openSettingsSection('calendar-sync')">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Đồng bộ lịch</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="settings-menu-item" onclick="openSettingsSection('export-import')">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Xuất/Nhập dữ liệu</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="settings-footer">
+                        <button class="settings-btn reset-btn" onclick="resetCalendarSettings()">
+                            <i class="fas fa-undo"></i>
+                            <span>Khôi phục mặc định</span>
+                        </button>
+                        <button class="settings-btn export-btn" onclick="exportCalendarData()">
+                            <i class="fas fa-download"></i>
+                            <span>Xuất dữ liệu</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== CONTAINER CHÍNH ===== -->
+    <div class="container">
+        <!-- Lớp phủ sidebar cho thiết bị di động -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ===== THANH ĐIỀU HƯỚNG BÊN TRÁI ===== -->
+        <aside class="sidebar">
+            <!-- Tiêu đề sidebar với thông tin vai trò -->
+            <div class="sidebar-header">
+                <div class="user-role-info">
+                    <div class="role-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="role-details">
+                        <h4>Nguyễn Văn Admin</h4>
+                        <span class="role-badge admin">👑 Boss/Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== MENU ĐIỀU HƯỚNG ===== -->
+            <nav class="sidebar-nav" aria-label="Menu điều hướng chính">
+                <!-- PHẦN TỔNG QUAN -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="overview">
+                        <div class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Tổng quan</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <!-- Dashboard chính -->
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link" title="Trang tổng quan chính">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <!-- Thống kê cá nhân -->
+                        <li class="nav-item">
+                            <a href="personal-stats.html" class="nav-link" title="Xem báo cáo và thống kê cá nhân">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Thống kê cá nhân</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- PHẦN LỊCH & CHẤM CÔNG -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="attendance">
+                        <div class="section-title">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Lịch & Chấm công</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <!-- Lịch tổng quan -->
+                        <li class="nav-item active">
+                            <a href="calendar-overview.html" class="nav-link" title="Xem lịch làm việc tổng quan">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Lịch tổng quan</span>
+                            </a>
+                        </li>
+                        <!-- Lịch cá nhân -->
+                        <li class="nav-item">
+                            <a href="../index.html" class="nav-link" title="Xem lịch cá nhân">
+                                <i class="fas fa-calendar"></i>
+                                <span>Lịch cá nhân</span>
+                            </a>
+                        </li>
+                        <!-- Chấm công -->
+                        <li class="nav-item">
+                            <a href="operations.html" class="nav-link" title="Thực hiện check-in/check-out">
+                                <i class="fas fa-clock"></i>
+                                <span>Check-in/Check-out</span>
+                            </a>
+                        </li>
+                        <!-- Quản lý nghỉ phép -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Đăng ký và quản lý nghỉ phép">
+                                <i class="fas fa-user-clock"></i>
+                                <span>Nghỉ phép / Xin nghỉ</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Câu lạc bộ -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="clubs">
+                        <div class="section-title">
+                            <i class="fas fa-users"></i>
+                            <span>Câu lạc bộ</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="clubs.html" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span>Tổng quan CLB</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="clubs-list.html" class="nav-link">
+                                <i class="fas fa-list"></i>
+                                <span>Danh sách CLB</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-organizers.html" class="nav-link">
+                                <i class="fas fa-crown"></i>
+                                <span>Ban chủ nhiệm</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-members.html" class="nav-link">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Thành viên</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-events.html" class="nav-link">
+                                <i class="fas fa-calendar-star"></i>
+                                <span>Sự kiện CLB</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- PHẦN QUẢN LÝ NHÓM -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="management">
+                        <div class="section-title">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Quản lý nhóm</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <!-- Quản lý cộng tác viên -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Quản lý danh sách cộng tác viên">
+                                <i class="fas fa-handshake"></i>
+                                <span>Cộng tác viên</span>
+                            </a>
+                        </li>
+                        <!-- Phân công nhiệm vụ -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Phân công và theo dõi nhiệm vụ">
+                                <i class="fas fa-tasks"></i>
+                                <span>Phân công nhiệm vụ</span>
+                            </a>
+                        </li>
+                        <!-- Duyệt báo cáo -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Xem xét và phê duyệt báo cáo">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Duyệt báo cáo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- PHẦN QUẢN LÝ HỆ THỐNG (CHỈ ADMIN) -->
+                <div class="nav-section admin-section">
+                    <div class="section-header" data-section="admin">
+                        <div class="section-title">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Quản lý hệ thống</span>
+                            <span class="admin-badge">ADMIN</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <!-- Quản lý người dùng -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Quản lý tài khoản người dùng">
+                                <i class="fas fa-users-cog"></i>
+                                <span>Quản lý người dùng</span>
+                            </a>
+                        </li>
+                        <!-- Xuất báo cáo tổng hợp -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Tạo và xuất báo cáo tổng hợp">
+                                <i class="fas fa-file-export"></i>
+                                <span>Xuất báo cáo</span>
+                            </a>
+                        </li>
+                        <!-- Cài đặt phân quyền -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Quản lý quyền hạn và vai trò">
+                                <i class="fas fa-cogs"></i>
+                                <span>Cài đặt hệ thống</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- PHẦN HỖ TRỢ -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="support">
+                        <div class="section-title">
+                            <i class="fas fa-life-ring"></i>
+                            <span>Hỗ trợ</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <!-- Hướng dẫn sử dụng -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Xem hướng dẫn chi tiết">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Hướng dẫn sử dụng</span>
+                            </a>
+                        </li>
+                        <!-- Video hướng dẫn -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Xem video giới thiệu chức năng">
+                                <i class="fas fa-video"></i>
+                                <span>Video giới thiệu</span>
+                            </a>
+                        </li>
+                        <!-- Tài nguyên tải về -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" title="Tải về tài liệu và mẫu biểu">
+                                <i class="fas fa-download"></i>
+                                <span>Tài nguyên tải về</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- ===== CHÂN SIDEBAR ===== -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <small>Lịch Tổng Quan v2.1.0</small>
+                    <br>
+                    <small>© 2025 CTSV System</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== NỘI DUNG CHÍNH ===== -->
+        <main class="main-content">
+            <!-- ===== BẢNG ĐIỀU KHIỂN DASHBOARD ===== -->
+            <div class="dashboard-grid">
+                <!-- CARD CÔNG VIỆC TRONG THÁNG -->
+                <div class="card workflow-card">
+                    <!-- Tiêu đề card -->
+                    <div class="card-header">
+                        <h3><i class="fas fa-tasks"></i> Lịch tổng quan trong tháng</h3>
+                        <div class="card-actions">
+                            <button id="refresh-tasks" title="Làm mới danh sách sự kiện">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button id="export-tasks" title="Xuất dữ liệu lịch">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Nội dung card -->
+                    <div class="workflow-content">
+                        <!-- Tổng quan số liệu -->
+                        <div class="tasks-summary">
+                            <div class="summary-item">
+                                <div class="summary-number" id="total-events">42</div>
+                                <div class="summary-label">Tổng sự kiện</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-number" id="completed-events">8</div>
+                                <div class="summary-label">Đã hoàn thành</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-number" id="pending-events">4</div>
+                                <div class="summary-label">Đang diễn ra</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-number" id="upcoming-events">1</div>
+                                <div class="summary-label">Sắp diễn ra</div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline công việc theo ngày -->
+                        <div class="tasks-timeline" id="tasks-timeline">
+                            <!-- Danh sách sự kiện theo ngày sẽ được tạo bởi JavaScript -->
+                            <div class="no-tasks-message">
+                                <i class="fas fa-calendar-plus"></i>
+                                <p>Chưa có sự kiện nào trong tháng này</p>
+                                <small>Click vào ngày trong lịch để thêm sự kiện mới</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lịch công tác -->
+                <div class="card calendar-card">
+                    <div class="card-header">
+                        <h3><span id="current-month-year">08/2025</span> Lịch tổng quan</h3>
+                        <div class="card-actions">
+                            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                            <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-content">
+                        <div class="calendar-header">
+                            <div class="day-header">Chủ nhật</div>
+                            <div class="day-header">Thứ 2</div>
+                            <div class="day-header">Thứ 3</div>
+                            <div class="day-header">Thứ 4</div>
+                            <div class="day-header">Thứ 5</div>
+                            <div class="day-header">Thứ 6</div>
+                            <div class="day-header">Thứ 7</div>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- Calendar dates will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin ngày hiện tại -->
+                <div class="card today-info-card">
+                    <div class="card-header">
+                        <h3 id="today-date">Sự kiện nổi bật</h3>
+                        <div class="card-actions">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                    </div>
+                    <div class="today-content">
+                        <div class="today-item">
+                            <strong>1. Sự kiện tổng quan</strong>
+                            <p>● Theo dõi và quản lý lịch làm việc của tất cả cộng tác viên trong hệ thống.</p>
+                            <p>● Tổng hợp báo cáo hoạt động và hiệu suất làm việc theo từng bộ phận:</p>
+                            <p>- CTSV, Câu lạc bộ CODEKING, Câu lạc bộ YUME, Ban chủ nhiệm các CLB</p>
+                            <p>- Thống kê tham gia sự kiện, tỷ lệ hoàn thành và đánh giá hiệu suất</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bộ lọc sự kiện -->
+                <div class="card todo-card">
+                    <div class="card-header">
+                        <h3>Bộ lọc sự kiện</h3>
+                        <div class="card-actions">
+                            <button id="add-filter"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="todo-content">
+                        <div class="todo-item">
+                            <input type="checkbox" id="filter-meetings" checked>
+                            <label for="filter-meetings">Cuộc họp</label>
+                        </div>
+                        <div class="todo-item">
+                            <input type="checkbox" id="filter-events" checked>
+                            <label for="filter-events">Sự kiện CLB</label>
+                        </div>
+                        <div class="todo-item">
+                            <input type="checkbox" id="filter-training">
+                            <label for="filter-training">Đào tạo</label>
+                        </div>
+                        <div class="todo-item">
+                            <input type="checkbox" id="filter-deadlines">
+                            <label for="filter-deadlines">Deadline</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông báo hệ thống -->
+                <div class="card approval-card">
+                    <div class="card-header">
+                        <h3>Thông báo hệ thống</h3>
+                        <div class="card-actions">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                    </div>
+                    <div class="approval-content">
+                        <div class="notification-item">
+                            <div class="notification-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Cập nhật lịch tổng quan</strong></p>
+                                <p>Hệ thống đã đồng bộ thành công với lịch cá nhân</p>
+                                <small>2 giờ trước</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thống kê tham gia -->
+                <div class="card messages-card">
+                    <div class="card-header">
+                        <h3>Thống kê tham gia</h3>
+                        <div class="card-actions">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                    </div>
+                    <div class="messages-content">
+                        <div class="stats-item">
+                            <div class="stat-row">
+                                <span class="stat-name">CTV tham gia:</span>
+                                <span class="stat-value">156 người</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-name">Tỷ lệ hoàn thành:</span>
+                                <span class="stat-value">94%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-name">Sự kiện trong tuần:</span>
+                                <span class="stat-value">12 sự kiện</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div class="modal-overlay" id="eventModalOverlay">
+        <div class="event-modal" id="eventModal">
+            <div class="modal-header">
+                <h3 id="eventModalTitle">Chi tiết sự kiện</h3>
+                <button class="modal-close" id="eventModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="eventModalBody">
+                <!-- Event details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="eventModalCancel">Đóng</button>
+                <button class="btn btn-primary" id="eventModalEdit">Chỉnh sửa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Event Modal -->
+    <div class="modal-overlay" id="addEventModalOverlay">
+        <div class="event-modal" id="addEventModal">
+            <div class="modal-header">
+                <h3 id="addEventModalTitle">Thêm sự kiện mới</h3>
+                <button class="modal-close" id="addEventModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTitle">Tiêu đề sự kiện *</label>
+                            <input type="text" id="eventTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventGroup">Nhóm *</label>
+                            <select id="eventGroup" name="group" required>
+                                <option value="">Chọn nhóm</option>
+                                <option value="ctsv">CTSV</option>
+                                <option value="ctv">CTV</option>
+                                <option value="ban-chu-nhiem">Ban chủ nhiệm</option>
+                                <option value="clb-codeking">CLB CODEKING</option>
+                                <option value="clb-yume">CLB YUME</option>
+                                <option value="personal">Cá nhân</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventType">Loại sự kiện *</label>
+                            <select id="eventType" name="type" required>
+                                <option value="">Chọn loại</option>
+                                <option value="meeting">Họp</option>
+                                <option value="training">Đào tạo</option>
+                                <option value="event">Sự kiện</option>
+                                <option value="deadline">Deadline</option>
+                                <option value="personal">Cá nhân</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventPriority">Độ ưu tiên</label>
+                            <select id="eventPriority" name="priority">
+                                <option value="low">Thấp</option>
+                                <option value="medium" selected>Trung bình</option>
+                                <option value="high">Cao</option>
+                                <option value="urgent">Khẩn cấp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventDate">Ngày *</label>
+                            <input type="date" id="eventDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventStartTime">Giờ bắt đầu *</label>
+                            <input type="time" id="eventStartTime" name="startTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEndTime">Giờ kết thúc *</label>
+                            <input type="time" id="eventEndTime" name="endTime" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventLocation">Địa điểm</label>
+                        <input type="text" id="eventLocation" name="location" placeholder="Nhập địa điểm tổ chức">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescription">Mô tả</label>
+                        <textarea id="eventDescription" name="description" rows="3"
+                            placeholder="Mô tả chi tiết về sự kiện..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventParticipants">Người tham gia</label>
+                        <input type="text" id="eventParticipants" name="participants"
+                            placeholder="Nhập tên người tham gia (cách nhau bằng dấu phẩy)">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="eventAllDay" name="allDay">
+                            Sự kiện cả ngày
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="eventReminder" name="reminder" checked>
+                            Nhắc nhở trước 15 phút
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="addEventModalCancel">Hủy</button>
+                <button class="btn btn-primary" id="addEventModalSave">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Đang tải dữ liệu...</p>
+        </div>
+    </div>
+
+    <script src="../../assets/js/calendar-overview.js"></script>
+    <script src="../../assets/js/calendar-dashboard-integration.js"></script>
+    <script src="../../assets/js/dashboard-interactive.js"></script>
+    <script src="../../assets/js/dashboard-modern.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Initialize calendar when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize dashboard functionality
+            if (typeof DashboardManager !== 'undefined') {
+                const dashboard = new DashboardManager();
+                dashboard.init();
+            }
+
+            // Initialize interactive features
+            if (typeof DashboardInteractive !== 'undefined') {
+                const interactive = new DashboardInteractive();
+                interactive.init();
+            }
+
+            // Initialize calendar
+            const calendar = new CalendarOverview();
+            calendar.init();
+
+            // Update page title in sidebar
+            updateActiveNavItem('calendar-overview.html');
+        });
+
+        // Handle avatar error
+        function handleAvatarError(img) {
+            img.style.display = 'none';
+            const fallback = img.nextElementSibling;
+            if (fallback && fallback.tagName === 'I') {
+                fallback.style.display = 'block';
+            }
+        }
+
+        // Search functionality
+        function handleSearch(value) {
+            // Implement calendar-specific search
+            console.log('Searching for:', value);
+        }
+
+        function handleSearchKeydown(event) {
+            if (event.key === 'Enter') {
+                const value = event.target.value.trim();
+                if (value) {
+                    handleSearch(value);
+                }
+            }
+        }
+
+        function showSearchSuggestions() {
+            document.getElementById('searchSuggestions').style.display = 'block';
+        }
+
+        function hideSearchSuggestions() {
+            setTimeout(() => {
+                document.getElementById('searchSuggestions').style.display = 'none';
+            }, 200);
+        }
+
+        function clearSearch() {
+            document.getElementById('globalSearch').value = '';
+            document.getElementById('searchClear').style.display = 'none';
+        }
+
+        function searchFor(query) {
+            document.getElementById('globalSearch').value = query;
+            handleSearch(query);
+        }
+
+        // Calendar-specific functions
+        function openCalendarSettings() {
+            console.log('Opening calendar settings...');
+        }
+
+        function exportCalendar() {
+            console.log('Exporting calendar...');
+        }
+
+        function updateActiveNavItem(currentPage) {
+            // Update active navigation item
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') && link.getAttribute('href').includes(currentPage)) {
+                    link.closest('.nav-item').classList.add('active');
+                    // Expand parent section
+                    const section = link.closest('.nav-section');
+                    if (section) {
+                        const header = section.querySelector('.section-header');
+                        if (header) {
+                            header.classList.remove('collapsed');
+                        }
+                    }
+                } else {
+                    link.closest('.nav-item').classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            updateActiveNavItem('calendar-overview.html');
+            initializeCalendarOverview();
+        });
+    </script>
+
+    <!-- ===== JAVASCRIPT FILES ===== -->
+    <script src="../../assets/js/profile-avatar-manager.js"></script>
+    <script src="../../assets/js/profile-dropdown.js"></script>
+    <script src="../../assets/js/calendar-overview.js"></script>
+    <script src="../../assets/js/calendar-dashboard-integration.js"></script>
+    <script src="../../utils/pwa-manager.js"></script>
+</body>
+
+</html>

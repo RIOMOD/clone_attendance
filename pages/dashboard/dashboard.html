@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Hệ thống chấm công CTSV</title>
+    <meta name="description" content="Trang dashboard tổng quan hệ thống chấm công sinh viên CTSV">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="dashboard-clean.css">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Enhanced Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>CTSV Dashboard</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <button class="action-btn" id="themeToggle" title="Chuyển đổi giao diện">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="action-btn" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <button class="action-btn" title="Tin nhắn">
+                        <i class="fas fa-comment"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+                <div class="user-menu">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="User Avatar" class="user-avatar">
+                    <span class="user-name">Admin User</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-main">
+            <!-- Enhanced Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="../../index.html"><i class="fas fa-home"></i> Trang chủ</a></li>
+                        <li class="active"><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                        <li><a href="../CLB/index.html"><i class="fas fa-users"></i> Câu lạc bộ</a></li>
+                        <li><a href="../calendar/calendar-overview.html"><i class="fas fa-calendar"></i> Lịch</a></li>
+                        <li><a href="../operations/operations.html"><i class="fas fa-cogs"></i> Vận hành</a></li>
+                        <li><a href="../statistics/personal-stats.html"><i class="fas fa-chart-bar"></i> Thống kê</a>
+                        </li>
+                        <li><a href="../profile/profile.html"><i class="fas fa-user"></i> Hồ sơ</a></li>
+                        <li><a href="../authen/login-professional.html"><i class="fas fa-sign-out-alt"></i> Đăng
+                                xuất</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Enhanced Content -->
+            <main class="content">
+                <div class="page-header">
+                    <h1><i class="fas fa-chart-line"></i> Dashboard</h1>
+                    <p>Tổng quan hệ thống chấm công sinh viên CTSV</p>
+                </div>
+
+                <!-- Dashboard Controls -->
+                <div class="dashboard-controls">
+                    <div class="controls-left">
+                        <div class="date-selector">
+                            <select id="dateRange">
+                                <option value="today">Hôm nay</option>
+                                <option value="week" selected>Tuần này</option>
+                                <option value="month">Tháng này</option>
+                                <option value="quarter">Quý này</option>
+                                <option value="year">Năm này</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn-control" id="refreshDashboard">
+                            <i class="fas fa-sync"></i> Làm mới
+                        </button>
+                        <button class="btn-control export-btn" data-type="pdf">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn-control export-btn" data-type="excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn-control primary">
+                            <i class="fas fa-plus"></i> Tạo báo cáo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enhanced Stats Section -->
+                <div class="dashboard-stats">
+                    <div class="stat-card primary" data-stat="totalStudents">
+                        <div class="stat-header">
+                            <div class="stat-title">Tổng sinh viên</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Đã đăng ký hệ thống</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +5.2% so với tuần trước
+                        </div>
+                    </div>
+
+                    <div class="stat-card success" data-stat="todayAttendance">
+                        <div class="stat-header">
+                            <div class="stat-title">Chấm công hôm nay</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">856</div>
+                        <div class="stat-label">Lượt chấm công</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12.8% so với hôm qua
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning" data-stat="activeClubs">
+                        <div class="stat-header">
+                            <div class="stat-title">CLB hoạt động</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">25</div>
+                        <div class="stat-label">Câu lạc bộ</div>
+                        <div class="stat-change stable">
+                            <i class="fas fa-minus"></i>
+                            Ổn định
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger" data-stat="pendingTasks">
+                        <div class="stat-header">
+                            <div class="stat-title">Cần xử lý</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Vấn đề chờ xử lý</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Cần chú ý
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Charts Section -->
+                <div class="dashboard-charts">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <h3 class="chart-title">Thống kê chấm công tuần</h3>
+                                <p style="color: #6b7280; margin: 0; font-size: 0.9rem;">Biểu đồ lượt chấm công theo
+                                    ngày</p>
+                            </div>
+                            <div class="chart-actions">
+                                <button class="btn-control export-btn" data-type="image">
+                                    <i class="fas fa-download"></i> Xuất
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <h3 class="chart-title">Hoạt động CLB</h3>
+                                <p style="color: #6b7280; margin: 0; font-size: 0.9rem;">Phân bố trạng thái CLB</p>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="clubActivityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Section -->
+                <div class="activity-section">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-clock"></i> Hoạt động gần đây</h3>
+                            <a href="#" class="view-all">Xem tất cả</a>
+                        </div>
+                        <div class="activity-list" id="activitiesList">
+                            <div class="activity-item">
+                                <div class="activity-icon success">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p><strong>Nguyễn Văn A</strong> đã chấm công thành công cho CLB IT</p>
+                                    <small>5 phút trước</small>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon primary">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p>Tạo sự kiện mới: <strong>"Workshop AI trong Giáo dục"</strong></p>
+                                    <small>15 phút trước</small>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon warning">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p>Cập nhật thông tin CLB <strong>"Photography Club"</strong></p>
+                                    <small>30 phút trước</small>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon success">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <p><strong>5 thành viên mới</strong> đã tham gia CLB Âm nhạc</p>
+                                    <small>1 giờ trước</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-bolt"></i> Thao tác nhanh</h3>
+                        </div>
+                        <div class="quick-actions">
+                            <a href="../CLB/clubs-list-new.html" class="action-btn-large">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Tạo CLB mới</span>
+                            </a>
+                            <a href="../operations/operations.html" class="action-btn-large">
+                                <i class="fas fa-calendar-plus"></i>
+                                <span>Tạo sự kiện</span>
+                            </a>
+                            <a href="../statistics/personal-stats.html" class="action-btn-large">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Xem báo cáo</span>
+                            </a>
+                            <a href="../profile/profile.html" class="action-btn-large">
+                                <i class="fas fa-user-cog"></i>
+                                <span>Cài đặt</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="dashboard-clean.js"></script>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner-content">
+            <div class="spinner"></div>
+            <p>Đang tải dashboard...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications-container"></div>
+</body>
+
+</html>

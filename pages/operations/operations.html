@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vận hành - Hệ thống Chấm Công CTSV</title>
+    <!-- Enhanced CSS System -->
+    <link rel="stylesheet" href="../../assets/css/global-enhanced.css">
+    <link rel="stylesheet" href="../../assets/css/components-enhanced.css">
+    <link rel="stylesheet" href="../../assets/css/responsive-comprehensive-enhanced.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../../assets/css/operations.css">
+    <link rel="stylesheet" href="../../assets/css/operations-light.css">
+    <link rel="stylesheet" href="../../assets/css/header-enhanced.css">
+    <link rel="stylesheet" href="operations-enhanced.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation Breadcrumbs -->
+    <div class="breadcrumb-nav">
+        <a href="../../index.html" class="breadcrumb-item">
+            <i class="fas fa-home"></i>
+            Trang chủ
+        </a>
+        <i class="fas fa-chevron-right breadcrumb-separator"></i>
+        <a href="../dashboard/dashboard.html" class="breadcrumb-item">
+            Dashboard
+        </a>
+        <i class="fas fa-chevron-right breadcrumb-separator"></i>
+        <span class="breadcrumb-item active">
+            Vận hành hệ thống
+        </span>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-clock"></i>
+            <span>CTSV Attendance</span>
+        </div>
+
+        <nav class="nav-menu" aria-label="Main Navigation">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="calendar-overview.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                Lịch tổng
+            </a>
+            <a href="../index.html" class="nav-item">
+                <i class="fas fa-calendar"></i>
+                Lịch cá nhân
+            </a>
+            <a href="personal-stats.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                Thống kê
+            </a>
+
+            <div class="dropdown active">
+                <button type="button" class="dropdown-toggle" aria-expanded="false">
+                    <i class="fas fa-cogs"></i>
+                    Quản lý
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="operations.html" class="dropdown-item active" role="menuitem">
+                        <i class="fas fa-cogs"></i>
+                        Vận hành
+                    </a>
+                    <a href="clubs.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-users"></i>
+                        Tổng quan CLB
+                    </a>
+                    <a href="clubs-list.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-list"></i>
+                        Danh sách CLB
+                    </a>
+                    <a href="club-organizers.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-user-tie"></i>
+                        Ban chủ nhiệm
+                    </a>
+                    <a href="club-members.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-user-friends"></i>
+                        Thành viên
+                    </a>
+                    <a href="club-events.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-calendar-check"></i>
+                        Sự kiện CLB
+                    </a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button type="button" class="dropdown-toggle" aria-expanded="false">
+                    <i class="fas fa-star"></i>
+                    Câu lạc bộ
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="clubs.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-code"></i>
+                        CLB CODEKING
+                    </a>
+                    <a href="clubs.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-star"></i>
+                        CLB YUME
+                    </a>
+                    <a href="clubs.html" class="dropdown-item" role="menuitem">
+                        <i class="fas fa-plus"></i>
+                        Tham gia CLB mới
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="user-actions">
+            <button type="button" class="search-toggle" aria-label="Tìm kiếm">
+                <i class="fas fa-search"></i>
+            </button>
+
+            <div class="user-profile-dropdown">
+                <button type="button" class="user-icon" id="userProfileBtn" aria-label="Profile menu">
+                    <i class="fas fa-user"></i>
+                </button>
+                <div class="profile-dropdown-menu" id="profileDropdown">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="../../assets/images/avata_admin.jpg" alt="Admin Avatar"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="fas fa-user-circle" style="display: none;"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Nguyễn Văn Admin</h4>
+                            <p>admin@ctsv.edu.vn</p>
+                            <span class="profile-role">Quản trị viên</span>
+                        </div>
+                    </div>
+                    <div class="profile-divider"></div>
+                    <div class="profile-menu">
+                        <button type="button" class="profile-menu-item" onclick="openProfileModal('profileModal')">
+                            <i class="fas fa-user"></i>
+                            <span>Xem Profile</span>
+                        </button>
+                        <button type="button" class="profile-menu-item" onclick="openProfileModal('editProfileModal')">
+                            <i class="fas fa-edit"></i>
+                            <span>Chỉnh sửa thông tin</span>
+                        </button>
+                        <button type="button" class="profile-menu-item"
+                            onclick="openProfileModal('personalSettingsModal')">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Cài đặt cá nhân</span>
+                        </button>
+                        <button type="button" class="profile-menu-item"
+                            onclick="openProfileModal('toolbarSettingsModal')">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Thanh công cụ</span>
+                        </button>
+                        <button type="button" class="profile-menu-item"
+                            onclick="openProfileModal('loginManagementModal')">
+                            <i class="fas fa-database"></i>
+                            <span>Quản lý đăng nhập</span>
+                        </button>
+                        <div class="profile-divider"></div>
+                        <button type="button" class="profile-menu-item" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Đăng xuất</span>
+                        </button>
+                        <div class="profile-divider"></div>
+                        <button type="button" class="profile-menu-item" onclick="handleCompleteLogout()">
+                            <i class="fas fa-calculator"></i>
+                            <span>Tạn số & Thoát</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-dropdown">
+                <button type="button" class="settings-icon" id="settingsBtn" aria-label="Cài đặt">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="settings-dropdown-menu" id="settingsDropdown">
+                    <div class="settings-header">
+                        <h4><i class="fas fa-cog"></i> Cài đặt hệ thống</h4>
+                    </div>
+
+                    <!-- Giao diện & Hiển thị -->
+                    <div class="settings-section">
+                        <h5><i class="fas fa-palette"></i> Giao diện & Hiển thị</h5>
+
+                        <!-- Theme Toggle -->
+                        <div class="setting-item">
+                            <label class="setting-label" for="darkModeToggle">
+                                <span><i class="fas fa-moon"></i> Chế độ tối</span>
+                                <div class="theme-toggle">
+                                    <input type="checkbox" id="darkModeToggle">
+                                    <span class="toggle-slider">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Color Scheme -->
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span><i class="fas fa-paint-brush"></i> Màu chủ đạo</span>
+                            </label>
+                            <div class="color-schemes">
+                                <button class="color-option active" data-color="blue" aria-label="Chọn màu xanh dương">
+                                    <div class="color-preview"
+                                        style="background: linear-gradient(135deg, #3498db, #2980b9)"></div>
+                                    <span>Xanh dương</span>
+                                </button>
+                                <button class="color-option" data-color="green" aria-label="Chọn màu xanh lá">
+                                    <div class="color-preview"
+                                        style="background: linear-gradient(135deg, #27ae60, #229954)"></div>
+                                    <span>Xanh lá</span>
+                                </button>
+                                <button class="color-option" data-color="purple" aria-label="Chọn màu tím">
+                                    <div class="color-preview"
+                                        style="background: linear-gradient(135deg, #8e44ad, #7d3c98)"></div>
+                                    <span>Tím</span>
+                                </button>
+                                <button class="color-option" data-color="orange" aria-label="Chọn màu cam">
+                                    <div class="color-preview"
+                                        style="background: linear-gradient(135deg, #e67e22, #d35400)"></div>
+                                    <span>Cam</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Font Size -->
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <span><i class="fas fa-text-height"></i> Cỡ chữ giao diện</span>
+                            </label>
+                            <div class="font-size-controls">
+                                <button class="font-btn" data-size="small">
+                                    <i class="fas fa-font"></i> Nhỏ
+                                </button>
+                                <button class="font-btn active" data-size="medium">
+                                    <i class="fas fa-font"></i> Vừa
+                                </button>
+                                <button class="font-btn" data-size="large">
+                                    <i class="fas fa-font"></i> To
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Layout Options -->
+                        <div class="setting-item">
+                            <label class="setting-label" for="fullscreenMode">
+                                <span><i class="fas fa-expand-arrows-alt"></i> Chế độ toàn màn hình</span>
+                                <input type="checkbox" class="setting-checkbox" id="fullscreenMode">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-divider"></div>
+
+                    <!-- Thông báo & Cảnh báo -->
+                    <div class="settings-section">
+                        <h5><i class="fas fa-bell"></i> Thông báo & Cảnh báo</h5>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="emailNotifications">
+                                <span><i class="fas fa-envelope"></i> Thông báo email</span>
+                                <input type="checkbox" class="setting-checkbox" id="emailNotifications" checked>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="soundNotifications">
+                                <span><i class="fas fa-volume-up"></i> Âm thanh thông báo</span>
+                                <input type="checkbox" class="setting-checkbox" id="soundNotifications" checked>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="desktopNotifications">
+                                <span><i class="fas fa-desktop"></i> Thông báo desktop</span>
+                                <input type="checkbox" class="setting-checkbox" id="desktopNotifications">
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="endWorkReminder">
+                                <span><i class="fas fa-clock"></i> Nhắc nhở cuối giờ làm</span>
+                                <input type="checkbox" class="setting-checkbox" id="endWorkReminder" checked>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-divider"></div>
+
+                    <!-- Chấm công & Bảo mật -->
+                    <div class="settings-section">
+                        <h5><i class="fas fa-user-shield"></i> Chấm công & Bảo mật</h5>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="autoCheckin">
+                                <span><i class="fas fa-clock"></i> Tự động check-in</span>
+                                <input type="checkbox" class="setting-checkbox" id="autoCheckin">
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="showAvatar">
+                                <span><i class="fas fa-user-circle"></i> Hiển thị avatar</span>
+                                <input type="checkbox" class="setting-checkbox" id="showAvatar" checked>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label" for="autoLogout">
+                                <span><i class="fas fa-lock"></i> Tự động đăng xuất (30p)</span>
+                                <input type="checkbox" class="setting-checkbox" id="autoLogout">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-divider"></div>
+
+                    <div class="settings-footer">
+                        <button type="button" class="settings-btn reset-btn" onclick="resetSettings()">
+                            <i class="fas fa-undo"></i> Khôi phục mặc định
+                        </button>
+                        <button type="button" class="settings-btn save-btn" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Lưu cài đặt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="setting-item">
+        <label class="setting-label">
+            <span><i class="fas fa-clock"></i> Tự động check-in</span>
+            <input type="checkbox" class="setting-checkbox" id="autoCheckin">
+        </label>
+    </div>
+
+    <div class="setting-item">
+        <label class="setting-label">
+            <span><i class="fas fa-user-circle"></i> Hiển thị avatar</span>
+            <input type="checkbox" class="setting-checkbox" id="showAvatar" checked>
+        </label>
+    </div>
+
+    <div class="setting-item">
+        <label class="setting-label">
+            <span><i class="fas fa-lock"></i> Tự động đăng xuất (30p)</span>
+            <input type="checkbox" class="setting-checkbox" id="autoLogout">
+        </label>
+    </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-footer">
+        <button class="settings-btn reset-btn" onclick="resetSettings()">
+            <i class="fas fa-undo"></i> Khôi phục mặc định
+        </button>
+        <button class="settings-btn save-btn" onclick="saveSettings()">
+            <i class="fas fa-save"></i> Lưu cài đặt
+        </button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Sidebar Header with Role -->
+            <div class="sidebar-header">
+                <div class="user-role-info">
+                    <div class="role-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="role-details">
+                        <h4>Nguyễn Văn Admin</h4>
+                        <span class="role-badge admin">👑 Boss/Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <!-- Tổng quan -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="overview">
+                        <div class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Tổng quan</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="../index.html" class="nav-link">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Thống kê cá nhân</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Lịch & Chấm công -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="attendance">
+                        <div class="section-title">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Lịch & Chấm công</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="calendar-overview.html" class="nav-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Lịch tổng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../index.html" class="nav-link">
+                                <i class="fas fa-calendar"></i>
+                                <span>Lịch cá nhân</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-clock"></i>
+                                <span>Check-in/Check-out</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user-clock"></i>
+                                <span>Nghỉ phép / Xin nghỉ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-book"></i>
+                                <span>Nhật ký làm việc</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Vận hành -->
+                <div class="nav-section expanded">
+                    <div class="section-header active" data-section="operations">
+                        <div class="section-title">
+                            <i class="fas fa-cogs"></i>
+                            <span>Vận hành</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item active">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span>CTSV</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span>CTV</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-clipboard-check"></i>
+                                <span>Quản lý nhiệm vụ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Báo cáo vận hành</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Câu lạc bộ -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="clubs">
+                        <div class="section-title">
+                            <i class="fas fa-users"></i>
+                            <span>Câu lạc bộ</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="clubs.html" class="nav-link">
+                                <i class="fas fa-list"></i>
+                                <span>Danh sách CLB</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-crown"></i>
+                                <span>Ban chủ nhiệm</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Thành viên</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-calendar-star"></i>
+                                <span>Sự kiện CLB</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quản lý nhóm -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="management">
+                        <div class="section-title">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Quản lý nhóm</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-handshake"></i>
+                                <span>Cộng tác viên</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-tasks"></i>
+                                <span>Phân công nhiệm vụ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Duyệt báo cáo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Admin/Boss Specific Features -->
+                <div class="nav-section admin-section">
+                    <div class="section-header" data-section="admin">
+                        <div class="section-title">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Quản lý hệ thống</span>
+                            <span class="admin-badge">ADMIN</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-users-cog"></i>
+                                <span>Quản lý người dùng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-export"></i>
+                                <span>Xuất báo cáo tổng hợp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-cogs"></i>
+                                <span>Cài đặt phân quyền</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hỗ trợ -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="support">
+                        <div class="section-title">
+                            <i class="fas fa-life-ring"></i>
+                            <span>Hỗ trợ</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Hướng dẫn sử dụng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-video"></i>
+                                <span>Video giới thiệu</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-download"></i>
+                                <span>Tài nguyên tải về</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <small>Version 2.1.0</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Operations Main Content -->
+        <main class="operations-main">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-content">
+                    <div class="page-title">
+                        <h1><i class="fas fa-cogs"></i> Vận hành</h1>
+                        <p>Quản lý hoạt động CTSV và CTV một cách hiệu quả</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addTaskBtn">
+                            <i class="fas fa-plus"></i> Thêm nhiệm vụ
+                        </button>
+                        <button class="btn btn-secondary" id="exportReportBtn">
+                            <i class="fas fa-download"></i> Xuất báo cáo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats">
+                <div class="stat-card ctsv">
+                    <div class="stat-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>45</h3>
+                        <p>Nhân viên CTSV</p>
+                        <small>+3 tuần này</small>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>6.7%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card ctv">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>128</h3>
+                        <p>Cộng tác viên</p>
+                        <small>+8 tuần này</small>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12.3%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card tasks">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>267</h3>
+                        <p>Nhiệm vụ hoàn thành</p>
+                        <small>Tháng này</small>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>18.4%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card efficiency">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>94.2%</h3>
+                        <p>Hiệu suất làm việc</p>
+                        <small>Trung bình</small>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>2.8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="operations-grid">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <!-- Department Management -->
+                    <div class="operations-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-sitemap"></i> Quản lý phòng ban</h3>
+                            <div class="card-actions">
+                                <button class="btn-icon" title="Thêm phòng ban">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="btn-icon" title="Cài đặt">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="department-list">
+                            <div class="department-item active">
+                                <div class="dept-info">
+                                    <div class="dept-icon ctsv">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div class="dept-details">
+                                        <h4>CTSV</h4>
+                                        <p>Công tác sinh viên</p>
+                                        <small>45 thành viên</small>
+                                    </div>
+                                </div>
+                                <div class="dept-stats">
+                                    <span class="attendance-rate high">98%</span>
+                                    <div class="dept-actions">
+                                        <button class="btn-sm primary">Quản lý</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="department-item">
+                                <div class="dept-info">
+                                    <div class="dept-icon ctv">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="dept-details">
+                                        <h4>CTV</h4>
+                                        <p>Cộng tác viên</p>
+                                        <small>128 thành viên</small>
+                                    </div>
+                                </div>
+                                <div class="dept-stats">
+                                    <span class="attendance-rate medium">85%</span>
+                                    <div class="dept-actions">
+                                        <button class="btn-sm secondary">Quản lý</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="department-item">
+                                <div class="dept-info">
+                                    <div class="dept-icon support">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <div class="dept-details">
+                                        <h4>Hỗ trợ kỹ thuật</h4>
+                                        <p>Technical Support</p>
+                                        <small>12 thành viên</small>
+                                    </div>
+                                </div>
+                                <div class="dept-stats">
+                                    <span class="attendance-rate high">96%</span>
+                                    <div class="dept-actions">
+                                        <button class="btn-sm info">Quản lý</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Task Management -->
+                    <div class="operations-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-tasks"></i> Quản lý nhiệm vụ</h3>
+                            <div class="task-tabs">
+                                <button class="tab-btn active" data-tab="pending">Đang thực hiện</button>
+                                <button class="tab-btn" data-tab="completed">Hoàn thành</button>
+                                <button class="tab-btn" data-tab="overdue">Quá hạn</button>
+                            </div>
+                        </div>
+                        <div class="task-content">
+                            <div class="task-list" id="pendingTasks">
+                                <div class="task-item high-priority">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task1">
+                                        <label for="task1"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <h4>Cập nhật hệ thống chấm công</h4>
+                                        <p>Nâng cấp tính năng báo cáo và thống kê</p>
+                                        <div class="task-meta">
+                                            <span class="task-assignee">
+                                                <i class="fas fa-user"></i> Nguyễn Văn A
+                                            </span>
+                                            <span class="task-deadline">
+                                                <i class="fas fa-clock"></i> 2 ngày
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="task-priority high">
+                                        <span>Cao</span>
+                                    </div>
+                                </div>
+
+                                <div class="task-item medium-priority">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task2">
+                                        <label for="task2"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <h4>Đào tạo CTV mới</h4>
+                                        <p>Tổ chức khóa đào tạo cho 15 CTV mới</p>
+                                        <div class="task-meta">
+                                            <span class="task-assignee">
+                                                <i class="fas fa-user"></i> Trần Thị B
+                                            </span>
+                                            <span class="task-deadline">
+                                                <i class="fas fa-clock"></i> 5 ngày
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="task-priority medium">
+                                        <span>Trung bình</span>
+                                    </div>
+                                </div>
+
+                                <div class="task-item low-priority">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task3">
+                                        <label for="task3"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <h4>Kiểm tra thiết bị</h4>
+                                        <p>Bảo trì máy chấm công tại các điểm</p>
+                                        <div class="task-meta">
+                                            <span class="task-assignee">
+                                                <i class="fas fa-user"></i> Lê Văn C
+                                            </span>
+                                            <span class="task-deadline">
+                                                <i class="fas fa-clock"></i> 1 tuần
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="task-priority low">
+                                        <span>Thấp</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    <!-- Performance Chart -->
+                    <div class="operations-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-area"></i> Hiệu suất làm việc</h3>
+                            <div class="chart-period">
+                                <select id="chartPeriod">
+                                    <option value="week">Tuần này</option>
+                                    <option value="month" selected>Tháng này</option>
+                                    <option value="quarter">Quý này</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-color ctsv"></span>
+                                <span>CTSV</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color ctv"></span>
+                                <span>CTV</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color support"></span>
+                                <span>Hỗ trợ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="operations-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-history"></i> Hoạt động gần đây</h3>
+                            <button class="btn-text">Xem tất cả</button>
+                        </div>
+                        <div class="activity-timeline">
+                            <div class="activity-item">
+                                <div class="activity-time">10:30</div>
+                                <div class="activity-icon success">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Nhiệm vụ hoàn thành</h4>
+                                    <p>Nguyễn Văn A đã hoàn thành cập nhật báo cáo tuần</p>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-time">09:15</div>
+                                <div class="activity-icon info">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>CTV mới tham gia</h4>
+                                    <p>Trần Thị D đã được thêm vào nhóm CTV phòng CTSV</p>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-time">08:45</div>
+                                <div class="activity-icon warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Cảnh báo deadline</h4>
+                                    <p>3 nhiệm vụ sắp hết hạn trong ngày hôm nay</p>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-time">07:30</div>
+                                <div class="activity-icon primary">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>Lịch họp mới</h4>
+                                    <p>Cuộc họp đánh giá hiệu suất được lên lịch</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="operations-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bolt"></i> Thao tác nhanh</h3>
+                        </div>
+                        <div class="quick-actions-grid">
+                            <button class="quick-action-btn primary">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Thêm nhân viên</span>
+                            </button>
+                            <button class="quick-action-btn success">
+                                <i class="fas fa-tasks"></i>
+                                <span>Tạo nhiệm vụ</span>
+                            </button>
+                            <button class="quick-action-btn info">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Xem báo cáo</span>
+                            </button>
+                            <button class="quick-action-btn warning">
+                                <i class="fas fa-cog"></i>
+                                <span>Cài đặt hệ thống</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Thêm nhiệm vụ mới</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addTaskForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskTitle">Tiêu đề nhiệm vụ</label>
+                            <input type="text" id="taskTitle" name="taskTitle" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDescription">Mô tả</label>
+                            <textarea id="taskDescription" name="taskDescription" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskAssignee">Phân công cho</label>
+                            <select id="taskAssignee" name="taskAssignee" required>
+                                <option value="">Chọn người thực hiện</option>
+                                <option value="user1">Nguyễn Văn A</option>
+                                <option value="user2">Trần Thị B</option>
+                                <option value="user3">Lê Văn C</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskPriority">Độ ưu tiên</label>
+                            <select id="taskPriority" name="taskPriority" required>
+                                <option value="low">Thấp</option>
+                                <option value="medium" selected>Trung bình</option>
+                                <option value="high">Cao</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDeadline">Deadline</label>
+                            <input type="datetime-local" id="taskDeadline" name="taskDeadline" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDepartment">Phòng ban</label>
+                            <select id="taskDepartment" name="taskDepartment" required>
+                                <option value="">Chọn phòng ban</option>
+                                <option value="ctsv">CTSV</option>
+                                <option value="ctv">CTV</option>
+                                <option value="support">Hỗ trợ kỹ thuật</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addTaskModal')">Hủy</button>
+                <button type="submit" form="addTaskForm" class="btn btn-primary">Tạo nhiệm vụ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Enhanced Scripts -->
+    <script src="../../assets/js/app-enhanced.js"></script>
+    <script src="../../assets/js/navigation-enhanced.js"></script>
+    <script src="../../assets/js/header-manager.js"></script>
+    <script src="../../assets/js/operations.js"></script>
+    <script src="operations-enhanced.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize header manager
+            if (typeof HeaderManager !== 'undefined') {
+                window.headerManager = new HeaderManager();
+            }
+
+            // Initialize operations manager
+            const operations = new OperationsManager();
+            operations.init();
+
+            // Add some demo functionality for header features
+            window.openProfileModal = function (modalId) {
+                console.log('Opening modal:', modalId);
+                // Implement modal opening logic
+            };
+
+            window.handleLogout = function () {
+                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    console.log('Logging out...');
+                    // Implement logout logic
+                    window.location.href = 'login.html';
+                }
+            };
+
+            window.handleCompleteLogout = function () {
+                if (confirm('Bạn có chắc chắn muốn tạn số và thoát ra?')) {
+                    console.log('Complete logout...');
+                    // Implement complete logout logic
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'login.html';
+                }
+            };
+
+            window.resetSettings = function () {
+                if (confirm('Bạn có chắc chắn muốn khôi phục cài đặt mặc định?')) {
+                    console.log('Resetting settings...');
+                    // Implement reset settings logic
+                    location.reload();
+                }
+            };
+
+            window.saveSettings = function () {
+                console.log('Saving settings...');
+                // Implement save settings logic
+                alert('Cài đặt đã được lưu thành công!');
+            };
+        });
+    </script>
+</body>
+
+</html>

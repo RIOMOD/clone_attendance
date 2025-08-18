@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Hệ thống Chấm Công CTSV</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+
+    <!-- Preload fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts - Professional fonts for attendance system -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Enhanced CSS System -->
+    <link rel="stylesheet" href="../../assets/css/global-enhanced.css">
+    <link rel="stylesheet" href="../../assets/css/components-enhanced.css">
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="login-professional.css">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Đăng nhập vào hệ thống chấm công CTSV - Quản lý hiệu quả thời gian làm việc">
+    <meta name="keywords" content="chấm công, CTSV, đăng nhập, quản lý thời gian, attendance system">
+
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="../../manifest.json">
+</head>
+
+<body>
+    <!-- Background animated elements -->
+    <div class="bg-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Main container -->
+    <div class="login-container">
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb-nav">
+            <a href="../../index.html" class="breadcrumb-link">
+                <i class="fas fa-home"></i>
+                <span>Trang chủ</span>
+            </a>
+            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+            <span class="breadcrumb-current">Đăng nhập</span>
+        </div>
+
+        <!-- Left side - Branding & Info -->
+        <div class="login-branding">
+            <div class="brand-content">
+                <!-- Logo and title -->
+                <div class="brand-header">
+                    <div class="logo-container">
+                        <i class="fas fa-clock brand-icon"></i>
+                        <div class="brand-text">
+                            <h1 class="brand-title">CTSV System</h1>
+                            <p class="brand-subtitle">Hệ thống Chấm Công Thông Minh</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features list -->
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Chấm công thông minh</h3>
+                            <p>Hỗ trợ nhiều phương thức chấm công hiện đại</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Báo cáo chi tiết</h3>
+                            <p>Thống kê và phân tích thời gian làm việc</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Bảo mật cao</h3>
+                            <p>Đảm bảo an toàn dữ liệu và quyền riêng tư</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Người dùng</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Hỗ trợ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side - Login Form -->
+        <div class="login-form-container">
+            <div class="login-form-wrapper">
+                <!-- Form header -->
+                <div class="form-header">
+                    <div class="welcome-back">
+                        <h2 class="form-title">Chào mừng trở lại</h2>
+                        <p class="form-subtitle">Đăng nhập để tiếp tục sử dụng hệ thống</p>
+                    </div>
+
+                    <!-- Time display -->
+                    <div class="current-time">
+                        <div class="time-display" id="currentTime"></div>
+                        <div class="date-display" id="currentDate"></div>
+                    </div>
+                </div>
+
+                <!-- Login form -->
+                <form id="loginForm" class="login-form" novalidate>
+                    <!-- Email field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            <span>Địa chỉ Email</span>
+                        </label>
+                        <div class="input-container">
+                            <input type="email" id="email" name="email" class="form-input"
+                                placeholder="Nhập email của bạn" required autocomplete="email"
+                                aria-describedby="email-error">
+                            <div class="input-border"></div>
+                        </div>
+                        <div id="email-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Password field -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            <span>Mật khẩu</span>
+                        </label>
+                        <div class="input-container password-container">
+                            <input type="password" id="password" name="password" class="form-input"
+                                placeholder="Nhập mật khẩu" required autocomplete="current-password"
+                                aria-describedby="password-error">
+                            <button type="button" class="password-toggle" id="passwordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <div class="input-border"></div>
+                        </div>
+                        <div id="password-error" class="error-message"></div>
+                    </div>
+
+                    <!-- Remember me and forgot password -->
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember" name="remember">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">Ghi nhớ đăng nhập</span>
+                        </label>
+                        <a href="forgot-password.html" class="forgot-password">Quên mật khẩu?</a>
+                    </div>
+
+                    <!-- Login button -->
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <span class="btn-text">Đăng nhập</span>
+                        <div class="btn-loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <i class="fas fa-arrow-right btn-icon"></i>
+                    </button>
+
+                    <!-- Demo accounts section -->
+                    <div class="demo-section">
+                        <button type="button" class="demo-toggle-btn" id="demoToggleBtn">
+                            <i class="fas fa-users"></i>
+                            <span>Tài khoản demo</span>
+                            <i class="fas fa-chevron-down demo-arrow"></i>
+                        </button>
+
+                        <div class="demo-accounts" id="demoAccounts" style="display: none;">
+                            <div class="demo-account" data-email="admin@ctsv.edu.vn" data-password="admin123"
+                                data-role="admin">
+                                <div class="demo-avatar">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="demo-info">
+                                    <span class="demo-name">Administrator</span>
+                                    <span class="demo-email">admin@ctsv.edu.vn</span>
+                                </div>
+                                <div class="demo-badge admin">Admin</div>
+                            </div>
+
+                            <div class="demo-account" data-email="manager@ctsv.edu.vn" data-password="manager123"
+                                data-role="manager">
+                                <div class="demo-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="demo-info">
+                                    <span class="demo-name">Manager</span>
+                                    <span class="demo-email">manager@ctsv.edu.vn</span>
+                                </div>
+                                <div class="demo-badge manager">Manager</div>
+                            </div>
+
+                            <div class="demo-account" data-email="user@ctsv.edu.vn" data-password="user123"
+                                data-role="user">
+                                <div class="demo-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="demo-info">
+                                    <span class="demo-name">User</span>
+                                    <span class="demo-email">user@ctsv.edu.vn</span>
+                                </div>
+                                <div class="demo-badge user">User</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Footer links -->
+                <div class="form-footer">
+                    <p>Chưa có tài khoản? <a href="register-professional.html">Đăng ký ngay</a></p>
+                    <div class="footer-links">
+                        <a href="../../index.html">Trang chủ</a>
+                        <a href="#" onclick="showHelpModal()">Trợ giúp</a>
+                        <a href="#" onclick="showContactModal()">Liên hệ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error notifications -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Trợ giúp đăng nhập</h3>
+                <button class="modal-close" onclick="closeModal('helpModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="help-item">
+                    <h4>Quên mật khẩu?</h4>
+                    <p>Click vào "Quên mật khẩu?" và làm theo hướng dẫn để khôi phục tài khoản.</p>
+                </div>
+                <div class="help-item">
+                    <h4>Tài khoản bị khóa?</h4>
+                    <p>Liên hệ quản trị viên hệ thống để được hỗ trợ mở khóa tài khoản.</p>
+                </div>
+                <div class="help-item">
+                    <h4>Lỗi đăng nhập?</h4>
+                    <p>Kiểm tra kết nối internet và thử lại. Nếu vẫn lỗi, liên hệ IT Support.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thông tin liên hệ</h3>
+                <button class="modal-close" onclick="closeModal('contactModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>Hotline: 1900 1234</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email: support@ctsv.edu.vn</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Thời gian hỗ trợ: 24/7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript file -->
+    <script src="login-professional.js"></script>
+</body>
+
+</html>

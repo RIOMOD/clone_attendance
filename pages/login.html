@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - CTSV</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .redirect-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .logo {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .message {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .countdown {
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 600px) {
+            .redirect-container {
+                padding: 30px 20px;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-container">
+        <div class="logo">🎓</div>
+        <h1 class="title">Chuyển hướng đăng nhập</h1>
+        <p class="message">
+            Trang đăng nhập đã được chuyển đến vị trí mới.<br>
+            Vui lòng chọn phương thức đăng nhập phù hợp.
+        </p>
+        
+        <div class="btn-container">
+            <a href="authen/login-professional.html" class="btn btn-primary">
+                🔐 Đăng nhập chuyên nghiệp
+            </a>
+            <a href="../index.html" class="btn btn-secondary">
+                🏠 Về trang chủ
+            </a>
+        </div>
+        
+        <div class="countdown">
+            Tự động chuyển hướng sau <span id="countdown">5</span> giây...
+        </div>
+    </div>
+    
+    <script>
+        // Auto redirect after 5 seconds
+        let seconds = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            seconds--;
+            countdownElement.textContent = seconds;
+            
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = 'authen/login-professional.html';
+            }
+        }, 1000);
+        
+        // Also redirect immediately if user clicks anywhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.btn')) {
+                window.location.href = 'authen/login-professional.html';
+            }
+        });
+    </script>
+</body>
+</html>
