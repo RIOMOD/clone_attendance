@@ -1,0 +1,911 @@
+/* ===== CLB PAGE STYLES - DASHBOARD SYNCHRONIZED ===== */
+
+/* Import CSS Variables từ homepage-modern */
+@import url('../../style-homepage-modern.css');
+
+/* CLB Specific Color Overrides */
+:root {
+    /* CLB Theme Colors */
+    --clb-primary: #8e44ad;
+    --clb-secondary: #9b59b6;
+    --clb-accent: #e8d5f3;
+    --clb-gradient: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+    
+    /* CLB Category Colors */
+    --academic-color: #3498db;
+    --sports-color: #e74c3c;
+    --culture-color: #f39c12;
+    --social-color: #27ae60;
+    --technology-color: #6c5ce7;
+    --volunteer-color: #fd79a8;
+    --science-color: #00b894;
+    --business-color: #fdcb6e;
+    
+    /* CLB Status Colors */
+    --active-status: #00b894;
+    --pending-status: #fdcb6e;
+    --inactive-status: #ddd;
+    --recruiting-status: #0984e3;
+    
+    /* Enhanced Shadows for CLB elements */
+    --clb-shadow-card: 0 8px 25px rgba(142, 68, 173, 0.15);
+    --clb-shadow-hover: 0 12px 40px rgba(142, 68, 173, 0.25);
+}
+
+/* ===== CLB SPECIFIC OVERRIDES ===== */
+
+/* Update primary colors to CLB theme */
+.dashboard-header {
+    background: linear-gradient(135deg, var(--clb-primary) 0%, var(--clb-secondary) 100%);
+}
+
+.nav-item.active .nav-link {
+    background: linear-gradient(135deg, var(--clb-primary), var(--clb-secondary));
+}
+
+.btn-primary {
+    background: var(--clb-gradient);
+    border-color: var(--clb-primary);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #7d3c98, #8e44ad);
+    transform: translateY(-2px);
+    box-shadow: var(--clb-shadow-hover);
+}
+
+.action-btn:hover {
+    color: var(--clb-primary);
+}
+
+/* ===== CLB STATS CARDS ===== */
+.clb-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.clb-stat-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.clb-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--clb-gradient);
+}
+
+.clb-stat-card.academic::before {
+    background: linear-gradient(90deg, var(--academic-color), #5dade2);
+}
+
+.clb-stat-card.sports::before {
+    background: linear-gradient(90deg, var(--sports-color), #ec7063);
+}
+
+.clb-stat-card.culture::before {
+    background: linear-gradient(90deg, var(--culture-color), #f8c471);
+}
+
+.clb-stat-card.social::before {
+    background: linear-gradient(90deg, var(--social-color), #58d68d);
+}
+
+.clb-stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--clb-shadow-hover);
+}
+
+.clb-stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+}
+
+.clb-stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-2xl);
+    background: var(--clb-gradient);
+    color: var(--text-white);
+    box-shadow: var(--shadow-lg);
+}
+
+.clb-stat-card.academic .clb-stat-icon {
+    background: linear-gradient(135deg, var(--academic-color), #5dade2);
+}
+
+.clb-stat-card.sports .clb-stat-icon {
+    background: linear-gradient(135deg, var(--sports-color), #ec7063);
+}
+
+.clb-stat-card.culture .clb-stat-icon {
+    background: linear-gradient(135deg, var(--culture-color), #f8c471);
+}
+
+.clb-stat-card.social .clb-stat-icon {
+    background: linear-gradient(135deg, var(--social-color), #58d68d);
+}
+
+.clb-stat-content h3 {
+    font-size: var(--font-size-4xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: 1;
+}
+
+.clb-stat-label {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+}
+
+.clb-stat-trend {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.clb-stat-trend.positive {
+    color: var(--success);
+}
+
+.clb-stat-trend.negative {
+    color: var(--danger);
+}
+
+/* ===== CLB ACTION CARDS ===== */
+.clb-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.clb-action-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-normal);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    display: block;
+}
+
+.clb-action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--clb-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.clb-action-card:hover::before {
+    opacity: 0.05;
+}
+
+.clb-action-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--clb-shadow-hover);
+    color: inherit;
+    text-decoration: none;
+}
+
+.clb-action-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    position: relative;
+    z-index: 1;
+}
+
+.clb-action-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-2xl);
+    background: var(--clb-gradient);
+    color: var(--text-white);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.clb-action-card:hover .clb-action-icon {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.clb-action-content {
+    position: relative;
+    z-index: 1;
+}
+
+.clb-action-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.clb-action-description {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+}
+
+.clb-action-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+}
+
+.clb-action-count {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+}
+
+.clb-action-arrow {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all var(--transition-normal);
+    color: var(--clb-primary);
+}
+
+.clb-action-card:hover .clb-action-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ===== FEATURED CLUBS SECTION ===== */
+.featured-clubs {
+    margin-bottom: var(--space-12);
+}
+
+.featured-clubs-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: var(--space-8);
+}
+
+.featured-clubs-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.featured-clubs-title i {
+    color: var(--clb-primary);
+}
+
+.featured-clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-8);
+}
+
+.featured-club-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-normal);
+    position: relative;
+}
+
+.featured-club-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--clb-shadow-hover);
+}
+
+.club-card-banner {
+    height: 180px;
+    background: var(--clb-gradient);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+    font-size: var(--font-size-4xl);
+}
+
+.club-card-banner.academic {
+    background: linear-gradient(135deg, var(--academic-color), #5dade2);
+}
+
+.club-card-banner.sports {
+    background: linear-gradient(135deg, var(--sports-color), #ec7063);
+}
+
+.club-card-banner.culture {
+    background: linear-gradient(135deg, var(--culture-color), #f8c471);
+}
+
+.club-card-banner.social {
+    background: linear-gradient(135deg, var(--social-color), #58d68d);
+}
+
+.club-card-banner.technology {
+    background: linear-gradient(135deg, var(--technology-color), #a29bfe);
+}
+
+.club-status-badge {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    padding: var(--space-1) var(--space-3);
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-white);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.club-card-content {
+    padding: var(--space-6);
+}
+
+.club-card-header {
+    margin-bottom: var(--space-4);
+}
+
+.club-card-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+}
+
+.club-card-category {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    background: var(--bg-accent);
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+}
+
+.club-card-description {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    overflow: hidden;
+}
+
+.club-card-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-light);
+}
+
+.club-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.club-stat-value {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.club-stat-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+.club-card-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.club-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.club-btn-primary {
+    background: var(--clb-gradient);
+    color: var(--text-white);
+    border-color: var(--clb-primary);
+}
+
+.club-btn-primary:hover {
+    background: linear-gradient(135deg, #7d3c98, #8e44ad);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-white);
+    text-decoration: none;
+}
+
+.club-btn-outline {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+}
+
+.club-btn-outline:hover {
+    background: var(--bg-accent);
+    border-color: var(--clb-primary);
+    color: var(--clb-primary);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* ===== RECENT ACTIVITIES ===== */
+.recent-activities {
+    margin-bottom: var(--space-12);
+}
+
+.recent-activities-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-8);
+}
+
+.recent-activities-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.recent-activities-title i {
+    color: var(--clb-primary);
+}
+
+.activities-timeline {
+    position: relative;
+}
+
+.activities-timeline::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--clb-primary), var(--clb-secondary));
+    border-radius: var(--radius-full);
+}
+
+.activity-item {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    position: relative;
+}
+
+.activity-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xl);
+    background: var(--bg-primary);
+    border: 4px solid var(--clb-primary);
+    color: var(--clb-primary);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 1;
+}
+
+.activity-content {
+    flex: 1;
+    background: var(--bg-primary);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+}
+
+.activity-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+}
+
+.activity-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.activity-club {
+    font-size: var(--font-size-sm);
+    color: var(--clb-primary);
+    font-weight: 600;
+}
+
+.activity-time {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.activity-description {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+}
+
+.activity-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.activity-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    background: var(--bg-accent);
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+}
+
+.activity-tag.event {
+    background: rgba(142, 68, 173, 0.1);
+    color: var(--clb-primary);
+    border-color: rgba(142, 68, 173, 0.2);
+}
+
+.activity-tag.recruitment {
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--academic-color);
+    border-color: rgba(52, 152, 219, 0.2);
+}
+
+.activity-tag.achievement {
+    background: rgba(241, 196, 15, 0.1);
+    color: var(--culture-color);
+    border-color: rgba(241, 196, 15, 0.2);
+}
+
+/* ===== EMPTY STATES ===== */
+.clb-empty-state {
+    text-align: center;
+    padding: var(--space-16);
+    background: var(--bg-primary);
+    border-radius: var(--radius-2xl);
+    border: 2px dashed var(--border-color);
+}
+
+.clb-empty-state i {
+    font-size: var(--font-size-5xl);
+    color: var(--text-light);
+    margin-bottom: var(--space-6);
+}
+
+.clb-empty-state h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+}
+
+.clb-empty-state p {
+    font-size: var(--font-size-base);
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-8);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+    .clb-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .clb-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .featured-clubs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
+    }
+}
+
+@media (max-width: 768px) {
+    .clb-stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .clb-actions-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .featured-clubs-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .clb-stat-card,
+    .clb-action-card,
+    .featured-club-card {
+        padding: var(--space-6);
+    }
+    
+    .club-card-stats {
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+    
+    .club-stat-item {
+        flex: 1;
+        min-width: 60px;
+    }
+    
+    .activities-timeline::before {
+        left: 20px;
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-base);
+    }
+    
+    .activity-content {
+        padding: var(--space-4);
+    }
+}
+
+@media (max-width: 480px) {
+    .clb-stat-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+    
+    .clb-stat-icon,
+    .clb-action-icon {
+        width: 50px;
+        height: 50px;
+        font-size: var(--font-size-xl);
+    }
+    
+    .club-card-actions {
+        flex-direction: column;
+    }
+    
+    .featured-clubs-title,
+    .recent-activities-title {
+        font-size: var(--font-size-2xl);
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-2);
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Apply animations to elements */
+.clb-stats-grid .clb-stat-card {
+    animation: slideInFromLeft 0.6s ease-out;
+}
+
+.clb-actions-grid .clb-action-card {
+    animation: slideInFromRight 0.6s ease-out 0.2s both;
+}
+
+.featured-clubs-grid .featured-club-card:nth-child(1) {
+    animation: scaleIn 0.6s ease-out 0.1s both;
+}
+
+.featured-clubs-grid .featured-club-card:nth-child(2) {
+    animation: scaleIn 0.6s ease-out 0.2s both;
+}
+
+.featured-clubs-grid .featured-club-card:nth-child(3) {
+    animation: scaleIn 0.6s ease-out 0.3s both;
+}
+
+.activities-timeline .activity-item:nth-child(1) {
+    animation: slideInFromLeft 0.6s ease-out 0.4s both;
+}
+
+.activities-timeline .activity-item:nth-child(2) {
+    animation: slideInFromLeft 0.6s ease-out 0.5s both;
+}
+
+.activities-timeline .activity-item:nth-child(3) {
+    animation: slideInFromLeft 0.6s ease-out 0.6s both;
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+.club-card-description::-webkit-scrollbar {
+    width: 4px;
+}
+
+.club-card-description::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.club-card-description::-webkit-scrollbar-thumb {
+    background: var(--clb-primary);
+    border-radius: var(--radius-full);
+}
+
+/* ===== LOADING STATES ===== */
+.clb-skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-accent) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 2s infinite;
+    border-radius: var(--radius-lg);
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.clb-skeleton-card {
+    height: 200px;
+    margin-bottom: var(--space-4);
+}
+
+.clb-skeleton-text {
+    height: 16px;
+    margin-bottom: var(--space-2);
+}
+
+.clb-skeleton-title {
+    height: 24px;
+    width: 60%;
+    margin-bottom: var(--space-4);
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .dashboard-header,
+    .sidebar,
+    .page-actions,
+    .clb-action-card,
+    .club-card-actions,
+    .activity-tags {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin: 0;
+    }
+    
+    .clb-stat-card,
+    .featured-club-card,
+    .activity-content {
+        break-inside: avoid;
+        margin-bottom: var(--space-4);
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+    }
+    
+    .clb-stats-grid,
+    .featured-clubs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+}

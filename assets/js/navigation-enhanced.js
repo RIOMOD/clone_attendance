@@ -13,7 +13,7 @@ window.NavigationConfig = {
         },
         {
             label: 'Lịch tổng quan',
-            href: 'calendar-overview.html',
+            href: 'calendar/index.html',
             icon: 'fas fa-calendar-alt',
             description: 'Xem lịch tổng quan toàn hệ thống'
         },
@@ -25,7 +25,7 @@ window.NavigationConfig = {
         },
         {
             label: 'Thống kê cá nhân',
-            href: 'personal-stats.html',
+            href: 'statistics/index.html',
             icon: 'fas fa-chart-line',
             description: 'Báo cáo và phân tích thống kê cá nhân'
         }
@@ -83,7 +83,7 @@ window.NavigationConfig = {
         },
         {
             label: 'Thống kê cá nhân',
-            href: 'personal-stats.html',
+            href: 'statistics/index.html',
             icon: 'fas fa-chart-line',
             description: 'Xem báo cáo hiệu suất làm việc'
         },
@@ -133,7 +133,7 @@ window.NavigationConfig = {
         },
         {
             label: 'Lịch tổng quan',
-            href: 'calendar-overview.html',
+            href: 'calendar/index.html',
             icon: 'fas fa-calendar-alt',
             description: 'Xem lịch toàn hệ thống'
         },
@@ -145,7 +145,7 @@ window.NavigationConfig = {
         },
         {
             label: 'Thống kê cá nhân',
-            href: 'personal-stats.html',
+            href: 'statistics/index.html',
             icon: 'fas fa-chart-line',
             description: 'Báo cáo cá nhân'
         }
@@ -196,7 +196,7 @@ window.NavigationConfig = {
             items: [
                 {
                     label: 'Thống kê cá nhân',
-                    href: 'personal-stats.html',
+                    href: 'statistics/index.html',
                     icon: 'fas fa-chart-line',
                     description: 'Hiệu suất cá nhân'
                 },
@@ -244,8 +244,8 @@ window.NavigationConfig = {
     // Đường dẫn điều hướng cho từng trang
     breadcrumbs: {
         'dashboard.html': ['Trang chủ', 'Dashboard'],
-        'personal-stats.html': ['Trang chủ', 'Thống kê cá nhân'],
-        'calendar-overview.html': ['Trang chủ', 'Lịch tổng quan'],
+        'statistics/index.html': ['Trang chủ', 'Thống kê cá nhân'],
+        'calendar/index.html': ['Trang chủ', 'Lịch tổng quan'],
         'operations.html': ['Trang chủ', 'Quản lý', 'Vận hành hệ thống'],
         'clubs.html': ['Trang chủ', 'Quản lý', 'Câu lạc bộ', 'Tổng quan'],
         'clubs-list.html': ['Trang chủ', 'Quản lý', 'Câu lạc bộ', 'Danh sách'],
@@ -277,7 +277,7 @@ window.NavigationConfig = {
         },
         {
             label: 'Xem thống kê',
-            href: 'personal-stats.html',
+            href: 'statistics/index.html',
             icon: 'fas fa-chart-line',
             color: 'info',
             description: 'Phân tích hiệu suất'
@@ -303,7 +303,7 @@ window.NavigationConfig = {
 // ===== CÁC HÀM TIỆN ÍCH ĐIỀU HƯỚNG =====
 // Tập hợp các hàm hỗ trợ navigation
 window.NavigationUtils = {
-    
+
     // Lấy tên trang hiện tại
     getCurrentPage() {
         const path = window.location.pathname;
@@ -390,9 +390,9 @@ window.NavigationUtils = {
     generateBreadcrumb() {
         const currentPage = this.getCurrentPage();
         const breadcrumb = NavigationConfig.breadcrumbs[currentPage];
-        
+
         if (!breadcrumb) return '';
-        
+
         let html = '<nav class="breadcrumb">';
         breadcrumb.forEach((item, index) => {
             if (index === breadcrumb.length - 1) {
@@ -403,27 +403,27 @@ window.NavigationUtils = {
             }
         });
         html += '</nav>';
-        
+
         return html;
     },
 
     // Khởi tạo navigation cho trang
     initNavigation() {
         console.log('🚀 Khởi tạo hệ thống điều hướng...');
-        
+
         // Cập nhật active state cho các menu
         this.updateActiveStates();
-        
+
         // Khởi tạo event listeners
         this.initEventListeners();
-        
+
         console.log('✅ Hệ thống điều hướng đã sẵn sàng!');
     },
 
     // Cập nhật trạng thái active cho menu
     updateActiveStates() {
         const currentPage = this.getCurrentPage();
-        
+
         // Cập nhật main nav
         document.querySelectorAll('.nav-item').forEach(item => {
             const href = item.getAttribute('href');
@@ -462,7 +462,7 @@ window.NavigationUtils = {
             item.addEventListener('mouseenter', (e) => {
                 this.showTooltip(e.target);
             });
-            
+
             item.addEventListener('mouseleave', (e) => {
                 this.hideTooltip();
             });
@@ -471,7 +471,7 @@ window.NavigationUtils = {
 
     // Xử lý các action đặc biệt
     handleAction(action) {
-        switch(action) {
+        switch (action) {
             case 'openSettingsModal':
                 console.log('Mở modal cài đặt...');
                 // Thêm logic mở modal cài đặt
@@ -499,7 +499,7 @@ window.NavigationUtils = {
             // Xóa dữ liệu đăng nhập
             localStorage.removeItem('currentUser');
             localStorage.removeItem('isAuthenticated');
-            
+
             // Chuyển hướng về trang đăng nhập
             window.location.href = 'login.html';
         }
@@ -532,23 +532,23 @@ window.NavigationUtils = {
     getRelativeUrl(targetPage) {
         const currentPage = this.getCurrentPage();
         const currentDir = window.location.pathname.split('/').slice(0, -1).join('/');
-        
+
         // Xử lý các trường hợp đặc biệt
         if (targetPage.startsWith('../')) {
             return targetPage;
         }
-        
+
         return targetPage;
     }
 };
 
 // ===== KHỞI TẠO KHI DOM READY =====
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Khởi tạo hệ thống navigation
     if (window.NavigationUtils) {
         window.NavigationUtils.initNavigation();
     }
-    
+
     // Log thông tin trang hiện tại
     const currentPage = window.NavigationUtils?.getCurrentPage() || 'unknown';
     console.log(`📍 Trang hiện tại: ${currentPage}`);

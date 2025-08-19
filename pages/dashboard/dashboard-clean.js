@@ -674,7 +674,7 @@ class DashboardModule {
 
     viewReports() {
         this.showActionModal('Xem báo cáo', 'Bạn có muốn xem báo cáo thống kê không?', () => {
-            window.location.href = '../statistics/personal-stats.html';
+            window.location.href = '../statistics/index.html';
         });
     }
 

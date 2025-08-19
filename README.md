@@ -57,7 +57,7 @@ ATTENDANCE/
 - **Dashboard**: `/pages/dashboard/index.html`
 - **Câu lạc bộ**: `/pages/CLB/index.html`
 - **Vận hành**: `/pages/operations/operations.html`
-- **Thống kê**: `/pages/statistics/personal-stats.html`
+- **Thống kê**: `/pages/statistics/index.html`
 - **Profile**: `/pages/profile/profile.html`
 
 ## ✅ Tính năng đã hoàn thiện
@@ -151,4 +151,5 @@ Nếu gặp vấn đề, hãy:
 ## 🎉 Status: PRODUCTION READY
 
 Dự án đã hoàn thiện 100% và sẵn sàng deploy!
+
 # clone_attendance

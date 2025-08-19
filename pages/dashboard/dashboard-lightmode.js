@@ -239,7 +239,7 @@ class DashboardHeader {
                 icon: 'fas fa-chart-bar',
                 title: 'Thống kê chấm công',
                 subtitle: 'Trang - Báo cáo và phân tích',
-                url: '../statistics/personal-stats.html'
+                url: '../statistics/index.html'
             }
         ];
 
