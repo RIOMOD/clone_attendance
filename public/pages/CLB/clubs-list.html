@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Danh sách Câu lạc bộ - Hệ thống chấm công CTSV</title>
+    <meta name="description" content="Danh sách toàn bộ câu lạc bộ sinh viên CTSV">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
+
+    <!-- Modern Light Mode Stylesheets -->
+    <link rel="stylesheet" href="../dashboard/dashboard-modern.css">
+    <link rel="stylesheet" href="clb-modern.css">
+    <link rel="stylesheet" href="clubs-list-enhanced.css">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Dashboard Light Mode JavaScript -->
+    <script src="clb-modern-new.js" defer></script>
+    <script src="clubs-list-manager.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Enhanced Header với Full Functionality -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>CTSV Dashboard</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="search-box">
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm câu lạc bộ, thành viên..."
+                        autocomplete="off">
+                    <button type="button" id="searchBtn" title="Tìm kiếm">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults">
+                        <!-- Search results sẽ được populate động -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <!-- Theme Toggle -->
+                    <button class="action-btn" id="themeToggle" title="Chế độ Light Mode (đã kích hoạt)">
+                        <i class="fas fa-sun"></i>
+                    </button>
+
+                    <!-- Quick Actions -->
+                    <button class="action-btn" id="quickAdd" title="Thêm nhanh">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="action-btn" id="notificationBtn" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">3</span>
+                    </button>
+
+                    <!-- Messages -->
+                    <button class="action-btn" id="messageBtn" title="Tin nhắn">
+                        <i class="fas fa-comment"></i>
+                        <span class="badge" id="messageBadge">2</span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="action-btn" id="settingsBtn" title="Cài đặt nhanh">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+
+                <!-- Enhanced User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Quản trị viên</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            <div>
+                                <div class="dropdown-name">Admin User</div>
+                                <div class="dropdown-email">admin@ctsv.edu.vn</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+
+                        <a href="../profile/profile.html">
+                            <i class="fas fa-user"></i> Hồ sơ cá nhân
+                        </a>
+                        <button type="button" onclick="dashboard.openSettings()">
+                            <i class="fas fa-cog"></i> Cài đặt tài khoản
+                        </button>
+                        <button type="button" onclick="dashboard.viewNotifications()">
+                            <i class="fas fa-bell"></i> Quản lý thông báo
+                        </button>
+                        <button type="button" onclick="dashboard.openHelp()">
+                            <i class="fas fa-question-circle"></i> Trợ giúp
+                        </button>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button type="button" onclick="dashboard.switchAccount()">
+                            <i class="fas fa-user-friends"></i> Chuyển tài khoản
+                        </button>
+                        <a href="../authen/login-professional.html" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-list"></i>
+                    <span>Danh sách CLB</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../../index.html" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span class="nav-text">Trang chủ</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../dashboard/dashboard.html" class="nav-link">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span class="nav-text">Dashboard</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../operations/operations.html" class="nav-link">
+                                <i class="fas fa-cogs"></i>
+                                <span class="nav-text">Vận hành</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-users"></i>
+                        <span>CLB & Sự kiện</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="clb-modern.html" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span class="nav-text">Hoạt động CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="clubs-list.html" class="nav-link">
+                                <i class="fas fa-list"></i>
+                                <span class="nav-text">Danh sách CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-events.html" class="nav-link">
+                                <i class="fas fa-calendar-check"></i>
+                                <span class="nav-text">Sự kiện CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-members.html" class="nav-link">
+                                <i class="fas fa-users-cog"></i>
+                                <span class="nav-text">Quản lý thành viên</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-organizers.html" class="nav-link">
+                                <i class="fas fa-user-tie"></i>
+                                <span class="nav-text">Ban tổ chức</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Thống kê & Báo cáo</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../statistics/index.html" class="nav-link">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="nav-text">Thống kê cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                <span class="nav-text">Báo cáo tổng quan</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="nav-text">Xuất báo cáo</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-calendar"></i>
+                        <span>Lịch trình</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../calendar/index.html" class="nav-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span class="nav-text">Lịch học</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-user"></i>
+                        <span>Cá nhân</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../profile/profile.html" class="nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="nav-text">Hồ sơ cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span class="nav-text">Cài đặt</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="dashboard-main">
+
+            <!-- Enhanced Content -->
+            <main class="content">
+                <div class="page-header">
+                    <h1><i class="fas fa-list"></i> Danh sách Câu lạc bộ</h1>
+                    <p>Quản lý toàn bộ câu lạc bộ trong hệ thống CTSV</p>
+                </div>
+
+                <!-- Dashboard Controls -->
+                <div class="dashboard-controls">
+                    <div class="controls-left">
+                        <div class="date-selector">
+                            <select id="academicYear">
+                                <option value="2024-2025" selected>Niên khóa 2024-2025</option>
+                                <option value="2023-2024">Niên khóa 2023-2024</option>
+                                <option value="2022-2023">Niên khóa 2022-2023</option>
+                            </select>
+                        </div>
+                        <div class="filter-selector">
+                            <select id="statusFilter">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="inactive">Tạm dừng</option>
+                                <option value="pending">Chờ phê duyệt</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn-control" id="refreshClubs">
+                            <i class="fas fa-sync"></i> Làm mới
+                        </button>
+                        <button class="btn-control export-btn" data-type="pdf">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn-control export-btn" data-type="excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn-control primary" onclick="clubsManager.openCreateClubModal()">
+                            <i class="fas fa-plus"></i> Tạo CLB mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enhanced Stats Section -->
+                <div class="dashboard-stats">
+                    <div class="stat-card primary" data-stat="totalClubs">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>12</h3>
+                            <p>Tổng số CLB</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>2.1%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success" data-stat="activeClubs">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>9</h3>
+                            <p>CLB đang hoạt động</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>15.4%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning" data-stat="totalMembers">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>247</h3>
+                            <p>Tổng thành viên</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8.2%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card info" data-stat="newClubs">
+                        <div class="stat-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>3</h3>
+                            <p>CLB mới tháng này</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Tăng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters Section -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-filter"></i> Bộ lọc và tìm kiếm</h3>
+                    </div>
+                    <div class="activity-filters" style="display: block;">
+                        <div class="filter-group">
+                            <label for="searchClub">Tên CLB:</label>
+                            <input type="text" id="searchClub" placeholder="Tìm kiếm theo tên câu lạc bộ...">
+                        </div>
+                        <div class="filter-group">
+                            <label for="categoryFilter">Loại CLB:</label>
+                            <select id="categoryFilter">
+                                <option value="">Tất cả loại</option>
+                                <option value="technology">Công nghệ</option>
+                                <option value="sport">Thể thao</option>
+                                <option value="art">Nghệ thuật</option>
+                                <option value="academic">Học thuật</option>
+                                <option value="volunteer">Tình nguyện</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="membersFilter">Số thành viên:</label>
+                            <select id="membersFilter">
+                                <option value="">Tất cả</option>
+                                <option value="small">Dưới 10 thành viên</option>
+                                <option value="medium">10-30 thành viên</option>
+                                <option value="large">Trên 30 thành viên</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <button type="button" class="btn-control" onclick="filterClubs()">
+                            <i class="fas fa-search"></i> Áp dụng bộ lọc
+                        </button>
+                        <button type="button" class="btn-control" onclick="clearFilters()">
+                            <i class="fas fa-times"></i> Xóa bộ lọc
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Clubs Table Section -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-table"></i> Danh sách câu lạc bộ</h3>
+                        <div class="section-actions">
+                            <button class="btn-refresh" title="Làm mới">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                            <button class="btn-filter" title="Toggle view" onclick="toggleView()">
+                                <i class="fas fa-th"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container" id="tableView">
+                        <table class="clubs-table" id="clubsTable">
+                            <thead>
+                                <tr>
+                                    <th role="button" tabindex="0" onclick="sortTable('name')"
+                                        onkeypress="handleKeyPress(event, 'name')">
+                                        Tên CLB <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th role="button" tabindex="0" onclick="sortTable('code')"
+                                        onkeypress="handleKeyPress(event, 'code')">
+                                        Mã CLB <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th role="button" tabindex="0" onclick="sortTable('category')"
+                                        onkeypress="handleKeyPress(event, 'category')">
+                                        Loại <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th role="button" tabindex="0" onclick="sortTable('members')"
+                                        onkeypress="handleKeyPress(event, 'members')">
+                                        Thành viên <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th role="button" tabindex="0" onclick="sortTable('president')"
+                                        onkeypress="handleKeyPress(event, 'president')">
+                                        Chủ nhiệm <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th role="button" tabindex="0" onclick="sortTable('status')"
+                                        onkeypress="handleKeyPress(event, 'status')">
+                                        Trạng thái <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th role="button" tabindex="0" onclick="sortTable('founded')"
+                                        onkeypress="handleKeyPress(event, 'founded')">
+                                        Thành lập <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="club-name-cell">
+                                            <img src="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png"
+                                                alt="Code King" class="club-logo">
+                                            <div>
+                                                <div class="club-name">Code King</div>
+                                                <div class="club-description">Câu lạc bộ lập trình</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="club-code">CK001</span></td>
+                                    <td><span class="category-tag technology">Công nghệ</span></td>
+                                    <td><strong>45</strong></td>
+                                    <td>Nguyễn Văn A</td>
+                                    <td><span class="status-badge active">Hoạt động</span></td>
+                                    <td>2020</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-action view" onclick="viewClub('CK001')"
+                                                title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-action edit" onclick="editClub('CK001')"
+                                                title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-action delete" onclick="deleteClub('CK001')" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="club-name-cell">
+                                            <img src="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png"
+                                                alt="Music Club" class="club-logo">
+                                            <div>
+                                                <div class="club-name">Music Club</div>
+                                                <div class="club-description">Câu lạc bộ âm nhạc</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="club-code">MC002</span></td>
+                                    <td><span class="category-tag art">Nghệ thuật</span></td>
+                                    <td><strong>32</strong></td>
+                                    <td>Trần Thị B</td>
+                                    <td><span class="status-badge active">Hoạt động</span></td>
+                                    <td>2019</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-action view" onclick="viewClub('MC002')"
+                                                title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-action edit" onclick="editClub('MC002')"
+                                                title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-action delete" onclick="deleteClub('MC002')" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="club-name-cell">
+                                            <img src="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png"
+                                                alt="Green Future" class="club-logo">
+                                            <div>
+                                                <div class="club-name">Green Future</div>
+                                                <div class="club-description">Câu lạc bộ tình nguyện môi trường</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="club-code">GF003</span></td>
+                                    <td><span class="category-tag volunteer">Tình nguyện</span></td>
+                                    <td><strong>28</strong></td>
+                                    <td>Lê Văn C</td>
+                                    <td><span class="status-badge active">Hoạt động</span></td>
+                                    <td>2021</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-action view" onclick="viewClub('GF003')"
+                                                title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-action edit" onclick="editClub('GF003')"
+                                                title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-action delete" onclick="deleteClub('GF003')" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            Hiển thị 1-10 trong tổng 12 câu lạc bộ
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="pagination-btn active">1</button>
+                            <button class="pagination-btn">2</button>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-clock"></i>
+            <span>Attendance</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="../calendar/index.html" class="nav-item">Lịch tổng</a>
+            <a href="../../index.html" class="nav-item">Lịch cá nhân</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle">
+                    Quản lý
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="operations.html" class="dropdown-item">
+                        <i class="fas fa-cogs"></i>
+                        Vận hành
+                    </a>
+                    <a href="clubs.html" class="dropdown-item">
+                        <i class="fas fa-users"></i>
+                        Tổng quan CLB
+                    </a>
+                    <a href="clubs-list.html" class="dropdown-item">
+                        <i class="fas fa-list"></i>
+                        Danh sách CLB
+                    </a>
+                    <a href="club-organizers.html" class="dropdown-item">
+                        <i class="fas fa-user-tie"></i>
+                        Ban chủ nhiệm
+                    </a>
+                    <a href="club-members.html" class="dropdown-item">
+                        <i class="fas fa-user-friends"></i>
+                        Thành viên
+                    </a>
+                    <a href="club-events.html" class="dropdown-item">
+                        <i class="fas fa-calendar-check"></i>
+                        Sự kiện CLB
+                    </a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle club-dropdown">
+                    <i class="fas fa-users"></i>
+                    Câu lạc bộ
+                    <i class="fas fa-chevron-up"></i>
+                </a>
+                <div class="dropdown-menu club-menu">
+                    <div class="club-menu-header">
+                        <a href="clubs-list.html" class="featured-item active">
+                            <i class="fas fa-list"></i>
+                            <span>Danh sách CLB</span>
+                        </a>
+                    </div>
+                    <div class="club-menu-items">
+                        <a href="club-organizers.html" class="dropdown-item">
+                            <i class="fas fa-crown"></i>
+                            <span>Ban chủ nhiệm</span>
+                        </a>
+                        <a href="club-members.html" class="dropdown-item">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Thành viên</span>
+                        </a>
+                        <a href="club-events.html" class="dropdown-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Sự kiện CLB</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="user-actions">
+            <i class="fas fa-search"></i>
+            <div class="user-profile-dropdown">
+                <i class="fas fa-user user-icon" id="userProfileBtn"></i>
+                <div class="profile-dropdown-menu" id="profileDropdown">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="../../assets/images/avata_admin.jpg" alt="Admin Avatar"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="fas fa-user-circle" style="display: none;"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Nguyễn Văn Admin</h4>
+                            <p>admin@ctsv.edu.vn</p>
+                            <span class="profile-role">Quản trị viên</span>
+                        </div>
+                    </div>
+                    <div class="profile-divider"></div>
+                    <div class="profile-menu">
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-edit"></i>
+                            <span>Chỉnh sửa thông tin cá nhân</span>
+                        </a>
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Thiết lập chức năng cá nhân</span>
+                        </a>
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Thiết lập thanh biểu tượng</span>
+                        </a>
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-database"></i>
+                            <span>Quản lý thông tin đăng nhập</span>
+                        </a>
+                        <div class="profile-divider"></div>
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Thoát ra</span>
+                        </a>
+                        <div class="profile-divider"></div>
+                        <a href="#" class="profile-menu-item">
+                            <i class="fas fa-calculator"></i>
+                            <span>Tạn số & Thoát ra</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Sidebar Header with Role -->
+            <div class="sidebar-header">
+                <div class="user-role-info">
+                    <div class="role-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="role-details">
+                        <h4>Nguyễn Văn Admin</h4>
+                        <span class="role-badge admin">👑 Boss/Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <!-- Tổng quan -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="overview">
+                        <div class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Tổng quan</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="../../index.html" class="nav-link">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Thống kê cá nhân</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Lịch & Chấm công -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="attendance">
+                        <div class="section-title">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Lịch & Chấm công</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="../calendar/index.html" class="nav-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Lịch công tác</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-clock"></i>
+                                <span>Check-in/Check-out</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user-clock"></i>
+                                <span>Nghỉ phép / Xin nghỉ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-book"></i>
+                                <span>Nhật ký làm việc</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Câu lạc bộ -->
+                <div class="nav-section expanded">
+                    <div class="section-header" data-section="clubs">
+                        <div class="section-title">
+                            <i class="fas fa-users"></i>
+                            <span>Câu lạc bộ</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="clubs.html" class="nav-link">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Tổng quan CLB</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="clubs-list.html" class="nav-link">
+                                <i class="fas fa-list"></i>
+                                <span>Danh sách CLB</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-organizers.html" class="nav-link">
+                                <i class="fas fa-crown"></i>
+                                <span>Ban chủ nhiệm</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-members.html" class="nav-link">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Thành viên</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="club-events.html" class="nav-link">
+                                <i class="fas fa-calendar-star"></i>
+                                <span>Sự kiện CLB</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quản lý nhóm -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="management">
+                        <div class="section-title">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Quản lý nhóm</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-handshake"></i>
+                                <span>Cộng tác viên</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-tasks"></i>
+                                <span>Phân công nhiệm vụ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Duyệt báo cáo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Admin/Boss Specific Features -->
+                <div class="nav-section admin-section">
+                    <div class="section-header" data-section="admin">
+                        <div class="section-title">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Quản lý hệ thống</span>
+                            <span class="admin-badge">ADMIN</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="operations.html" class="nav-link">
+                                <i class="fas fa-users-cog"></i>
+                                <span>Vận hành hệ thống</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-export"></i>
+                                <span>Xuất báo cáo tổng hợp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-cogs"></i>
+                                <span>Cài đặt phân quyền</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hỗ trợ -->
+                <div class="nav-section">
+                    <div class="section-header" data-section="support">
+                        <div class="section-title">
+                            <i class="fas fa-life-ring"></i>
+                            <span>Hỗ trợ</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-arrow"></i>
+                    </div>
+                    <ul class="nav-submenu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Hướng dẫn sử dụng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-video"></i>
+                                <span>Video giới thiệu</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-download"></i>
+                                <span>Tài nguyên tải về</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <div class="version-info">
+                    <small>Version 2.1.0</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-content">
+                    <div class="page-title">
+                        <h1>
+                            <i class="fas fa-list"></i>
+                            Danh sách Câu lạc bộ
+                        </h1>
+                        <p>Quản lý toàn bộ câu lạc bộ trong hệ thống</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="exportClubsList()">
+                            <i class="fas fa-download"></i>
+                            Xuất danh sách
+                        </button>
+                        <button class="btn btn-primary" onclick="openCreateClubModal()">
+                            <i class="fas fa-plus"></i>
+                            Thêm câu lạc bộ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="dashboard-grid">
+                <div class="card stats-card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>12</h3>
+                        <p>Tổng số CLB</p>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>9</h3>
+                        <p>CLB đang hoạt động</p>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>324</h3>
+                        <p>Tổng thành viên</p>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>15</h3>
+                        <p>Sự kiện tháng này</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>
+                        <i class="fas fa-filter"></i>
+                        Bộ lọc và tìm kiếm
+                    </h3>
+                </div>
+                <div class="filters-container">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="categoryFilter">Danh mục:</label>
+                            <select id="categoryFilter">
+                                <option value="">Tất cả</option>
+                                <option value="academic">Học thuật</option>
+                                <option value="sports">Thể thao</option>
+                                <option value="culture">Văn hóa</option>
+                                <option value="social">Xã hội</option>
+                                <option value="technology">Công nghệ</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="statusFilter">Trạng thái:</label>
+                            <select id="statusFilter">
+                                <option value="">Tất cả</option>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="inactive">Tạm dừng</option>
+                                <option value="pending">Chờ phê duyệt</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="membersFilter">Số thành viên:</label>
+                            <select id="membersFilter">
+                                <option value="">Tất cả</option>
+                                <option value="small">Dưới 20</option>
+                                <option value="medium">20-50</option>
+                                <option value="large">Trên 50</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="yearFilter">Năm thành lập:</label>
+                            <select id="yearFilter">
+                                <option value="">Tất cả</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="older">Cũ hơn</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchClub" placeholder="Tìm kiếm câu lạc bộ...">
+                        </div>
+                        <button class="btn btn-secondary" onclick="clearFilters()">
+                            <i class="fas fa-times"></i>
+                            Xóa bộ lọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clubs Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>
+                        <i class="fas fa-list"></i>
+                        Danh sách câu lạc bộ
+                    </h3>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" onclick="toggleView()">
+                            <i class="fas fa-th-large"></i>
+                            Chế độ xem
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="clubs-table" id="clubsTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th onclick="sortTable('name')">
+                                    Tên câu lạc bộ <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('code')">
+                                    Mã CLB <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('category')">
+                                    Danh mục <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('members')">
+                                    Thành viên <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('president')">
+                                    Chủ nhiệm <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('status')">
+                                    Trạng thái <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('founded')">
+                                    Năm thành lập <i class="fas fa-sort"></i>
+                                </th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clubsTableBody">
+                            <!-- Sample Data -->
+                            <tr>
+                                <td><input type="checkbox" class="club-checkbox" data-club-id="1"></td>
+                                <td>
+                                    <div class="club-name">
+                                        <div class="club-avatar">
+                                            <i class="fas fa-code"></i>
+                                        </div>
+                                        <div class="club-info">
+                                            <h4>CLB Lập trình CodeKing</h4>
+                                            <small>Câu lạc bộ lập trình và công nghệ</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="club-code">CK001</span></td>
+                                <td><span class="category-badge technology">Công nghệ</span></td>
+                                <td>
+                                    <div class="members-count">
+                                        <i class="fas fa-users"></i>
+                                        <span>45</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="president-info">
+                                        <img src="../../assets/images/avata_admin.jpg" alt="President">
+                                        <span>Nguyễn Văn A</span>
+                                    </div>
+                                </td>
+                                <td><span class="status-badge active">Đang hoạt động</span></td>
+                                <td>2022</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon" onclick="viewClub(1)" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon" onclick="editClub(1)" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon danger" onclick="deleteClub(1)" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="club-checkbox" data-club-id="2"></td>
+                                <td>
+                                    <div class="club-name">
+                                        <div class="club-avatar">
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <div class="club-info">
+                                            <h4>CLB Âm nhạc Yume</h4>
+                                            <small>Câu lạc bộ âm nhạc và biểu diễn</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="club-code">YM002</span></td>
+                                <td><span class="category-badge culture">Văn hóa</span></td>
+                                <td>
+                                    <div class="members-count">
+                                        <i class="fas fa-users"></i>
+                                        <span>32</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="president-info">
+                                        <img src="../../assets/images/avata_admin.jpg" alt="President">
+                                        <span>Trần Thị B</span>
+                                    </div>
+                                </td>
+                                <td><span class="status-badge active">Đang hoạt động</span></td>
+                                <td>2023</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon" onclick="viewClub(2)" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon" onclick="editClub(2)" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon danger" onclick="deleteClub(2)" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Hiển thị 1-10 của 12 câu lạc bộ
+                    </div>
+                    <div class="pagination">
+                        <button class="btn btn-outline" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-primary">1</button>
+                        <button class="btn btn-outline">2</button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fas fa-bell"></i> Thông báo</h3>
+            <button class="notification-close" onclick="dashboard.closeNotificationPanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-content" id="notificationContent">
+            <div class="notification-item unread">
+                <div class="notification-item-icon info">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="notification-item-content">
+                    <div class="notification-item-title">CLB mới được tạo</div>
+                    <div class="notification-item-message">CLB "Gaming Club" đã được thêm vào danh sách và đang chờ phê
+                        duyệt</div>
+                    <div class="notification-item-time">
+                        <i class="fas fa-clock"></i>
+                        10 phút trước
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item unread">
+                <div class="notification-item-icon success">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="notification-item-content">
+                    <div class="notification-item-title">Thành viên mới</div>
+                    <div class="notification-item-message">15 thành viên mới đã gia nhập các CLB trong tuần này</div>
+                    <div class="notification-item-time">
+                        <i class="fas fa-clock"></i>
+                        1 giờ trước
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-item-icon warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="notification-item-content">
+                    <div class="notification-item-title">Cần cập nhật thông tin</div>
+                    <div class="notification-item-message">3 CLB chưa cập nhật thông tin hoạt động tháng này</div>
+                    <div class="notification-item-time">
+                        <i class="fas fa-clock"></i>
+                        2 giờ trước
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Club Modal -->
+    <div id="createClubModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+                <h3 style="margin: 0; font-size: var(--font-size-xl); color: var(--text-primary);">
+                    <i class="fas fa-plus" style="color: var(--primary);"></i>
+                    Tạo câu lạc bộ mới
+                </h3>
+                <button class="modal-close" onclick="clubsManager.closeModal('createClubModal')"
+                    style="background: none; border: none; font-size: var(--font-size-xl); cursor: pointer; color: var(--text-tertiary);">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createClubForm" style="display: grid; gap: var(--space-4);">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                        <div>
+                            <label for="clubName"
+                                style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Tên
+                                CLB *</label>
+                            <input type="text" id="clubName" name="name" required
+                                style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal);"
+                                placeholder="Nhập tên câu lạc bộ">
+                        </div>
+                        <div>
+                            <label for="clubCode"
+                                style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Mã
+                                CLB *</label>
+                            <input type="text" id="clubCode" name="code" required
+                                style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal);"
+                                placeholder="Ví dụ: CK001">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                        <div>
+                            <label for="clubCategory"
+                                style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Loại
+                                CLB *</label>
+                            <select id="clubCategory" name="category" required
+                                style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal);">
+                                <option value="">Chọn loại CLB</option>
+                                <option value="technology">Công nghệ</option>
+                                <option value="sport">Thể thao</option>
+                                <option value="art">Nghệ thuật</option>
+                                <option value="academic">Học thuật</option>
+                                <option value="volunteer">Tình nguyện</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="clubPresident"
+                                style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Chủ
+                                nhiệm *</label>
+                            <input type="text" id="clubPresident" name="president" required
+                                style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal);"
+                                placeholder="Tên chủ nhiệm CLB">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="clubDescription"
+                            style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Mô
+                            tả</label>
+                        <textarea id="clubDescription" name="description" rows="4"
+                            style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal); resize: vertical;"
+                            placeholder="Mô tả ngắn về câu lạc bộ..."></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                        <div>
+                            <label for="clubEmail"
+                                style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Email
+                                liên hệ</label>
+                            <input type="email" id="clubEmail" name="email"
+                                style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal);"
+                                placeholder="email@club.com">
+                        </div>
+                        <div>
+                            <label for="clubPhone"
+                                style="display: block; margin-bottom: var(--space-2); font-weight: 600; color: var(--text-primary);">Số
+                                điện thoại</label>
+                            <input type="tel" id="clubPhone" name="phone"
+                                style="width: 100%; padding: var(--space-3); border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); transition: all var(--transition-normal);"
+                                placeholder="0123456789">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer"
+                style="margin-top: var(--space-6); display: flex; justify-content: flex-end; gap: var(--space-3);">
+                <button type="button" class="btn-control" onclick="clubsManager.closeModal('createClubModal')">
+                    Hủy
+                </button>
+                <button type="submit" form="createClubForm" class="btn-control primary">
+                    <i class="fas fa-save"></i>
+                    Tạo câu lạc bộ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Club Modal -->
+    <div id="viewClubModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+                <h3 style="margin: 0; font-size: var(--font-size-xl); color: var(--text-primary);">
+                    <i class="fas fa-eye" style="color: var(--primary);"></i>
+                    Chi tiết câu lạc bộ
+                </h3>
+                <button class="modal-close" onclick="clubsManager.closeModal('viewClubModal')"
+                    style="background: none; border: none; font-size: var(--font-size-xl); cursor: pointer; color: var(--text-tertiary);">&times;</button>
+            </div>
+            <div class="modal-body" id="viewClubContent">
+                <!-- Club details will be rendered here -->
+            </div>
+            <div class="modal-footer"
+                style="margin-top: var(--space-6); display: flex; justify-content: flex-end; gap: var(--space-3);">
+                <button type="button" class="btn-control" onclick="clubsManager.closeModal('viewClubModal')">
+                    Đóng
+                </button>
+                <button type="button" class="btn-control primary" onclick="editCurrentClub()">
+                    <i class="fas fa-edit"></i>
+                    Chỉnh sửa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner-content">
+            <div class="spinner"></div>
+            <p>Đang tải danh sách CLB...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../dashboard/dashboard-clean.js"></script>
+    <script>
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize clubs list functionality
+            if (typeof ClubsListManager !== 'undefined') {
+                window.clubsManager = new ClubsListManager();
+            } else {
+                // Fallback club manager
+                window.clubsManager = {
+                    openCreateClubModal: function () {
+                        document.getElementById('createClubModal').style.display = 'flex';
+                        setTimeout(() => {
+                            document.getElementById('createClubModal').classList.add('show');
+                        }, 10);
+                    },
+                    closeModal: function (modalId) {
+                        const modal = document.getElementById(modalId);
+                        modal.classList.remove('show');
+                        setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 300);
+                    }
+                };
+            }
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Setup modal styling
+            setupModalStyles();
+        });
+
+        function setupModalStyles() {
+            const modals = document.querySelectorAll('.modal-overlay');
+            modals.forEach(modal => {
+                modal.style.cssText = `
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 2000;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                `;
+            });
+
+            // Add show class styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .modal-overlay.show {
+                    opacity: 1 !important;
+                    visibility: visible !important;
+                }
+                .modal-overlay .modal-content {
+                    transform: scale(0.9);
+                    transition: transform 0.3s ease;
+                }
+                .modal-overlay.show .modal-content {
+                    transform: scale(1);
+                }
+                
+                /* Table Styles */
+                .clubs-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: var(--space-4);
+                }
+                
+                .clubs-table th {
+                    background: var(--bg-tertiary);
+                    padding: var(--space-4);
+                    text-align: left;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    border-bottom: 2px solid var(--border-color);
+                    cursor: pointer;
+                    user-select: none;
+                    transition: all var(--transition-fast);
+                }
+                
+                .clubs-table th:hover {
+                    background: var(--primary);
+                    color: var(--text-white);
+                }
+                
+                .clubs-table td {
+                    padding: var(--space-4);
+                    border-bottom: 1px solid var(--border-light);
+                }
+                
+                .clubs-table tr:hover {
+                    background: var(--bg-tertiary);
+                }
+                
+                .club-name-cell {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--space-3);
+                }
+                
+                .club-logo {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: var(--radius-lg);
+                    object-fit: cover;
+                    border: 2px solid var(--border-color);
+                }
+                
+                .club-name {
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    margin-bottom: var(--space-1);
+                }
+                
+                .club-description {
+                    font-size: var(--font-size-sm);
+                    color: var(--text-secondary);
+                }
+                
+                .club-code {
+                    background: var(--bg-tertiary);
+                    padding: var(--space-1) var(--space-2);
+                    border-radius: var(--radius-md);
+                    font-weight: 600;
+                    font-size: var(--font-size-sm);
+                    color: var(--primary);
+                }
+                
+                .category-tag {
+                    padding: var(--space-1) var(--space-3);
+                    border-radius: var(--radius-full);
+                    font-size: var(--font-size-xs);
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .category-tag.technology {
+                    background: rgba(37, 99, 235, 0.1);
+                    color: var(--primary);
+                }
+                
+                .category-tag.art {
+                    background: rgba(168, 85, 247, 0.1);
+                    color: #a855f7;
+                }
+                
+                .category-tag.volunteer {
+                    background: rgba(34, 197, 94, 0.1);
+                    color: var(--success);
+                }
+                
+                .status-badge {
+                    padding: var(--space-1) var(--space-3);
+                    border-radius: var(--radius-full);
+                    font-size: var(--font-size-xs);
+                    font-weight: 600;
+                }
+                
+                .status-badge.active {
+                    background: rgba(34, 197, 94, 0.1);
+                    color: var(--success);
+                }
+                
+                .status-badge.inactive {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--danger);
+                }
+                
+                .action-buttons {
+                    display: flex;
+                    gap: var(--space-2);
+                }
+                
+                .btn-action {
+                    width: 2rem;
+                    height: 2rem;
+                    border: none;
+                    border-radius: var(--radius-md);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all var(--transition-fast);
+                }
+                
+                .btn-action.view {
+                    background: rgba(6, 182, 212, 0.1);
+                    color: var(--info);
+                }
+                
+                .btn-action.edit {
+                    background: rgba(245, 158, 11, 0.1);
+                    color: var(--warning);
+                }
+                
+                .btn-action.delete {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--danger);
+                }
+                
+                .btn-action:hover {
+                    transform: scale(1.1);
+                }
+                
+                .pagination-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: var(--space-6);
+                    padding: var(--space-4) 0;
+                }
+                
+                .pagination-info {
+                    color: var(--text-secondary);
+                    font-size: var(--font-size-sm);
+                }
+                
+                .pagination {
+                    display: flex;
+                    gap: var(--space-2);
+                }
+                
+                .pagination-btn {
+                    padding: var(--space-2) var(--space-3);
+                    border: 2px solid var(--border-color);
+                    background: var(--bg-primary);
+                    border-radius: var(--radius-md);
+                    cursor: pointer;
+                    transition: all var(--transition-fast);
+                }
+                
+                .pagination-btn:hover:not(:disabled) {
+                    background: var(--primary);
+                    color: var(--text-white);
+                    border-color: var(--primary);
+                }
+                
+                .pagination-btn.active {
+                    background: var(--primary);
+                    color: var(--text-white);
+                    border-color: var(--primary);
+                }
+                
+                .pagination-btn:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function setupEventListeners() {
+            // Search functionality
+            const searchInput = document.getElementById('searchClub');
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    filterClubs();
+                });
+            }
+
+            // Filter functionality
+            const filters = ['categoryFilter', 'statusFilter', 'membersFilter', 'academicYear'];
+            filters.forEach(filterId => {
+                const filter = document.getElementById(filterId);
+                if (filter) {
+                    filter.addEventListener('change', function () {
+                        filterClubs();
+                    });
+                }
+            });
+
+            // Form submission
+            const createForm = document.getElementById('createClubForm');
+            if (createForm) {
+                createForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    // Handle form submission
+                    console.log('Creating new club...');
+                    clubsManager.closeModal('createClubModal');
+                    showNotification('Tạo CLB thành công!', 'success');
+                });
+            }
+        }
+
+        function filterClubs() {
+            // Filter implementation
+            console.log('Filtering clubs...');
+        }
+
+        function clearFilters() {
+            // Clear all filters
+            document.getElementById('searchClub').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('membersFilter').value = '';
+            document.getElementById('academicYear').value = '2024-2025';
+            filterClubs();
+        }
+
+        function viewClub(clubId) {
+            // Show club details in modal
+            console.log('Viewing club:', clubId);
+            // Populate modal with club data
+            document.getElementById('viewClubContent').innerHTML = `
+                <div style="text-align: center; margin-bottom: var(--space-6);">
+                    <img src="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png" 
+                         alt="Club Logo" style="width: 80px; height: 80px; border-radius: var(--radius-xl); object-fit: cover; border: 3px solid var(--border-color);">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                    <div>
+                        <strong>Tên CLB:</strong> Code King<br>
+                        <strong>Mã CLB:</strong> CK001<br>
+                        <strong>Loại:</strong> Công nghệ<br>
+                        <strong>Thành viên:</strong> 45 người
+                    </div>
+                    <div>
+                        <strong>Chủ nhiệm:</strong> Nguyễn Văn A<br>
+                        <strong>Trạng thái:</strong> <span class="status-badge active">Hoạt động</span><br>
+                        <strong>Thành lập:</strong> 2020<br>
+                        <strong>Email:</strong> codeking@club.com
+                    </div>
+                </div>
+                <div style="margin-top: var(--space-4);">
+                    <strong>Mô tả:</strong><br>
+                    <p style="margin-top: var(--space-2); color: var(--text-secondary); line-height: 1.6;">
+                        Câu lạc bộ lập trình dành cho sinh viên yêu thích công nghệ. Tổ chức các workshop, hackathon và dự án thực tế.
+                    </p>
+                </div>
+            `;
+            document.getElementById('viewClubModal').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('viewClubModal').classList.add('show');
+            }, 10);
+        }
+
+        function editClub(clubId) {
+            console.log('Editing club:', clubId);
+            // Implement edit functionality
+        }
+
+        function deleteClub(clubId) {
+            if (confirm('Bạn có chắc chắn muốn xóa câu lạc bộ này?')) {
+                console.log('Deleting club:', clubId);
+                showNotification('Xóa CLB thành công!', 'success');
+            }
+        }
+
+        function sortTable(column) {
+            console.log('Sorting by:', column);
+        }
+
+        function handleKeyPress(event, column) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                sortTable(column);
+            }
+        }
+
+        function toggleView() {
+            console.log('Toggling view mode...');
+        }
+
+        function editCurrentClub() {
+            clubsManager.closeModal('viewClubModal');
+            // Open edit modal
+        }
+
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                padding: var(--space-4) var(--space-6);
+                margin-bottom: var(--space-3);
+                border-radius: var(--radius-lg);
+                color: white;
+                font-weight: 600;
+                animation: slideInRight 0.3s ease-out;
+                background: var(--success);
+            `;
+            notification.textContent = message;
+            container.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Dashboard integration
+        if (typeof dashboard === 'undefined') {
+            window.dashboard = {
+                openSettings: () => console.log('Opening settings...'),
+                viewNotifications: () => console.log('Viewing notifications...'),
+                openHelp: () => console.log('Opening help...'),
+                switchAccount: () => console.log('Switching account...'),
+                closeNotificationPanel: () => {
+                    document.getElementById('notificationPanel').classList.remove('show');
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

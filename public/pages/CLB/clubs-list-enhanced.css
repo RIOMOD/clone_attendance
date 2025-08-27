@@ -1,0 +1,586 @@
+/* Enhanced Styles for Clubs List Page */
+
+/* Additional Table Responsive Design */
+@media (max-width: 1200px) {
+
+    .clubs-table th:nth-child(7),
+    .clubs-table td:nth-child(7) {
+        display: none;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .clubs-table th:nth-child(6),
+    .clubs-table td:nth-child(6),
+    .clubs-table th:nth-child(5),
+    .clubs-table td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .clubs-table {
+        min-width: 600px;
+    }
+
+    .club-name-cell {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-2);
+    }
+
+    .club-logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: var(--space-1);
+    }
+
+    .btn-action {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* Enhanced Modal Responsiveness */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: var(--space-4);
+        padding: var(--space-6);
+        max-width: none !important;
+        width: calc(100% - var(--space-8)) !important;
+        max-height: calc(100vh - var(--space-8));
+        overflow-y: auto;
+    }
+
+    .modal-header h3 {
+        font-size: var(--font-size-lg) !important;
+    }
+
+    .modal-body form>div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Loading States */
+.table-loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.table-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: 2rem;
+    margin: -1rem 0 0 -1rem;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 10;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--space-16) var(--space-8);
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    color: var(--text-light);
+    margin-bottom: var(--space-4);
+}
+
+.empty-state h3 {
+    font-size: var(--font-size-xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.empty-state p {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-6);
+}
+
+/* Advanced Filters */
+.filter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    background: var(--primary);
+    color: var(--text-white);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    margin-right: var(--space-2);
+    margin-bottom: var(--space-2);
+}
+
+.filter-badge button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin-left: var(--space-1);
+    font-size: var(--font-size-xs);
+}
+
+.active-filters {
+    margin: var(--space-4) 0;
+    padding: var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.active-filters-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    font-size: var(--font-size-sm);
+}
+
+/* Club Statistics in Table */
+.club-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--font-size-sm);
+}
+
+.club-stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--text-secondary);
+}
+
+.club-stat-item i {
+    font-size: var(--font-size-xs);
+}
+
+/* Enhanced Action Buttons */
+.bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--space-4);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all var(--transition-normal);
+    pointer-events: none;
+}
+
+.bulk-actions.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.bulk-actions-info {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.bulk-actions-buttons {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* Table Selection */
+.clubs-table input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary);
+}
+
+.clubs-table tr.selected {
+    background: rgba(37, 99, 235, 0.05) !important;
+    border-left: 4px solid var(--primary);
+}
+
+/* Quick Edit Inline */
+.club-quick-edit {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-primary);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-xl);
+    z-index: 100;
+}
+
+.club-quick-edit.show {
+    display: block;
+}
+
+.quick-edit-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-3);
+    align-items: end;
+}
+
+.quick-edit-form input,
+.quick-edit-form select {
+    padding: var(--space-2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.quick-edit-actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* Advanced Search */
+.advanced-search {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-card);
+}
+
+.advanced-search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.advanced-search-toggle {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.advanced-search-content {
+    display: none;
+}
+
+.advanced-search-content.show {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+.search-operators {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.operator-btn {
+    padding: var(--space-2) var(--space-3);
+    border: 2px solid var(--border-color);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: var(--font-size-sm);
+}
+
+.operator-btn.active {
+    background: var(--primary);
+    color: var(--text-white);
+    border-color: var(--primary);
+}
+
+/* Export Options */
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-dropdown-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    min-width: 200px;
+    padding: var(--space-2);
+    margin-top: var(--space-1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-normal);
+    z-index: 1000;
+}
+
+.export-dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.export-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.export-option:hover {
+    background: var(--bg-tertiary);
+    color: var(--primary);
+}
+
+.export-option i {
+    width: 1.5rem;
+    text-align: center;
+}
+
+/* Notification Enhancements */
+.notification {
+    position: fixed;
+    top: var(--space-6);
+    right: var(--space-6);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-lg);
+    color: var(--text-white);
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: transform var(--transition-normal);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: var(--success);
+}
+
+.notification.error {
+    background: var(--danger);
+}
+
+.notification.warning {
+    background: var(--warning);
+}
+
+.notification.info {
+    background: var(--info);
+}
+
+/* Club Status Indicators */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.status-dot.active {
+    background: var(--success);
+}
+
+.status-dot.inactive {
+    background: var(--danger);
+}
+
+.status-dot.pending {
+    background: var(--warning);
+}
+
+/* Member Count Display */
+.member-count {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.member-count-number {
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+}
+
+.member-count-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+
+    .notification,
+    .bulk-actions,
+    .export-dropdown-content,
+    .advanced-search-content {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Focus Management */
+.clubs-table th:focus,
+.btn-action:focus,
+.pagination-btn:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+
+    .dashboard-header,
+    .sidebar,
+    .dashboard-controls,
+    .bulk-actions,
+    .pagination-container,
+    .action-buttons {
+        display: none !important;
+    }
+
+    .content {
+        padding: 0 !important;
+    }
+
+    .clubs-table {
+        font-size: 12px;
+    }
+
+    .clubs-table th,
+    .clubs-table td {
+        padding: 8px 4px;
+    }
+
+    .club-logo {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Dark Mode Compatibility (if needed later) */
+@media (prefers-color-scheme: dark) {
+    /* Will be populated if dark mode is implemented */
+}
+
+/* Custom Scrollbar for Table */
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+}
+
+/* Performance Optimizations */
+.clubs-table {
+    contain: layout style paint;
+    will-change: scroll-position;
+}
+
+.modal-overlay {
+    contain: layout style paint;
+    will-change: opacity, visibility;
+}
+
+/* Enhanced Button States */
+.btn-control:active {
+    transform: translateY(1px);
+}
+
+.btn-action:active {
+    transform: scale(0.95);
+}
+
+/* Form Validation States */
+.form-group input:invalid,
+.form-group select:invalid,
+.form-group textarea:invalid {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-group input:valid,
+.form-group select:valid,
+.form-group textarea:valid {
+    border-color: var(--success);
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-accent) 50%, var(--bg-tertiary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-row {
+    height: 60px;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-2);
+}

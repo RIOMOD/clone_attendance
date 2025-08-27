@@ -1,0 +1,666 @@
+/* CLB Modern Dashboard - Professional Light Mode Enhancements */
+
+/* Additional CLB-specific styling that builds on dashboard-modern.css */
+
+/* Sidebar Navigation Override for CLB */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    z-index: 999;
+    transition: var(--transition-normal);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6) var(--space-6) var(--space-4);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+    color: var(--primary);
+}
+
+.sidebar-logo i {
+    font-size: var(--font-size-xl);
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.sidebar-toggle:hover {
+    background: var(--bg-tertiary);
+    color: var(--primary);
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+    padding: var(--space-4);
+}
+
+.nav-section {
+    margin-bottom: var(--space-8);
+}
+
+.nav-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-3);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-list {
+    list-style: none;
+}
+
+.nav-item {
+    margin-bottom: var(--space-1);
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.nav-link:hover {
+    background: var(--bg-tertiary);
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.nav-item.active .nav-link {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+    font-size: var(--font-size-base);
+}
+
+.nav-text {
+    flex: 1;
+    font-size: var(--font-size-sm);
+}
+
+.nav-arrow {
+    font-size: var(--font-size-xs);
+    color: var(--text-light);
+    transition: var(--transition-fast);
+}
+
+.nav-item.active .nav-arrow {
+    transform: rotate(90deg);
+    color: var(--primary);
+}
+
+/* Main Content Adjustment */
+.main-content {
+    margin-left: 280px;
+    min-height: calc(100vh - 70px);
+}
+
+/* CLB Category Icons */
+.category-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+    transition: all var(--transition-normal);
+}
+
+.category-icon.all {
+    background: var(--bg-gradient-1);
+}
+
+.category-icon.academic {
+    background: var(--bg-gradient-2);
+}
+
+.category-icon.sports {
+    background: var(--bg-gradient-3);
+}
+
+.category-icon.culture {
+    background: var(--bg-gradient-4);
+}
+
+.category-icon.social {
+    background: var(--bg-gradient-5);
+}
+
+.category-icon.technology {
+    background: var(--primary);
+}
+
+/* CLB Categories List */
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.category-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.category-item.active {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.category-item.active .category-details h4,
+.category-item.active .category-details p {
+    color: white;
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.category-details h4 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.category-details p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.category-count {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.category-item.active .category-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* CLB List */
+.clubs-content {
+    margin-top: var(--space-6);
+}
+
+.clubs-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.club-item {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.club-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+}
+
+.club-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.club-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.club-status {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.club-status.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.club-status.pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.club-status.inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+/* Charts và Analytics */
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.legend-color {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+.legend-color.academic {
+    background: var(--primary);
+}
+
+.legend-color.sports {
+    background: var(--success);
+}
+
+.legend-color.culture {
+    background: var(--warning);
+}
+
+.legend-color.social {
+    background: var(--info);
+}
+
+/* Events Timeline */
+.events-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.event-item {
+    display: flex;
+    align-items: start;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    border-left: 4px solid var(--primary);
+    transition: all var(--transition-normal);
+}
+
+.event-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+}
+
+.event-date {
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+.event-day {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.event-details h4 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.event-details p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Top Clubs List */
+.top-clubs-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.top-club-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    transition: all var(--transition-normal);
+}
+
+.top-club-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.club-rank {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+}
+
+.top-club-info h5 {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.top-club-info p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+/* Activity Meta Styling */
+.activity-meta {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+}
+
+.activity-meta span {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+}
+
+.activity-type {
+    background: var(--bg-tertiary);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+}
+
+/* Report Items */
+.report-meta {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+}
+
+.report-format {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.report-format.pdf {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.report-format.excel {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+/* View Controls */
+.view-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.tab-btn {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.tab-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.view-options {
+    display: flex;
+    gap: var(--space-1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-1);
+    background: var(--bg-primary);
+}
+
+.view-btn {
+    padding: var(--space-2);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-normal);
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-btn:hover {
+    color: var(--primary);
+    background: var(--bg-secondary);
+}
+
+.view-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Chart Period Selector */
+.chart-period select {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .category-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+
+    .category-info {
+        width: 100%;
+    }
+
+    .view-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-3);
+    }
+
+    .filter-tabs {
+        flex-wrap: wrap;
+    }
+
+    .activity-meta {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .report-meta {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+    }
+
+    .chart-legend {
+        justify-content: center;
+    }
+}
+
+/* Modern animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.club-item,
+.category-item,
+.event-item,
+.top-club-item {
+    animation: slideInUp 0.5s ease-out forwards;
+}
+
+/* Stagger animation delay for list items */
+.club-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.club-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.club-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.club-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.club-item:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+/* Enhanced hover effects */
+.quick-action-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Focus states for accessibility */
+.tab-btn:focus,
+.view-btn:focus,
+.category-item:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}

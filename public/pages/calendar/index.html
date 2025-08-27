@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Lịch tổng quan - Hệ thống chấm công CTSV</title>
+    <meta name="description" content="Lịch tổng quan và quản lý sự kiện hệ thống chấm công CTSV">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
+
+    <!-- Modern Calendar Stylesheet -->
+    <link rel="stylesheet" href="calendar-modern.css">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- FullCalendar.js -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Enhanced Header với Full Functionality -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>CTSV Dashboard</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="search-box">
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm sinh viên, CLB, sự kiện..."
+                        autocomplete="off">
+                    <button type="button" id="searchBtn" title="Tìm kiếm">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults">
+                        <!-- Search results sẽ được populate động -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <!-- Theme Toggle -->
+                    <button class="action-btn" id="themeToggle" title="Chế độ Light Mode (đã kích hoạt)">
+                        <i class="fas fa-sun"></i>
+                    </button>
+
+                    <!-- Quick Actions -->
+                    <button class="action-btn" id="quickAdd" title="Thêm nhanh">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="action-btn" id="notificationBtn" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">5</span>
+                    </button>
+
+                    <!-- Messages -->
+                    <button class="action-btn" id="messageBtn" title="Tin nhắn">
+                        <i class="fas fa-comment"></i>
+                        <span class="badge" id="messageBadge">3</span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="action-btn" id="settingsBtn" title="Cài đặt nhanh">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+
+                <!-- Enhanced User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Quản trị viên</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            <div>
+                                <div class="dropdown-name">Admin User</div>
+                                <div class="dropdown-email">admin@ctsv.edu.vn</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+
+                        <a href="../profile/profile.html">
+                            <i class="fas fa-user"></i> Hồ sơ cá nhân
+                        </a>
+                        <button type="button" onclick="dashboard.openSettings()">
+                            <i class="fas fa-cog"></i> Cài đặt tài khoản
+                        </button>
+                        <button type="button" onclick="dashboard.viewNotifications()">
+                            <i class="fas fa-bell"></i> Quản lý thông báo
+                        </button>
+                        <button type="button" onclick="dashboard.openHelp()">
+                            <i class="fas fa-question-circle"></i> Trợ giúp
+                        </button>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button type="button" onclick="dashboard.switchAccount()">
+                            <i class="fas fa-user-friends"></i> Chuyển tài khoản
+                        </button>
+                        <a href="../authen/login-professional.html" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Lịch tổng quan</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../dashboard/dashboard.html" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span class="nav-text">Trang chủ</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../operations/operations.html" class="nav-link">
+                                <i class="fas fa-cogs"></i>
+                                <span class="nav-text">Vận hành</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-calendar"></i>
+                        <span>Lịch & Chấm công</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span class="nav-text">Lịch tổng quan</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-calendar-day"></i>
+                                <span class="nav-text">Lịch cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-clock"></i>
+                                <span class="nav-text">Chấm công</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-calendar-times"></i>
+                                <span class="nav-text">Quản lý nghỉ phép</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-users"></i>
+                        <span>CLB & Sự kiện</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../CLB/clubs-list.html" class="nav-link">
+                                <i class="fas fa-list"></i>
+                                <span class="nav-text">Danh sách CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../CLB/club-events.html" class="nav-link">
+                                <i class="fas fa-calendar-check"></i>
+                                <span class="nav-text">Sự kiện CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../CLB/club-members.html" class="nav-link">
+                                <i class="fas fa-user-friends"></i>
+                                <span class="nav-text">Thành viên CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../CLB/club-organizers.html" class="nav-link">
+                                <i class="fas fa-user-tie"></i>
+                                <span class="nav-text">Ban chủ nhiệm</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Thống kê & Báo cáo</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../statistics/index.html" class="nav-link">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="nav-text">Thống kê cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                <span class="nav-text">Báo cáo tổng quan</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="nav-text">Xuất báo cáo</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-user"></i>
+                        <span>Cá nhân</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../profile/profile.html" class="nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="nav-text">Hồ sơ cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span class="nav-text">Cài đặt</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>
+                            <i class="fas fa-calendar-alt"></i>
+                            Lịch tổng quan
+                        </h1>
+                        <p class="page-subtitle">Quản lý và theo dõi tất cả sự kiện, lịch họp của hệ thống</p>
+                    </div>
+                    <div class="page-actions">
+                        <div class="filter-controls">
+                            <select id="calendarFilter" class="filter-select">
+                                <option value="all">Tất cả sự kiện</option>
+                                <option value="meeting">Họp/Gặp mặt</option>
+                                <option value="event">Sự kiện CLB</option>
+                                <option value="deadline">Deadline</option>
+                                <option value="personal">Lịch cá nhân</option>
+                            </select>
+                            <button class="btn btn-outline" id="todayBtn">
+                                <i class="fas fa-calendar-day"></i>
+                                <span>Hôm nay</span>
+                            </button>
+                            <button class="btn btn-outline" id="syncBtn">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Đồng bộ</span>
+                            </button>
+                            <button class="btn btn-primary" id="addEventBtn">
+                                <i class="fas fa-plus"></i>
+                                <span>Thêm sự kiện</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Dashboard -->
+                <div class="calendar-dashboard">
+                    <!-- Quick Stats Cards -->
+                    <div class="calendar-stats">
+                        <div class="stats-card today-events">
+                            <div class="card-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="stat-number">5</h3>
+                                <p class="stat-label">Sự kiện hôm nay</p>
+                                <div class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+2 so với hôm qua</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card week-events">
+                            <div class="card-icon">
+                                <i class="fas fa-calendar-week"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="stat-number">23</h3>
+                                <p class="stat-label">Sự kiện tuần này</p>
+                                <div class="stat-trend down">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>-3 so với tuần trước</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card upcoming-deadlines">
+                            <div class="card-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="stat-number">8</h3>
+                                <p class="stat-label">Deadline sắp tới</p>
+                                <div class="stat-trend neutral">
+                                    <i class="fas fa-minus"></i>
+                                    <span>Không đổi</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card attendance-rate">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="stat-number">94.2%</h3>
+                                <p class="stat-label">Tỷ lệ tham dự</p>
+                                <div class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+1.2% so với tháng trước</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar & Events Layout -->
+                    <div class="calendar-layout">
+                        <!-- Main Calendar -->
+                        <div class="calendar-main">
+                            <div class="calendar-header">
+                                <div class="calendar-nav">
+                                    <button class="nav-btn" id="prevBtn">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <h2 id="currentMonth">Tháng 8, 2025</h2>
+                                    <button class="nav-btn" id="nextBtn">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="view-toggles">
+                                    <button class="toggle-btn" data-view="month">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Tháng</span>
+                                    </button>
+                                    <button class="toggle-btn active" data-view="week">
+                                        <i class="fas fa-calendar-week"></i>
+                                        <span>Tuần</span>
+                                    </button>
+                                    <button class="toggle-btn" data-view="day">
+                                        <i class="fas fa-calendar-day"></i>
+                                        <span>Ngày</span>
+                                    </button>
+                                    <button class="toggle-btn" data-view="list">
+                                        <i class="fas fa-list"></i>
+                                        <span>Danh sách</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar-container">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+
+                        <!-- Events Sidebar -->
+                        <div class="events-sidebar">
+                            <!-- Today's Events -->
+                            <div class="sidebar-section">
+                                <h3>
+                                    <i class="fas fa-calendar-day"></i>
+                                    Sự kiện hôm nay
+                                </h3>
+                                <div class="events-list" id="todayEvents">
+                                    <div class="event-item urgent">
+                                        <div class="event-time">09:00</div>
+                                        <div class="event-details">
+                                            <h4>Họp Ban Chủ nhiệm</h4>
+                                            <p>Phòng 301, Tòa A2</p>
+                                            <div class="event-tags">
+                                                <span class="tag urgent">Quan trọng</span>
+                                                <span class="tag meeting">Họp</span>
+                                            </div>
+                                        </div>
+                                        <div class="event-actions">
+                                            <button class="btn-icon" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-time">14:00</div>
+                                        <div class="event-details">
+                                            <h4>Workshop JavaScript</h4>
+                                            <p>CLB CodeKing - Lab B201</p>
+                                            <div class="event-tags">
+                                                <span class="tag event">Sự kiện</span>
+                                                <span class="tag tech">Tech</span>
+                                            </div>
+                                        </div>
+                                        <div class="event-actions">
+                                            <button class="btn-icon" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-time">16:30</div>
+                                        <div class="event-details">
+                                            <h4>Họp CLB Yume</h4>
+                                            <p>Phòng 205, Tòa C1</p>
+                                            <div class="event-tags">
+                                                <span class="tag meeting">Họp</span>
+                                                <span class="tag yume">Yume</span>
+                                            </div>
+                                        </div>
+                                        <div class="event-actions">
+                                            <button class="btn-icon" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming Events -->
+                            <div class="sidebar-section">
+                                <h3>
+                                    <i class="fas fa-clock"></i>
+                                    Sự kiện sắp tới
+                                </h3>
+                                <div class="events-list" id="upcomingEvents">
+                                    <div class="event-item">
+                                        <div class="event-date">
+                                            <span class="day">19</span>
+                                            <span class="month">Th8</span>
+                                        </div>
+                                        <div class="event-details">
+                                            <h4>Hackathon 2025</h4>
+                                            <p>Cả ngày - Trường Đại học</p>
+                                            <div class="event-tags">
+                                                <span class="tag event">Sự kiện</span>
+                                                <span class="tag competition">Thi đấu</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-date">
+                                            <span class="day">22</span>
+                                            <span class="month">Th8</span>
+                                        </div>
+                                        <div class="event-details">
+                                            <h4>Deadline Báo cáo tháng</h4>
+                                            <p>23:59 - Tất cả CLB</p>
+                                            <div class="event-tags">
+                                                <span class="tag deadline">Deadline</span>
+                                                <span class="tag important">Quan trọng</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-item">
+                                        <div class="event-date">
+                                            <span class="day">25</span>
+                                            <span class="month">Th8</span>
+                                        </div>
+                                        <div class="event-details">
+                                            <h4>Tổng kết CLB CodeKing</h4>
+                                            <p>19:00 - Hội trường A</p>
+                                            <div class="event-tags">
+                                                <span class="tag meeting">Họp</span>
+                                                <span class="tag codeking">CodeKing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions -->
+                            <div class="sidebar-section">
+                                <h3>
+                                    <i class="fas fa-bolt"></i>
+                                    Thao tác nhanh
+                                </h3>
+                                <div class="quick-actions">
+                                    <button class="quick-action-btn" id="quickMeeting">
+                                        <i class="fas fa-users"></i>
+                                        <span>Tạo cuộc họp</span>
+                                    </button>
+                                    <button class="quick-action-btn" id="quickEvent">
+                                        <i class="fas fa-calendar-plus"></i>
+                                        <span>Thêm sự kiện</span>
+                                    </button>
+                                    <button class="quick-action-btn" id="quickDeadline">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        <span>Đặt deadline</span>
+                                    </button>
+                                    <button class="quick-action-btn" id="quickExport">
+                                        <i class="fas fa-download"></i>
+                                        <span>Xuất lịch</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">Thêm sự kiện mới</h3>
+                <button class="modal-close" id="modalCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTitle">Tiêu đề sự kiện</label>
+                            <input type="text" id="eventTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventType">Loại sự kiện</label>
+                            <select id="eventType" name="type" required>
+                                <option value="meeting">Họp/Gặp mặt</option>
+                                <option value="event">Sự kiện CLB</option>
+                                <option value="deadline">Deadline</option>
+                                <option value="personal">Lịch cá nhân</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventDate">Ngày</label>
+                            <input type="date" id="eventDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventTime">Giờ bắt đầu</label>
+                            <input type="time" id="eventTime" name="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventDuration">Thời lượng (phút)</label>
+                            <input type="number" id="eventDuration" name="duration" min="15" step="15" value="60">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventLocation">Địa điểm</label>
+                        <input type="text" id="eventLocation" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescription">Mô tả</label>
+                        <textarea id="eventDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventOrganizer">Người tổ chức</label>
+                            <input type="text" id="eventOrganizer" name="organizer">
+                        </div>
+                        <div class="form-group">
+                            <label for="eventPriority">Độ ưu tiên</label>
+                            <select id="eventPriority" name="priority">
+                                <option value="low">Thấp</option>
+                                <option value="normal" selected>Bình thường</option>
+                                <option value="high">Cao</option>
+                                <option value="urgent">Khẩn cấp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="eventReminder" name="reminder" checked>
+                            Nhắc nhở trước sự kiện
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modalCancelBtn">Hủy</button>
+                <button class="btn btn-primary" id="modalSaveBtn">Lưu sự kiện</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="calendar-modern.js"></script>
+</body>
+
+</html>

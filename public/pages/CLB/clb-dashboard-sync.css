@@ -1,0 +1,424 @@
+/* =====================================================
+   CLB PAGE - COMPLETE DASHBOARD SYNCHRONIZATION
+   Based on dashboard-modern.css with CLB customizations
+   ===================================================== */
+
+/* Import Dashboard Base Styles */
+@import url('../dashboard/dashboard-modern.css');
+
+/* CLB Theme Variables - Extends Dashboard Base */
+:root {
+    /* CLB Primary Colors */
+    --clb-primary: #8e44ad;
+    --clb-secondary: #9b59b6;
+    --clb-accent: #e8d5f3;
+    --clb-gradient: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+
+    /* CLB Category Colors */
+    --clb-technology: #3498db;
+    --clb-culture: #f39c12;
+    --clb-sports: #e74c3c;
+    --clb-social: #27ae60;
+    --clb-academic: #9b59b6;
+
+    /* CLB Enhanced Shadows */
+    --clb-shadow-card: 0 8px 25px rgba(142, 68, 173, 0.15);
+    --clb-shadow-hover: 0 12px 40px rgba(142, 68, 173, 0.25);
+}
+
+/* ===== CLB-SPECIFIC DASHBOARD CUSTOMIZATIONS ===== */
+
+/* Page Header Customization */
+.page-header h1 i {
+    color: var(--clb-primary);
+}
+
+/* Stats Cards with CLB Colors */
+.stat-card[data-stat="totalClubs"] {
+    background: var(--clb-gradient);
+    color: white;
+}
+
+.stat-card[data-stat="totalClubs"] .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Dashboard Grid Customization for CLB */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+}
+
+.grid-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.grid-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+/* ===== CLUB CATEGORIES SECTION ===== */
+.categories-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--space-3);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-surface);
+}
+
+.category-item:hover {
+    background: var(--color-surface-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--clb-shadow-card);
+}
+
+.category-item.active {
+    background: var(--clb-gradient);
+    color: white;
+    border-color: var(--clb-primary);
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.category-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.category-icon.all {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+}
+
+.category-icon.academic {
+    background: linear-gradient(135deg, var(--clb-academic) 0%, #8e44ad 100%);
+}
+
+.category-icon.sports {
+    background: linear-gradient(135deg, var(--clb-sports) 0%, #c0392b 100%);
+}
+
+.category-icon.culture {
+    background: linear-gradient(135deg, var(--clb-culture) 0%, #e67e22 100%);
+}
+
+.category-icon.social {
+    background: linear-gradient(135deg, var(--clb-social) 0%, #229954 100%);
+}
+
+.category-icon.technology {
+    background: linear-gradient(135deg, var(--clb-technology) 0%, #2980b9 100%);
+}
+
+.category-details h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+    color: inherit;
+}
+
+.category-details p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+.category-item:not(.active) .category-details p {
+    color: var(--color-text-secondary);
+}
+
+.category-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-full);
+    font-weight: 600;
+    font-size: 0.875rem;
+    min-width: 40px;
+    text-align: center;
+}
+
+.category-item:not(.active) .category-count {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-primary);
+}
+
+/* ===== VIEW CONTROLS ===== */
+.view-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.filter-tabs {
+    display: flex;
+    background: var(--color-surface-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-1);
+}
+
+.tab-btn {
+    padding: var(--space-2) var(--space-4);
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.tab-btn.active {
+    background: var(--clb-gradient);
+    color: white;
+}
+
+.tab-btn:hover:not(.active) {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+.view-options {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.view-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.view-btn.active {
+    background: var(--clb-gradient);
+    color: white;
+    border-color: var(--clb-primary);
+}
+
+.view-btn:hover:not(.active) {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-primary);
+}
+
+/* ===== CHART CUSTOMIZATIONS ===== */
+.chart-period select {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--border-radius-full);
+}
+
+.legend-color.academic {
+    background: var(--clb-academic);
+}
+
+.legend-color.sports {
+    background: var(--clb-sports);
+}
+
+.legend-color.culture {
+    background: var(--clb-culture);
+}
+
+.legend-color.social {
+    background: var(--clb-social);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .grid-right {
+        order: -1;
+    }
+
+    .view-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-3);
+    }
+
+    .filter-tabs {
+        justify-content: stretch;
+    }
+
+    .tab-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .category-item {
+        padding: var(--space-3);
+    }
+
+    .category-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+}
+
+/* ===== TABLET RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr 300px;
+        gap: var(--space-4);
+    }
+}
+
+/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+.category-item:focus,
+.tab-btn:focus,
+.view-btn:focus {
+    outline: 2px solid var(--clb-primary);
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .category-item {
+        border-width: 2px;
+    }
+
+    .tab-btn.active,
+    .view-btn.active {
+        outline: 2px solid var(--color-text-primary);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .category-item,
+    .tab-btn,
+    .view-btn {
+        transition: none;
+    }
+
+    .category-item:hover {
+        transform: none;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --clb-shadow-card: 0 8px 25px rgba(0, 0, 0, 0.3);
+        --clb-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .category-details p {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .category-item:not(.active) .category-details p {
+        color: var(--color-text-tertiary);
+    }
+}
+
+/* ===== LOADING STATES ===== */
+.dashboard-card.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-card.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+
+    .view-controls,
+    .chart-period {
+        display: none;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .dashboard-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+}

@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Điểm danh CTSV - Trang chủ</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <!-- Modern Homepage Styles -->
+    <link rel="stylesheet" href="./style-homepage-modern.css">
+
+    <!-- Enhanced Homepage Styles -->
+    <link rel="stylesheet" href="./style-homepage-enhanced.css">
+
+    <!-- Dashboard Modern Styles (for header/sidebar consistency) -->
+    <link rel="stylesheet" href="./pages/dashboard/dashboard-modern.css" media="screen"
+        onerror="this.onerror=null;this.href='#';">
+
+    <!-- Additional Mobile Menu Styles -->
+    <style>
+        /* Fix content không bị che bởi header và sidebar */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar {
+            position: fixed !important;
+            top: 70px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+            z-index: 999;
+            overflow-y: auto;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content {
+            margin-left: 280px;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            padding: 32px;
+            background: #f8fafc;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                width: 280px;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .dashboard-main.sidebar-open::before {
+                content: '';
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 998;
+            }
+        }
+
+        /* Search Box Styling - Dashboard Match */
+        .header-center {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 500px;
+            margin: 0 var(--space-8);
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: var(--space-3) var(--space-12) var(--space-3) var(--space-4);
+            border: 2px solid transparent;
+            border-radius: var(--radius-full);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-normal);
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .search-box button {
+            position: absolute;
+            right: var(--space-1);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: var(--text-white);
+            border: none;
+            border-radius: var(--radius-full);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-box button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Search Results */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: var(--space-2);
+            display: none;
+        }
+
+        .search-result-item {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .search-result-item:hover {
+            background-color: var(--bg-secondary);
+            transform: translateX(var(--space-1));
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item i {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--bg-gradient-1);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-white);
+            font-size: var(--font-size-sm);
+        }
+
+        .search-result-content {
+            flex: 1;
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            font-size: var(--font-size-sm);
+        }
+
+        .search-result-subtitle {
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+        }
+
+        .search-no-results {
+            padding: var(--space-4);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .header-center {
+                max-width: none;
+                margin: 0 16px;
+            }
+        }
+
+        /* User dropdown styling */
+        .user-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Notification panel styling */
+        .notification-panel {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-panel.show {
+            transform: translateX(0);
+        }
+
+        /* Page header styling */
+        .page-header {
+            margin-bottom: 24px;
+            padding: 20px 0;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* Dashboard controls styling */
+        .dashboard-controls {
+            margin-bottom: 24px;
+        }
+
+        /* Modern Sidebar Navigation - Dashboard Style */
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 24px 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin: 8px 16px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            color: #475569;
+            text-decoration: none;
+            border-radius: 16px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #2563eb;
+            transform: scaleY(0);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar-nav a:hover {
+            background: #f1f5f9;
+            color: #2563eb;
+            transform: translateX(4px);
+        }
+
+        .sidebar-nav a:hover::before {
+            transform: scaleY(1);
+        }
+
+        .sidebar-nav li.active a {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateX(4px);
+        }
+
+        .sidebar-nav li.active a::before {
+            transform: scaleY(1);
+            background: white;
+        }
+
+        .sidebar-nav a i {
+            width: 24px;
+            text-align: center;
+            font-size: 16px;
+        }
+    </style>
+    <!-- Meta tags for SEO -->
+    <meta name="description"
+        content="Hệ thống quản lý điểm danh hiện đại với giao diện thân thiện và tính năng thông minh">
+    <meta name="keywords" content="điểm danh, quản lý, sinh viên, giáo viên, thống kê">
+    <meta name="author" content="CodeKing Team">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Hệ thống Điểm danh - Trang chủ">
+    <meta property="og:description" content="Hệ thống quản lý điểm danh hiện đại">
+    <meta property="og:type" content="website">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="./style-homepage-modern.css" as="style">
+    <link rel="preload" href="./script-homepage-modern.js" as="script">
+</head>
+
+<body>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Enhanced Header với Full Functionality -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-home"></i>
+                    <span>CTSV Homepage</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="search-box">
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm sinh viên, CLB, sự kiện..."
+                        autocomplete="off">
+                    <button type="button" id="searchBtn" title="Tìm kiếm">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults">
+                        <!-- Search results sẽ được populate động -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <!-- Theme Toggle -->
+                    <button class="action-btn" id="themeToggle" title="Chế độ Light Mode (đã kích hoạt)">
+                        <i class="fas fa-sun"></i>
+                    </button>
+
+                    <!-- Quick Actions -->
+                    <button class="action-btn" id="quickAdd" title="Thêm nhanh">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="action-btn" id="notificationBtn" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">5</span>
+                    </button>
+
+                    <!-- Messages -->
+                    <button class="action-btn" id="messageBtn" title="Tin nhắn">
+                        <i class="fas fa-comment"></i>
+                        <span class="badge" id="messageBadge">3</span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="action-btn" id="settingsBtn" title="Cài đặt nhanh">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+
+                <!-- Enhanced User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <img src="./assets/images/avata/avata_admin.jpg" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Quản trị viên</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <img src="./assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            <div>
+                                <div class="dropdown-name">Admin User</div>
+                                <div class="dropdown-email">admin@ctsv.edu.vn</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+
+                        <a href="./pages/profile/profile.html">
+                            <i class="fas fa-user"></i> Hồ sơ cá nhân
+                        </a>
+                        <a href="./pages/dashboard/dashboard.html">
+                            <i class="fas fa-chart-pie"></i> Dashboard
+                        </a>
+                        <button type="button" onclick="dashboard.openSettings()">
+                            <i class="fas fa-cog"></i> Cài đặt tài khoản
+                        </button>
+                        <button type="button" onclick="dashboard.viewNotifications()">
+                            <i class="fas fa-bell"></i> Quản lý thông báo
+                        </button>
+                        <button type="button" onclick="dashboard.openHelp()">
+                            <i class="fas fa-question-circle"></i> Trợ giúp
+                        </button>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button type="button" onclick="dashboard.switchAccount()">
+                            <i class="fas fa-user-friends"></i> Chuyển tài khoản
+                        </button>
+                        <a href="./pages/authen/login-professional.html" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-main">
+            <!-- Modern Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span class="logo-text">CTSV Dashboard</span>
+                    </div>
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-angle-left"></i>
+                    </button>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <div class="nav-section-title">Dashboard</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="./pages/dashboard/dashboard.html" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-line"></i>
+                                    <span class="nav-text">Dashboard</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">CLB & Sự kiện</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="./pages/CLB/clubs-list.html" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <span class="nav-text">Danh sách CLB</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./pages/CLB/club-members.html" class="nav-link">
+                                    <i class="nav-icon fas fa-user-friends"></i>
+                                    <span class="nav-text">Thành viên CLB</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./pages/CLB/club-events.html" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-alt"></i>
+                                    <span class="nav-text">Sự kiện CLB</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./pages/CLB/club-organizers.html" class="nav-link">
+                                    <i class="nav-icon fas fa-user-tie"></i>
+                                    <span class="nav-text">Ban tổ chức</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">Thống kê & Báo cáo</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="./pages/statistics/index.html" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-bar"></i>
+                                    <span class="nav-text">Thống kê tổng quan</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./pages/operations/operations.html" class="nav-link">
+                                    <i class="nav-icon fas fa-cogs"></i>
+                                    <span class="nav-text">Vận hành hệ thống</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">Lịch trình</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="./pages/calendar/index.html" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar"></i>
+                                    <span class="nav-text">Lịch công tác</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./pages/calendar/personal-calendar.html" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-check"></i>
+                                    <span class="nav-text">Lịch cá nhân</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">Cá nhân</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="./pages/profile/profile.html" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <span class="nav-text">Hồ sơ cá nhân</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="./index.html" class="nav-link active">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <span class="nav-text">Trang chủ</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./pages/authen/login-professional.html" class="nav-link">
+                                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                                    <span class="nav-text">Đăng xuất</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Sidebar Overlay for Mobile -->
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+            <!-- Enhanced Content -->
+            <main class="content">
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb" aria-label="breadcrumb">
+                    <ol class="breadcrumb-list">
+                        <li class="breadcrumb-item active">
+                            <i class="fas fa-home"></i>
+                            <span>Trang chủ</span>
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="page-header">
+                    <h1><i class="fas fa-home"></i> Chào mừng trở lại!</h1>
+                    <p>Quản lý điểm danh thông minh và hiện đại</p>
+                </div>
+
+                <!-- Dashboard Controls -->
+                <div class="dashboard-controls">
+                    <div class="controls-left">
+                        <div class="date-selector">
+                            <select id="dateRange">
+                                <option value="today">Hôm nay</option>
+                                <option value="week" selected>Tuần này</option>
+                                <option value="month">Tháng này</option>
+                                <option value="quarter">Quý này</option>
+                                <option value="year">Năm này</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn-control" id="refreshDashboard">
+                            <i class="fas fa-sync"></i> Làm mới
+                        </button>
+                        <button class="btn-control export-btn" data-type="pdf">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn-control export-btn" data-type="excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn-control primary" id="quickStatsBtn">
+                            <i class="fas fa-chart-line"></i> Thống kê nhanh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-wrapper">
+
+                    <!-- Enhanced Stats Section -->
+                    <div class="dashboard-stats">
+                        <div class="stat-card primary" data-stat="totalStudents">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <button class="stat-menu-btn" title="Xem chi tiết">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalStudents">1,247</h3>
+                                <div class="stat-label">Tổng sinh viên</div>
+                                <div class="stat-trend positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>5.2% so với tháng trước</span>
+                                </div>
+                                <div class="stat-footer">
+                                    <div class="stat-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 85%"></div>
+                                        </div>
+                                        <span class="progress-text">85% hoạt động</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card success" data-stat="presentToday">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <button class="stat-menu-btn" title="Xem chi tiết">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="presentToday">892</h3>
+                                <div class="stat-label">Có mặt hôm nay</div>
+                                <div class="stat-trend positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>12.8% từ hôm qua</span>
+                                </div>
+                                <div class="stat-footer">
+                                    <div class="stat-chart">
+                                        <canvas id="todayAttendanceChart" width="100" height="30"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card warning" data-stat="averageAttendance">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <button class="stat-menu-btn" title="Xem chi tiết">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="averageAttendance">85.4%</h3>
+                                <div class="stat-label">Tỷ lệ điểm danh TB</div>
+                                <div class="stat-trend negative">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>-2.1% so với tuần trước</span>
+                                </div>
+                                <div class="stat-footer">
+                                    <div class="stat-comparison">
+                                        <div class="comparison-item">
+                                            <span class="comparison-label">Mục tiêu</span>
+                                            <span class="comparison-value">90%</span>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <span class="comparison-label">Hiện tại</span>
+                                            <span class="comparison-value">85.4%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card info" data-stat="activeSessions">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <button class="stat-menu-btn" title="Xem chi tiết">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="activeSessions">24</h3>
+                                <div class="stat-label">Phiên hoạt động</div>
+                                <div class="stat-trend positive">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>15% tăng từ hôm qua</span>
+                                </div>
+                                <div class="stat-footer">
+                                    <div class="stat-status">
+                                        <div class="status-indicator active">
+                                            <span class="status-dot"></span>
+                                            <span class="status-text">Đang hoạt động</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Stats Grid -->
+                    <div class="stats-grid" style="display: none;">
+                        <!-- Total Students -->
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalStudents">1,247</h3>
+                                <div class="stat-label">Tổng sinh viên</div>
+                                <div class="stat-trend positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    +5.2%
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Present Today -->
+                        <div class="stat-card success">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="presentToday">892</h3>
+                                <div class="stat-label">Có mặt hôm nay</div>
+                                <div class="stat-trend positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    +12%
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Average Attendance -->
+                        <div class="stat-card warning">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="averageAttendance">85.4%</h3>
+                                <div class="stat-label">Tỷ lệ điểm danh TB</div>
+                                <div class="stat-trend negative">
+                                    <i class="fas fa-arrow-down"></i>
+                                    -2.1%
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Sessions -->
+                        <div class="stat-card info">
+                            <div class="stat-header">
+                                <div class="stat-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                                <div class="stat-menu">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </div>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="activeSessions">24</h3>
+                                <div class="stat-label">Phiên hoạt động</div>
+                                <div class="stat-trend positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    +15%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modern Charts Section -->
+                    <div class="dashboard-charts">
+                        <div class="chart-card main-chart">
+                            <div class="chart-header">
+                                <div class="chart-title-section">
+                                    <h3 class="chart-title">
+                                        <i class="fas fa-chart-line"></i>
+                                        Thống kê điểm danh tuần
+                                    </h3>
+                                    <p class="chart-subtitle">Biểu đồ lượt điểm danh theo ngày trong tuần</p>
+                                </div>
+                                <div class="chart-actions">
+                                    <div class="chart-period-selector">
+                                        <select id="chartPeriod" class="period-select">
+                                            <option value="7">7 ngày</option>
+                                            <option value="30" selected>30 ngày</option>
+                                            <option value="90">90 ngày</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn-chart-action" title="Tải xuống">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-chart-action" title="Toàn màn hình">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                    <button class="btn-refresh" title="Làm mới">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-color"
+                                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></span>
+                                        <span class="legend-label">Điểm danh</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-color"
+                                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></span>
+                                        <span class="legend-label">Mục tiêu</span>
+                                    </div>
+                                </div>
+                                <canvas id="attendanceChart"></canvas>
+                                <div class="chart-insights">
+                                    <div class="insight-item">
+                                        <div class="insight-icon success">
+                                            <i class="fas fa-trending-up"></i>
+                                        </div>
+                                        <div class="insight-content">
+                                            <span class="insight-label">Xu hướng</span>
+                                            <span class="insight-value">+5.2% tăng trường</span>
+                                        </div>
+                                    </div>
+                                    <div class="insight-item">
+                                        <div class="insight-icon info">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </div>
+                                        <div class="insight-content">
+                                            <span class="insight-label">Cao nhất</span>
+                                            <span class="insight-value">Thứ 3 (92%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-card secondary-chart">
+                            <div class="chart-header">
+                                <div class="chart-title-section">
+                                    <h3 class="chart-title">
+                                        <i class="fas fa-chart-pie"></i>
+                                        Hoạt động CLB
+                                    </h3>
+                                    <p class="chart-subtitle">Phân bố trạng thái các CLB</p>
+                                </div>
+                                <div class="chart-actions">
+                                    <button class="btn-chart-action" title="Chi tiết">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="clubActivityChart"></canvas>
+                                <div class="chart-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-color" style="background: var(--success);"></div>
+                                        <div class="stat-info">
+                                            <span class="stat-number">15</span>
+                                            <span class="stat-label">Hoạt động</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-color" style="background: var(--warning);"></div>
+                                        <div class="stat-info">
+                                            <span class="stat-number">8</span>
+                                            <span class="stat-label">Tạm nghỉ</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-color" style="background: var(--danger);"></div>
+                                        <div class="stat-info">
+                                            <span class="stat-number">2</span>
+                                            <span class="stat-label">Không hoạt động</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Section -->
+                    <div class="quick-actions-section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>
+                                    <i class="fas fa-bolt"></i>
+                                    Hành động nhanh
+                                </h3>
+                                <div class="section-actions">
+                                    <button class="btn-view-all"
+                                        onclick="window.location.href='./pages/operations/operations.html'">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Xem tất cả
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="quick-actions-grid">
+                                <a href="./pages/CLB/clubs-list.html" class="quick-action-card featured">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <div class="quick-action-title">Tạo sự kiện mới</div>
+                                        <div class="quick-action-description">Tạo và quản lý sự kiện cho CLB</div>
+                                        <div class="quick-action-badge">Phổ biến</div>
+                                    </div>
+                                    <div class="quick-action-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <a href="./pages/profile/profile.html" class="quick-action-card">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <div class="quick-action-title">Thêm thành viên</div>
+                                        <div class="quick-action-description">Mời và đăng ký thành viên mới vào hệ thống
+                                        </div>
+                                    </div>
+                                    <div class="quick-action-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <a href="./pages/statistics/index.html" class="quick-action-card">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <div class="quick-action-title">Xem báo cáo</div>
+                                        <div class="quick-action-description">Thống kê chi tiết và báo cáo hiệu suất
+                                        </div>
+                                        <div class="quick-action-badge new">Mới</div>
+                                    </div>
+                                    <div class="quick-action-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <a href="./pages/calendar/index.html" class="quick-action-card">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <div class="quick-action-title">Lịch sự kiện</div>
+                                        <div class="quick-action-description">Xem và quản lý lịch trình hoạt động</div>
+                                    </div>
+                                    <div class="quick-action-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <button class="quick-action-card quick-clock" onclick="dashboard.openClockInModal()">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <div class="quick-action-title">Điểm danh nhanh</div>
+                                        <div class="quick-action-description">Thực hiện điểm danh nhanh chóng</div>
+                                        <div class="quick-action-badge urgent">Nhanh</div>
+                                    </div>
+                                    <div class="quick-action-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </button>
+
+                                <a href="./pages/operations/operations.html" class="quick-action-card">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-cogs"></i>
+                                    </div>
+                                    <div class="quick-action-content">
+                                        <div class="quick-action-title">Quản lý vận hành</div>
+                                        <div class="quick-action-description">Quản lý và giám sát hoạt động hệ thống
+                                        </div>
+                                    </div>
+                                    <div class="quick-action-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Activity Section -->
+                    <div class="activity-section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>
+                                    <i class="fas fa-clock"></i>
+                                    Hoạt động gần đây
+                                </h3>
+                                <div class="section-actions">
+                                    <button class="btn-filter" id="activityFilter" title="Lọc hoạt động">
+                                        <i class="fas fa-filter"></i>
+                                    </button>
+                                    <button class="btn-refresh" id="refreshActivity" title="Làm mới">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                    <a href="#" class="view-all">Xem tất cả</a>
+                                </div>
+                            </div>
+
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon success">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Điểm danh thành công</div>
+                                        <div class="activity-description">Nguyễn Văn A đã điểm danh cho sự kiện
+                                            "Workshop React"</div>
+                                        <div class="activity-meta">
+                                            <span class="activity-time">
+                                                <i class="fas fa-clock"></i>
+                                                5 phút trước
+                                            </span>
+                                            <span class="activity-user">
+                                                <i class="fas fa-user"></i>
+                                                Nguyễn Văn A
+                                            </span>
+                                            <span class="activity-type">Điểm danh</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-icon info">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Sự kiện mới được tạo</div>
+                                        <div class="activity-description">Sự kiện "Hackathon 2025" đã được tạo và đang
+                                            chờ phê duyệt</div>
+                                        <div class="activity-meta">
+                                            <span class="activity-time">
+                                                <i class="fas fa-clock"></i>
+                                                15 phút trước
+                                            </span>
+                                            <span class="activity-user">
+                                                <i class="fas fa-user"></i>
+                                                Trần Thị B
+                                            </span>
+                                            <span class="activity-type">Sự kiện</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-icon warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Cảnh báo tham gia thấp</div>
+                                        <div class="activity-description">Sự kiện "Meeting tuần" có tỷ lệ tham gia thấp
+                                            (45%)</div>
+                                        <div class="activity-meta">
+                                            <span class="activity-time">
+                                                <i class="fas fa-clock"></i>
+                                                30 phút trước
+                                            </span>
+                                            <span class="activity-user">
+                                                <i class="fas fa-cog"></i>
+                                                Hệ thống
+                                            </span>
+                                            <span class="activity-type">Cảnh báo</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-icon success">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Thành viên mới tham gia</div>
+                                        <div class="activity-description">Lê Văn C đã đăng ký tham gia CLB Code King
+                                        </div>
+                                        <div class="activity-meta">
+                                            <span class="activity-time">
+                                                <i class="fas fa-clock"></i>
+                                                1 giờ trước
+                                            </span>
+                                            <span class="activity-user">
+                                                <i class="fas fa-user"></i>
+                                                Lê Văn C
+                                            </span>
+                                            <span class="activity-type">Thành viên</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Grid -->
+                    <div class="dashboard-grid" style="display: none;">
+                        <!-- Today's Schedule -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-calendar-day"></i>
+                                    Lịch học hôm nay
+                                </h3>
+                                <div class="card-actions">
+                                    <select class="select-minimal">
+                                        <option>Hôm nay</option>
+                                        <option>Ngày mai</option>
+                                        <option>Tuần này</option>
+                                    </select>
+                                    <button class="btn-icon" title="Xem tất cả">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="schedule-list" id="scheduleList">
+                                    <!-- Schedule items will be loaded by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-bolt"></i>
+                                    Thao tác nhanh
+                                </h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="quick-actions-grid">
+                                    <div class="quick-action-btn" data-action="clock-in">
+                                        <div class="action-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Điểm danh</h4>
+                                            <p>Điểm danh nhanh</p>
+                                        </div>
+                                    </div>
+                                    <div class="quick-action-btn success" data-action="calendar">
+                                        <div class="action-icon">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Lịch học</h4>
+                                            <p>Xem lịch học</p>
+                                        </div>
+                                    </div>
+                                    <div class="quick-action-btn warning" data-action="clubs">
+                                        <div class="action-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Hoạt động CLB</h4>
+                                            <p>Tham gia CLB</p>
+                                        </div>
+                                    </div>
+                                    <div class="quick-action-btn info" data-action="profile">
+                                        <div class="action-icon">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4>Hồ sơ</h4>
+                                            <p>Xem hồ sơ</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time Tracking -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-stopwatch"></i>
+                                    Theo dõi thời gian
+                                </h3>
+                                <div class="card-actions">
+                                    <button class="btn-icon" title="Cài đặt">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="time-display">
+                                    <div class="current-session">
+                                        <div class="session-timer" id="sessionTimer">00:00:00</div>
+                                        <div class="session-label" id="sessionLabel">Chưa bắt đầu</div>
+                                    </div>
+
+                                    <div class="time-controls">
+                                        <button class="time-btn" id="startBtn">
+                                            <i class="fas fa-play"></i>
+                                            <span>Bắt đầu</span>
+                                        </button>
+                                        <button class="time-btn" id="pauseBtn" style="display: none;">
+                                            <i class="fas fa-pause"></i>
+                                            <span>Tạm dừng</span>
+                                        </button>
+                                        <button class="time-btn" id="stopBtn" style="display: none;">
+                                            <i class="fas fa-stop"></i>
+                                            <span>Dừng</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="time-summary">
+                                        <div class="time-stat">
+                                            <div class="stat-label">Hôm nay</div>
+                                            <div class="stat-value" id="todayHours">0.0h</div>
+                                        </div>
+                                        <div class="time-stat">
+                                            <div class="stat-label">Tuần này</div>
+                                            <div class="stat-value" id="weekHours">0.0h</div>
+                                        </div>
+                                        <div class="time-stat">
+                                            <div class="stat-label">Tháng này</div>
+                                            <div class="stat-value" id="monthHours">0.0h</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="status-indicator" id="statusIndicator">
+                                        <i class="fas fa-pause-circle"></i>
+                                        Tạm nghỉ
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-history"></i>
+                                    Hoạt động gần đây
+                                </h3>
+                                <div class="card-actions">
+                                    <button class="btn-text">Xem tất cả</button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="activity-list" id="activityList">
+                                    <!-- Activity items will be loaded by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Chart -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-chart-line"></i>
+                                    Biểu đồ điểm danh
+                                </h3>
+                                <div class="card-actions">
+                                    <select class="select-minimal">
+                                        <option>7 ngày qua</option>
+                                        <option>30 ngày qua</option>
+                                        <option>3 tháng qua</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="chart-container">
+                                    <canvas id="attendanceChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weather & Campus Info -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-cloud-sun"></i>
+                                    Thông tin trường học
+                                </h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="weather-info">
+                                    <div class="weather-current">
+                                        <div class="weather-icon">
+                                            <i class="fas fa-sun"></i>
+                                        </div>
+                                        <div class="weather-details">
+                                            <h3>28°C</h3>
+                                            <p>Nắng đẹp</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="campus-stats">
+                                        <div class="campus-stat">
+                                            <i class="fas fa-building"></i>
+                                            <div>
+                                                <span>15</span>
+                                                <span class="stat-label">Tòa nhà</span>
+                                            </div>
+                                        </div>
+                                        <div class="campus-stat">
+                                            <i class="fas fa-chalkboard-teacher"></i>
+                                            <div>
+                                                <span>127</span>
+                                                <span class="stat-label">Phòng học</span>
+                                            </div>
+                                        </div>
+                                        <div class="campus-stat">
+                                            <i class="fas fa-user-tie"></i>
+                                            <div>
+                                                <span>89</span>
+                                                <span class="stat-label">Giảng viên</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Notification Panel -->
+        <div class="notification-panel" id="notificationPanel">
+            <div class="notification-header">
+                <h3>Thông báo</h3>
+                <button class="notification-close" onclick="dashboard.closeNotificationPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item unread">
+                    <div class="notification-item-icon info">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Chào mừng đến với hệ thống</div>
+                        <div class="notification-item-message">Hệ thống điểm danh CTSV đã được cập nhật với nhiều tính
+                            năng mới.</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            5 phút trước
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item unread">
+                    <div class="notification-item-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Đồng bộ hoàn tất</div>
+                        <div class="notification-item-message">Dữ liệu điểm danh đã được đồng bộ thành công.</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            15 phút trước
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item">
+                    <div class="notification-item-icon warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Cập nhật hệ thống</div>
+                        <div class="notification-item-message">Hệ thống sẽ bảo trì vào 23:00 tối nay.</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            1 giờ trước
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <!-- Clock In Modal -->
+        <div class="modal-overlay" id="clockInModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Điểm danh nhanh</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="empty-state">
+                        <i class="fas fa-clock"></i>
+                        <h4>Điểm danh nhanh</h4>
+                        <p>Chức năng điểm danh nhanh đang được phát triển</p>
+                        <button class="btn btn-primary">Điểm danh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Modal -->
+        <div class="modal-overlay" id="quickStatsModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Thống kê nhanh</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="empty-state">
+                        <i class="fas fa-chart-bar"></i>
+                        <h4>Thống kê chi tiết</h4>
+                        <p>Xem thống kê chi tiết về điểm danh và hoạt động</p>
+                        <button class="btn btn-primary" onclick="window.location.href='./pages/statistics/index.html'">
+                            Xem chi tiết
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal-overlay" id="settingsModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Cài đặt</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="settings-section">
+                        <h4>Giao diện</h4>
+                        <div class="setting-item">
+                            <label for="autoRefresh">Tự động làm mới:</label>
+                            <select id="autoRefresh">
+                                <option value="0">Tắt</option>
+                                <option value="30">30 giây</option>
+                                <option value="60" selected>1 phút</option>
+                                <option value="300">5 phút</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="defaultView">Chế độ xem mặc định:</label>
+                            <select id="defaultView">
+                                <option value="charts">Biểu đồ</option>
+                                <option value="stats" selected>Thống kê</option>
+                                <option value="activities">Hoạt động</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h4>Thông báo</h4>
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enableNotifications" checked>
+                                <span>Bật thông báo</span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="soundNotifications">
+                                <span>Thông báo âm thanh</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="dashboard.closeModal('settingsModal')">Hủy</button>
+                        <button type="button" class="btn btn-primary" onclick="dashboard.saveSettings()">Lưu cài
+                            đặt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Add Modal -->
+        <div class="modal-overlay" id="quickAddModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Thêm nhanh</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="quick-add-options">
+                        <a href="./pages/CLB/clubs.html" class="quick-add-option">
+                            <i class="fas fa-users"></i>
+                            <span>Thêm CLB mới</span>
+                        </a>
+                        <a href="./pages/calendar/index.html" class="quick-add-option">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>Tạo sự kiện</span>
+                        </a>
+                        <a href="./pages/profile/profile.html" class="quick-add-option">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Thêm thành viên</span>
+                        </a>
+                        <button class="quick-add-option" onclick="dashboard.openClockInModal()">
+                            <i class="fas fa-clock"></i>
+                            <span>Điểm danh nhanh</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Modal -->
+        <div class="modal-overlay" id="messagesModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Tin nhắn</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="messages-list">
+                        <div class="message-item unread">
+                            <div class="message-avatar">
+                                <img src="./assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            </div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="sender-name">Nguyễn Văn A</span>
+                                    <span class="message-time">10:30</span>
+                                </div>
+                                <div class="message-text">Xin chào, tôi cần hỗ trợ về việc điểm danh CLB.</div>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">
+                                <img src="./assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            </div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="sender-name">Trần Thị B</span>
+                                    <span class="message-time">09:15</span>
+                                </div>
+                                <div class="message-text">Báo cáo sự kiện tuần này đã hoàn thành.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner-content">
+            <div class="spinner"></div>
+            <p>Đang tải dashboard...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <!-- Scripts -->
+    <script src="./script-homepage-modern.js"></script>
+
+    <!-- Enhanced Homepage Functionality -->
+    <script src="./script-homepage-enhanced.js"></script>
+
+    <!-- Dashboard Functionality -->
+    <script src="./pages/dashboard/dashboard-clean.js"></script>
+
+    <!-- Additional Scripts for Enhanced Functionality -->
+    <script>
+        // Enhanced Homepage Dashboard Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Initialize dashboard if available
+            if (typeof dashboard !== 'undefined') {
+                console.log('✅ Dashboard module loaded successfully');
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.querySelector('.sidebar');
+            const dashboardMain = document.querySelector('.dashboard-main');
+
+            if (mobileMenuBtn && sidebar) {
+                mobileMenuBtn.addEventListener('click', function () {
+                    const isOpen = sidebar.classList.contains('mobile-open');
+
+                    if (isOpen) {
+                        sidebar.classList.remove('mobile-open');
+                        dashboardMain.classList.remove('sidebar-open');
+                    } else {
+                        sidebar.classList.add('mobile-open');
+                        dashboardMain.classList.add('sidebar-open');
+                    }
+                });
+
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', function (e) {
+                    if (window.innerWidth <= 768) {
+                        if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                            sidebar.classList.remove('mobile-open');
+                            dashboardMain.classList.remove('sidebar-open');
+                        }
+                    }
+                });
+
+                // Close sidebar when clicking overlay
+                const sidebarOverlay = document.getElementById('sidebarOverlay');
+                if (sidebarOverlay) {
+                    sidebarOverlay.addEventListener('click', function () {
+                        sidebar.classList.remove('mobile-open');
+                        dashboardMain.classList.remove('sidebar-open');
+                    });
+                }
+            }
+
+            // Global search functionality
+            const globalSearch = document.getElementById('globalSearch');
+            const searchResults = document.getElementById('searchResults');
+
+            if (globalSearch) {
+                let searchTimeout;
+                globalSearch.addEventListener('input', function (e) {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        handleGlobalSearch(e.target.value);
+                    }, 300);
+                });
+
+                // Show search results when focused
+                globalSearch.addEventListener('focus', function () {
+                    if (this.value.trim()) {
+                        handleGlobalSearch(this.value);
+                    }
+                });
+
+                // Hide search results when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!globalSearch.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.style.display = 'none';
+                    }
+                });
+            }
+
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function () {
+                    toggleTheme();
+                });
+            }
+
+            // Quick stats button functionality
+            const quickStatsBtn = document.getElementById('quickStatsBtn');
+            if (quickStatsBtn) {
+                quickStatsBtn.addEventListener('click', function () {
+                    openModal('quickStatsModal');
+                });
+            }
+
+            // Quick add button functionality
+            const quickAdd = document.getElementById('quickAdd');
+            if (quickAdd) {
+                quickAdd.addEventListener('click', function () {
+                    openModal('quickAddModal');
+                });
+            }
+
+            // Messages button functionality
+            const messageBtn = document.getElementById('messageBtn');
+            if (messageBtn) {
+                messageBtn.addEventListener('click', function () {
+                    openModal('messagesModal');
+                });
+            }
+
+            // Settings button functionality
+            const settingsBtn = document.getElementById('settingsBtn');
+            if (settingsBtn) {
+                settingsBtn.addEventListener('click', function () {
+                    openModal('settingsModal');
+                });
+            }
+
+            // Notification button functionality
+            const notificationBtn = document.getElementById('notificationBtn');
+            if (notificationBtn) {
+                notificationBtn.addEventListener('click', function () {
+                    toggleNotificationPanel();
+                });
+            }
+
+            // User menu functionality
+            const userMenu = document.getElementById('userMenu');
+            const userDropdown = document.getElementById('userDropdown');
+            if (userMenu && userDropdown) {
+                userMenu.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function () {
+                    userDropdown.classList.remove('show');
+                });
+            }
+
+            // Modal functionality
+            setupModals();
+        });
+
+        // Global search function
+        function handleGlobalSearch(query) {
+            const searchResults = document.getElementById('searchResults');
+
+            if (!query.trim()) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            // Mock search data with dashboard-style results
+            const searchData = [
+                { title: 'Trang chủ', url: './index.html', icon: 'fas fa-home', subtitle: 'Quản lý điểm danh chung' },
+                { title: 'Dashboard', url: './pages/dashboard/dashboard.html', icon: 'fas fa-chart-line', subtitle: 'Tổng quan hệ thống' },
+                { title: 'Câu lạc bộ', url: './pages/CLB/index.html', icon: 'fas fa-users', subtitle: 'Quản lý CLB và thành viên' },
+                { title: 'Lịch học', url: './pages/calendar/index.html', icon: 'fas fa-calendar', subtitle: 'Lịch trình và sự kiện' },
+                { title: 'Thống kê', url: './pages/statistics/index.html', icon: 'fas fa-chart-bar', subtitle: 'Báo cáo và phân tích' },
+                { title: 'Hồ sơ', url: './pages/profile/profile.html', icon: 'fas fa-user', subtitle: 'Thông tin cá nhân' },
+                { title: 'Vận hành', url: './pages/operations/operations.html', icon: 'fas fa-cogs', subtitle: 'Quản lý hoạt động' }
+            ];
+
+            const filteredResults = searchData.filter(item =>
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.subtitle.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (filteredResults.length > 0) {
+                searchResults.innerHTML = filteredResults.map(item =>
+                    `<div class="search-result-item" onclick="window.location.href='${item.url}'">
+                        <i class="${item.icon}"></i>
+                        <div class="search-result-content">
+                            <div class="search-result-title">${item.title}</div>
+                            <div class="search-result-subtitle">${item.subtitle}</div>
+                        </div>
+                    </div>`
+                ).join('');
+                searchResults.style.display = 'block';
+            } else {
+                searchResults.innerHTML = '<div class="search-no-results">Không tìm thấy kết quả phù hợp</div>';
+                searchResults.style.display = 'block';
+            }
+        }
+
+        // Theme toggle function
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+
+            body.classList.toggle('dark-theme');
+
+            if (body.classList.contains('dark-theme')) {
+                icon.className = 'fas fa-moon';
+                themeToggle.title = 'Chế độ Dark Mode (đã kích hoạt)';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fas fa-sun';
+                themeToggle.title = 'Chế độ Light Mode (đã kích hoạt)';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.classList.add('modal-open');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        }
+
+        // Setup modal functionality
+        function setupModals() {
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('modal-overlay')) {
+                    e.target.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                }
+
+                if (e.target.classList.contains('modal-close')) {
+                    const modal = e.target.closest('.modal-overlay');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                    }
+                }
+            });
+
+            // ESC key to close modals
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    const openModal = document.querySelector('.modal-overlay[style*="flex"]');
+                    if (openModal) {
+                        openModal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                    }
+                }
+            });
+        }
+
+        // Notification panel toggle
+        function toggleNotificationPanel() {
+            const panel = document.getElementById('notificationPanel');
+            if (panel) {
+                panel.classList.toggle('show');
+
+                // Mark notifications as read when opened
+                if (panel.classList.contains('show')) {
+                    const badge = document.getElementById('notificationBadge');
+                    if (badge) {
+                        setTimeout(() => {
+                            badge.textContent = '0';
+                            badge.style.display = 'none';
+                        }, 1000);
+                    }
+                }
+            }
+        }
+
+        // Close notification panel
+        function closeNotificationPanel() {
+            const panel = document.getElementById('notificationPanel');
+            if (panel) {
+                panel.classList.remove('show');
+            }
+        }
+
+        // Initialize theme on load
+        window.addEventListener('load', function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            }
+
+            // Initialize charts
+            initializeCharts();
+
+            // Initialize real-time updates
+            initializeRealTimeUpdates();
+        });
+
+        // Initialize charts
+        function initializeCharts() {
+            // Attendance Chart
+            const attendanceCtx = document.getElementById('attendanceChart');
+            if (attendanceCtx) {
+                const attendanceChart = new Chart(attendanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                        datasets: [{
+                            label: 'Điểm danh',
+                            data: [65, 78, 66, 85, 92, 45, 23],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#2563eb',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }, {
+                            label: 'Mục tiêu',
+                            data: [80, 80, 80, 80, 80, 80, 80],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                            borderDash: [5, 5],
+                            fill: false,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                cornerRadius: 8,
+                                padding: 12,
+                                displayColors: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)',
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#64748b',
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#64748b',
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        }
+                    }
+                });
+            }
+
+            // Club Activity Chart
+            const clubCtx = document.getElementById('clubActivityChart');
+            if (clubCtx) {
+                const clubChart = new Chart(clubCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Hoạt động', 'Tạm nghỉ', 'Không hoạt động'],
+                        datasets: [{
+                            data: [15, 8, 2],
+                            backgroundColor: [
+                                '#10b981',
+                                '#f59e0b',
+                                '#ef4444'
+                            ],
+                            borderWidth: 0,
+                            cutout: '70%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                cornerRadius: 8,
+                                padding: 12,
+                                callbacks: {
+                                    label: function (context) {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((context.parsed / total) * 100);
+                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Mini chart for stat card
+            const todayCtx = document.getElementById('todayAttendanceChart');
+            if (todayCtx) {
+                const todayChart = new Chart(todayCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['6h', '8h', '10h', '12h', '14h', '16h', '18h'],
+                        datasets: [{
+                            data: [12, 25, 45, 67, 89, 78, 65],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            x: { display: false },
+                            y: { display: false }
+                        },
+                        elements: {
+                            point: { radius: 0 }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize real-time updates
+        function initializeRealTimeUpdates() {
+            // Update stats every 30 seconds
+            setInterval(updateStats, 30000);
+
+            // Update time every second
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+        }
+
+        // Update current time
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('vi-VN');
+            const dateString = now.toLocaleDateString('vi-VN');
+
+            // Update any time displays
+            document.querySelectorAll('.current-time').forEach(el => {
+                el.textContent = timeString;
+            });
+
+            document.querySelectorAll('.current-date').forEach(el => {
+                el.textContent = dateString;
+            });
+        }
+
+        // Update statistics
+        function updateStats() {
+            // Simulate real-time data updates
+            const stats = {
+                totalStudents: Math.floor(Math.random() * 100) + 1200,
+                presentToday: Math.floor(Math.random() * 100) + 850,
+                activeSessions: Math.floor(Math.random() * 10) + 20
+            };
+
+            // Update stat displays
+            Object.keys(stats).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = stats[key].toLocaleString();
+                }
+            });
+        }
+
+        // Make functions globally available for dashboard compatibility
+        window.dashboard = window.dashboard || {
+            closeModal: closeModal,
+            openModal: openModal,
+            closeNotificationPanel: closeNotificationPanel,
+            openSettings: () => openModal('settingsModal'),
+            viewNotifications: () => toggleNotificationPanel(),
+            openHelp: () => window.open('https://support.ctsv.edu.vn', '_blank'),
+            switchAccount: () => alert('Chức năng chuyển tài khoản đang được phát triển'),
+            saveSettings: () => {
+                alert('Cài đặt đã được lưu thành công!');
+                closeModal('settingsModal');
+            },
+            openClockInModal: () => openModal('clockInModal')
+        };
+    </script>
+    <script>
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            if (performance.getEntriesByType) {
+                const paintMetrics = performance.getEntriesByType('paint');
+                paintMetrics.forEach(metric => {
+                    console.log(`${metric.name}: ${Math.round(metric.startTime)}ms`);
+                });
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', (e) => {
+            console.error('JavaScript Error:', {
+                message: e.message,
+                filename: e.filename,
+                line: e.lineno,
+                column: e.colno,
+                error: e.error
+            });
+        });
+
+        // Theme detection
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const handleThemeChange = (e) => {
+                // Future: Handle dark mode toggle
+                console.log('Theme preference:', e.matches ? 'dark' : 'light');
+            };
+
+            mediaQuery.addListener(handleThemeChange);
+            handleThemeChange(mediaQuery);
+        }
+    </script>
+</body>
+
+</html>

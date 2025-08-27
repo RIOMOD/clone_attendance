@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Ban tổ chức CLB - Hệ thống chấm công CTSV</title>
+    <meta name="description" content="Quản lý ban lãnh đạo và tổ chức của các câu lạc bộ sinh viên CTSV">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
+
+    <!-- Modern Light Mode Stylesheets -->
+    <link rel="stylesheet" href="../dashboard/dashboard-modern.css">
+    <link rel="stylesheet" href="clb-modern.css">
+    <link rel="stylesheet" href="clubs-list-enhanced.css">
+    <link rel="stylesheet" href="club-organizers-enhanced.css">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Dashboard Light Mode JavaScript -->
+    <script src="club-organizers-manager.js" defer></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Enhanced Header với Full Functionality -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>CTSV Dashboard</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="search-box">
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm ban tổ chức, thành viên..."
+                        autocomplete="off">
+                    <button type="button" id="searchBtn" title="Tìm kiếm">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults">
+                        <!-- Search results sẽ được populate động -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <!-- Theme Toggle -->
+                    <button class="action-btn" id="themeToggle" title="Chế độ Light Mode (đã kích hoạt)">
+                        <i class="fas fa-sun"></i>
+                    </button>
+
+                    <!-- Quick Actions -->
+                    <button class="action-btn" id="quickAdd" title="Thêm nhanh">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="action-btn" id="notificationBtn" title="Thông báo">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">4</span>
+                    </button>
+
+                    <!-- Messages -->
+                    <button class="action-btn" id="messageBtn" title="Tin nhắn">
+                        <i class="fas fa-comment"></i>
+                        <span class="badge" id="messageBadge">2</span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="action-btn" id="settingsBtn" title="Cài đặt nhanh">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+
+                <!-- Enhanced User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Quản trị viên</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                            <div>
+                                <div class="dropdown-name">Admin User</div>
+                                <div class="dropdown-email">admin@ctsv.edu.vn</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+
+                        <a href="../profile/profile.html">
+                            <i class="fas fa-user"></i> Hồ sơ cá nhân
+                        </a>
+                        <button type="button" onclick="dashboard.openSettings()">
+                            <i class="fas fa-cog"></i> Cài đặt tài khoản
+                        </button>
+                        <button type="button" onclick="dashboard.viewNotifications()">
+                            <i class="fas fa-bell"></i> Quản lý thông báo
+                        </button>
+                        <button type="button" onclick="dashboard.openHelp()">
+                            <i class="fas fa-question-circle"></i> Trợ giúp
+                        </button>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button type="button" onclick="dashboard.switchAccount()">
+                            <i class="fas fa-user-friends"></i> Chuyển tài khoản
+                        </button>
+                        <a href="../authen/login-professional.html" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-main">
+            <!-- Modern Sidebar Navigation -->
+            <aside class="sidebar" aria-label="Main navigation">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span class="logo-text">CTSV Dashboard</span>
+                    </div>
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-angle-left"></i>
+                    </button>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <div class="nav-section-title">Dashboard</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="../dashboard/dashboard.html" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-line"></i>
+                                    <span class="nav-text">Dashboard</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">CLB & Sự kiện</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="clubs-list.html" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <span class="nav-text">Danh sách CLB</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="club-members.html" class="nav-link">
+                                    <i class="nav-icon fas fa-user-friends"></i>
+                                    <span class="nav-text">Thành viên CLB</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="club-events.html" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-alt"></i>
+                                    <span class="nav-text">Sự kiện CLB</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="club-organizers.html" class="nav-link active">
+                                    <i class="nav-icon fas fa-user-tie"></i>
+                                    <span class="nav-text">Ban tổ chức</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">Thống kê & Báo cáo</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="../statistics/index.html" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-bar"></i>
+                                    <span class="nav-text">Thống kê tổng quan</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../operations/operations.html" class="nav-link">
+                                    <i class="nav-icon fas fa-cogs"></i>
+                                    <span class="nav-text">Vận hành hệ thống</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">Lịch trình</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="../calendar/index.html" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar"></i>
+                                    <span class="nav-text">Lịch công tác</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../calendar/personal-calendar.html" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-check"></i>
+                                    <span class="nav-text">Lịch cá nhân</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-section-title">Cá nhân</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="../profile/profile.html" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <span class="nav-text">Hồ sơ cá nhân</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../index.html" class="nav-link">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <span class="nav-text">Trang chủ</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../authen/login-professional.html" class="nav-link">
+                                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                                    <span class="nav-text">Đăng xuất</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Enhanced Content -->
+            <main class="content">
+                <div class="page-header">
+                    <h1><i class="fas fa-users-cog"></i> Quản lý Ban tổ chức</h1>
+                    <p>Quản lý ban lãnh đạo và tổ chức của các câu lạc bộ sinh viên CTSV</p>
+                </div>
+
+                <!-- Dashboard Controls -->
+                <div class="dashboard-controls">
+                    <div class="controls-left">
+                        <div class="date-selector">
+                            <select id="academicYear">
+                                <option value="2024-2025" selected>Niên khóa 2024-2025</option>
+                                <option value="2023-2024">Niên khóa 2023-2024</option>
+                                <option value="2022-2023">Niên khóa 2022-2023</option>
+                            </select>
+                        </div>
+                        <div class="filter-selector">
+                            <select id="clubFilter">
+                                <option value="">Tất cả CLB</option>
+                                <option value="technology">CLB Công nghệ</option>
+                                <option value="sport">CLB Thể thao</option>
+                                <option value="art">CLB Nghệ thuật</option>
+                                <option value="volunteer">CLB Tình nguyện</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn-control" id="refreshOrganizers">
+                            <i class="fas fa-sync"></i> Làm mới
+                        </button>
+                        <button class="btn-control export-btn" data-type="pdf">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn-control export-btn" data-type="excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn-control primary" onclick="organizersManager.openAppointModal()">
+                            <i class="fas fa-user-plus"></i> Bổ nhiệm BTC
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enhanced Stats Section -->
+                <div class="dashboard-stats">
+                    <div class="stat-card primary" data-stat="presidents">
+                        <div class="stat-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>18</h3>
+                            <p>Chủ tịch CLB</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-check-circle"></i>
+                            <span>100% có chủ tịch</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success" data-stat="organizers">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>72</h3>
+                            <p>Ban quản lý</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+5 vị trí mới</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning" data-stat="candidates">
+                        <div class="stat-icon">
+                            <i class="fas fa-hand-paper"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>8</h3>
+                            <p>Ứng viên</p>
+                        </div>
+                        <div class="stat-trend stable">
+                            <i class="fas fa-clock"></i>
+                            <span>Chờ phỏng vấn</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger" data-stat="vacantPositions">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>3</h3>
+                            <p>Vị trí trống</p>
+                        </div>
+                        <div class="stat-trend down">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Cần tuyển</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Section -->
+                <div class="quick-actions-section">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3>
+                                <i class="fas fa-bolt"></i>
+                                Quản lý ban tổ chức
+                            </h3>
+                            <p>Các chức năng thường dùng để quản lý ban tổ chức CLB</p>
+                        </div>
+
+                        <div class="quick-actions-grid">
+                            <button class="quick-action-card" onclick="organizersManager.openAppointModal()">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="quick-action-title">Bổ nhiệm</div>
+                                <div class="quick-action-description">Bổ nhiệm vào ban tổ chức</div>
+                            </button>
+
+                            <button class="quick-action-card" onclick="organizersManager.openPermissionsModal()">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-users-cog"></i>
+                                </div>
+                                <div class="quick-action-title">Phân quyền</div>
+                                <div class="quick-action-description">Quản lý quyền hạn BTC</div>
+                            </button>
+
+                            <button class="quick-action-card" onclick="organizersManager.viewOrgChart()">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-sitemap"></i>
+                                </div>
+                                <div class="quick-action-title">Sơ đồ tổ chức</div>
+                                <div class="quick-action-description">Xem cấu trúc ban tổ chức</div>
+                            </button>
+
+                            <button class="quick-action-card" onclick="organizersManager.manageTerms()">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-file-contract"></i>
+                                </div>
+                                <div class="quick-action-title">Nhiệm kỳ</div>
+                                <div class="quick-action-description">Quản lý nhiệm kỳ BTC</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organizers by Club Section -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-users"></i> Ban tổ chức theo CLB</h3>
+                        <div class="section-actions">
+                            <button class="btn-filter" id="organizersFilter" title="Lọc ban tổ chức">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                            <button class="btn-refresh" id="refreshOrganizersList" title="Làm mới">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Section -->
+                    <div class="activity-filters" id="organizersFilterSection" style="display: none;">
+                        <div class="filter-group">
+                            <label for="positionFilter">Chức vụ:</label>
+                            <select id="positionFilter">
+                                <option value="">Tất cả chức vụ</option>
+                                <option value="president">Chủ tịch</option>
+                                <option value="vice-president">Phó chủ tịch</option>
+                                <option value="secretary">Thư ký</option>
+                                <option value="treasurer">Thủ quỹ</option>
+                                <option value="member">Thành viên BTC</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="statusFilter">Trạng thái:</label>
+                            <select id="statusFilter">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="inactive">Tạm nghỉ</option>
+                                <option value="pending">Chờ phê duyệt</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Organizers Grid -->
+                    <div class="organizers-container">
+                        <div class="club-organizer-card">
+                            <div class="club-org-header">
+                                <div class="club-info">
+                                    <div class="club-logo">
+                                        <i class="fas fa-laptop-code"></i>
+                                    </div>
+                                    <div class="club-details">
+                                        <h4>CLB Công nghệ</h4>
+                                        <span class="club-category">Công nghệ thông tin</span>
+                                    </div>
+                                </div>
+                                <div class="club-stats">
+                                    <span class="member-count">8 BTC</span>
+                                    <span class="status-badge active">Hoạt động</span>
+                                </div>
+                            </div>
+
+                            <div class="organizers-grid">
+                                <div class="organizer-item">
+                                    <div class="organizer-avatar">
+                                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Nguyễn Văn A">
+                                        <div class="status-indicator active"></div>
+                                    </div>
+                                    <div class="organizer-info">
+                                        <div class="organizer-name">Nguyễn Văn A</div>
+                                        <div class="organizer-role">
+                                            <span class="role-badge president">Chủ tịch</span>
+                                        </div>
+                                        <div class="organizer-meta">
+                                            <span class="term-info">
+                                                <i class="fas fa-calendar"></i>
+                                                2024-2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="organizer-actions">
+                                        <button class="btn-action view"
+                                            onclick="organizersManager.viewOrganizer('org1')" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action edit"
+                                            onclick="organizersManager.editOrganizer('org1')" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action delete"
+                                            onclick="organizersManager.removeOrganizer('org1')" title="Miễn nhiệm">
+                                            <i class="fas fa-user-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="organizer-item">
+                                    <div class="organizer-avatar">
+                                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Trần Thị B">
+                                        <div class="status-indicator active"></div>
+                                    </div>
+                                    <div class="organizer-info">
+                                        <div class="organizer-name">Trần Thị B</div>
+                                        <div class="organizer-role">
+                                            <span class="role-badge vice-president">Phó chủ tịch</span>
+                                        </div>
+                                        <div class="organizer-meta">
+                                            <span class="term-info">
+                                                <i class="fas fa-calendar"></i>
+                                                2024-2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="organizer-actions">
+                                        <button class="btn-action view"
+                                            onclick="organizersManager.viewOrganizer('org2')" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action edit"
+                                            onclick="organizersManager.editOrganizer('org2')" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action delete"
+                                            onclick="organizersManager.removeOrganizer('org2')" title="Miễn nhiệm">
+                                            <i class="fas fa-user-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="organizer-item">
+                                    <div class="organizer-avatar">
+                                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Lê Văn C">
+                                        <div class="status-indicator active"></div>
+                                    </div>
+                                    <div class="organizer-info">
+                                        <div class="organizer-name">Lê Văn C</div>
+                                        <div class="organizer-role">
+                                            <span class="role-badge secretary">Thư ký</span>
+                                        </div>
+                                        <div class="organizer-meta">
+                                            <span class="term-info">
+                                                <i class="fas fa-calendar"></i>
+                                                2024-2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="organizer-actions">
+                                        <button class="btn-action view"
+                                            onclick="organizersManager.viewOrganizer('org3')" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action edit"
+                                            onclick="organizersManager.editOrganizer('org3')" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action delete"
+                                            onclick="organizersManager.removeOrganizer('org3')" title="Miễn nhiệm">
+                                            <i class="fas fa-user-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Add Member Button -->
+                                <div class="organizer-item add-member">
+                                    <button class="add-organizer-btn"
+                                        onclick="organizersManager.openAppointModal('tech')">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Thêm thành viên BTC</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="club-organizer-card">
+                            <div class="club-org-header">
+                                <div class="club-info">
+                                    <div class="club-logo">
+                                        <i class="fas fa-running"></i>
+                                    </div>
+                                    <div class="club-details">
+                                        <h4>CLB Thể thao</h4>
+                                        <span class="club-category">Thể dục thể thao</span>
+                                    </div>
+                                </div>
+                                <div class="club-stats">
+                                    <span class="member-count">6 BTC</span>
+                                    <span class="status-badge active">Hoạt động</span>
+                                </div>
+                            </div>
+
+                            <div class="organizers-grid">
+                                <div class="organizer-item">
+                                    <div class="organizer-avatar">
+                                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Phạm Văn D">
+                                        <div class="status-indicator active"></div>
+                                    </div>
+                                    <div class="organizer-info">
+                                        <div class="organizer-name">Phạm Văn D</div>
+                                        <div class="organizer-role">
+                                            <span class="role-badge president">Chủ tịch</span>
+                                        </div>
+                                        <div class="organizer-meta">
+                                            <span class="term-info">
+                                                <i class="fas fa-calendar"></i>
+                                                2024-2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="organizer-actions">
+                                        <button class="btn-action view"
+                                            onclick="organizersManager.viewOrganizer('org4')" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action edit"
+                                            onclick="organizersManager.editOrganizer('org4')" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action delete"
+                                            onclick="organizersManager.removeOrganizer('org4')" title="Miễn nhiệm">
+                                            <i class="fas fa-user-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="organizer-item">
+                                    <div class="organizer-avatar">
+                                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Võ Thị E">
+                                        <div class="status-indicator active"></div>
+                                    </div>
+                                    <div class="organizer-info">
+                                        <div class="organizer-name">Võ Thị E</div>
+                                        <div class="organizer-role">
+                                            <span class="role-badge vice-president">Phó chủ tịch</span>
+                                        </div>
+                                        <div class="organizer-meta">
+                                            <span class="term-info">
+                                                <i class="fas fa-calendar"></i>
+                                                2024-2025
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="organizer-actions">
+                                        <button class="btn-action view"
+                                            onclick="organizersManager.viewOrganizer('org5')" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action edit"
+                                            onclick="organizersManager.editOrganizer('org5')" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action delete"
+                                            onclick="organizersManager.removeOrganizer('org5')" title="Miễn nhiệm">
+                                            <i class="fas fa-user-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Add Member Button -->
+                                <div class="organizer-item add-member">
+                                    <button class="add-organizer-btn"
+                                        onclick="organizersManager.openAppointModal('sport')">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Thêm thành viên BTC</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Enhanced Modals -->
+
+        <!-- Appoint Modal -->
+        <div class="modal" id="appointModal">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Bổ nhiệm vào ban tổ chức</h3>
+                    <button class="modal-close" onclick="organizersManager.closeModal('appointModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointForm">
+                        <div class="form-group">
+                            <label for="appointClub">Câu lạc bộ:</label>
+                            <select id="appointClub" required>
+                                <option value="">Chọn câu lạc bộ</option>
+                                <option value="tech">CLB Công nghệ</option>
+                                <option value="sport">CLB Thể thao</option>
+                                <option value="art">CLB Nghệ thuật</option>
+                                <option value="volunteer">CLB Tình nguyện</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointStudent">Sinh viên:</label>
+                            <div class="student-search">
+                                <input type="text" id="appointStudent" placeholder="Tìm kiếm sinh viên..."
+                                    autocomplete="off">
+                                <div class="search-results" id="studentSearchResults"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointPosition">Chức vụ:</label>
+                            <select id="appointPosition" required>
+                                <option value="">Chọn chức vụ</option>
+                                <option value="president">Chủ tịch</option>
+                                <option value="vice-president">Phó chủ tịch</option>
+                                <option value="secretary">Thư ký</option>
+                                <option value="treasurer">Thủ quỹ</option>
+                                <option value="event-coordinator">Điều phối sự kiện</option>
+                                <option value="member">Thành viên BTC</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointStartDate">Ngày bắt đầu:</label>
+                            <input type="date" id="appointStartDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointEndDate">Ngày kết thúc:</label>
+                            <input type="date" id="appointEndDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointDescription">Mô tả nhiệm vụ:</label>
+                            <textarea id="appointDescription" rows="4"
+                                placeholder="Mô tả chi tiết về nhiệm vụ và trách nhiệm..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel"
+                        onclick="organizersManager.closeModal('appointModal')">Hủy</button>
+                    <button type="button" class="btn-primary" onclick="organizersManager.processAppointment()">Bổ
+                        nhiệm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Organizer Modal -->
+        <div class="modal" id="editOrganizerModal">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-edit"></i> Chỉnh sửa thông tin BTC</h3>
+                    <button class="modal-close"
+                        onclick="organizersManager.closeModal('editOrganizerModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editOrganizerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editOrgName">Họ và tên:</label>
+                                <input type="text" id="editOrgName" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editOrgStudentId">Mã sinh viên:</label>
+                                <input type="text" id="editOrgStudentId" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editOrgPosition">Chức vụ:</label>
+                                <select id="editOrgPosition" required>
+                                    <option value="president">Chủ tịch</option>
+                                    <option value="vice-president">Phó chủ tịch</option>
+                                    <option value="secretary">Thư ký</option>
+                                    <option value="treasurer">Thủ quỹ</option>
+                                    <option value="event-coordinator">Điều phối sự kiện</option>
+                                    <option value="member">Thành viên BTC</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editOrgStatus">Trạng thái:</label>
+                                <select id="editOrgStatus" required>
+                                    <option value="active">Đang hoạt động</option>
+                                    <option value="inactive">Tạm nghỉ</option>
+                                    <option value="suspended">Tạm đình chỉ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editOrgStartDate">Ngày bắt đầu:</label>
+                                <input type="date" id="editOrgStartDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editOrgEndDate">Ngày kết thúc:</label>
+                                <input type="date" id="editOrgEndDate" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editOrgDescription">Mô tả nhiệm vụ:</label>
+                            <textarea id="editOrgDescription" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editOrgNotes">Ghi chú:</label>
+                            <textarea id="editOrgNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel"
+                        onclick="organizersManager.closeModal('editOrganizerModal')">Hủy</button>
+                    <button type="button" class="btn-primary" onclick="organizersManager.updateOrganizer()">Cập
+                        nhật</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organizer Detail Modal -->
+        <div class="modal" id="organizerDetailModal">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-tie"></i> Chi tiết thành viên BTC</h3>
+                    <button class="modal-close"
+                        onclick="organizersManager.closeModal('organizerDetailModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="organizer-detail-content">
+                        <div class="detail-header">
+                            <div class="detail-avatar">
+                                <img id="detailAvatar" src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                                <div class="status-indicator active" id="detailStatusIndicator"></div>
+                            </div>
+                            <div class="detail-info">
+                                <h4 id="detailName">Nguyễn Văn A</h4>
+                                <div class="detail-role" id="detailRole">
+                                    <span class="role-badge president">Chủ tịch</span>
+                                </div>
+                                <div class="detail-meta">
+                                    <span class="club-name" id="detailClub">CLB Công nghệ</span>
+                                    <span class="term-info" id="detailTerm">2024-2025</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-tabs">
+                            <div class="tab-buttons">
+                                <button class="tab-btn active" data-tab="info">Thông tin</button>
+                                <button class="tab-btn" data-tab="responsibilities">Trách nhiệm</button>
+                                <button class="tab-btn" data-tab="activities">Hoạt động</button>
+                                <button class="tab-btn" data-tab="performance">Đánh giá</button>
+                            </div>
+
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="infoTab">
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">Mã sinh viên:</span>
+                                            <span id="detailStudentId">SV2024001</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Email:</span>
+                                            <span id="detailEmail">nguyenvana@ctsv.edu.vn</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Điện thoại:</span>
+                                            <span id="detailPhone">0123456789</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Lớp:</span>
+                                            <span id="detailClass">CNTT2024A</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Ngày bắt đầu:</span>
+                                            <span id="detailStartDate">01/09/2024</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Ngày kết thúc:</span>
+                                            <span id="detailEndDate">31/08/2025</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="responsibilitiesTab">
+                                    <div class="responsibilities-list" id="detailResponsibilities">
+                                        <div class="responsibility-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Lãnh đạo và điều hành hoạt động của CLB</span>
+                                        </div>
+                                        <div class="responsibility-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Chủ trì các cuộc họp ban tổ chức</span>
+                                        </div>
+                                        <div class="responsibility-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Đại diện CLB trong các hoạt động chính thức</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="activitiesTab">
+                                    <div class="activities-timeline" id="detailActivities">
+                                        <div class="activity-item">
+                                            <div class="activity-date">15/11/2024</div>
+                                            <div class="activity-content">
+                                                <h5>Tổ chức Hackathon 2024</h5>
+                                                <p>Chủ trì tổ chức sự kiện lập trình lớn nhất trong năm</p>
+                                            </div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="activity-date">01/11/2024</div>
+                                            <div class="activity-content">
+                                                <h5>Họp ban tổ chức tháng 11</h5>
+                                                <p>Điều hành cuộc họp định kỳ hàng tháng</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="performanceTab">
+                                    <div class="performance-metrics">
+                                        <div class="metric-item">
+                                            <span class="metric-label">Tỷ lệ tham dự họp:</span>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width: 95%"></div>
+                                            </div>
+                                            <span>95%</span>
+                                        </div>
+                                        <div class="metric-item">
+                                            <span class="metric-label">Số sự kiện tổ chức:</span>
+                                            <span class="metric-value">12</span>
+                                        </div>
+                                        <div class="metric-item">
+                                            <span class="metric-label">Đánh giá tổng thể:</span>
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <span>Xuất sắc</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary"
+                        onclick="organizersManager.editOrganizer(organizersManager.currentOrganizerId)">
+                        <i class="fas fa-edit"></i> Chỉnh sửa
+                    </button>
+                    <button type="button" class="btn-cancel"
+                        onclick="organizersManager.closeModal('organizerDetailModal')">Đóng</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Permissions Modal -->
+        <div class="modal" id="permissionsModal">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-shield"></i> Phân quyền ban tổ chức</h3>
+                    <button class="modal-close"
+                        onclick="organizersManager.closeModal('permissionsModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="permissions-container">
+                        <div class="permission-group">
+                            <h4>Quyền quản lý thành viên</h4>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_view_members" checked>
+                                <label for="perm_view_members">Xem danh sách thành viên</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_add_members">
+                                <label for="perm_add_members">Thêm thành viên mới</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_edit_members">
+                                <label for="perm_edit_members">Chỉnh sửa thông tin thành viên</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_remove_members">
+                                <label for="perm_remove_members">Xóa thành viên</label>
+                            </div>
+                        </div>
+
+                        <div class="permission-group">
+                            <h4>Quyền quản lý sự kiện</h4>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_view_events" checked>
+                                <label for="perm_view_events">Xem danh sách sự kiện</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_create_events">
+                                <label for="perm_create_events">Tạo sự kiện mới</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_edit_events">
+                                <label for="perm_edit_events">Chỉnh sửa sự kiện</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_delete_events">
+                                <label for="perm_delete_events">Xóa sự kiện</label>
+                            </div>
+                        </div>
+
+                        <div class="permission-group">
+                            <h4>Quyền tài chính</h4>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_view_finance" checked>
+                                <label for="perm_view_finance">Xem báo cáo tài chính</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_manage_finance">
+                                <label for="perm_manage_finance">Quản lý ngân sách</label>
+                            </div>
+                            <div class="permission-item">
+                                <input type="checkbox" id="perm_approve_expenses">
+                                <label for="perm_approve_expenses">Phê duyệt chi tiêu</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel"
+                        onclick="organizersManager.closeModal('permissionsModal')">Hủy</button>
+                    <button type="button" class="btn-primary" onclick="organizersManager.savePermissions()">Lưu
+                        quyền</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Đang xử lý...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+
+        <script src="../../firebase/app.js"></script>
+        <script src="club-organizers-manager.js"></script>
+</body>
+
+</html>
