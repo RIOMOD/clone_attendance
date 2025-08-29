@@ -33,7 +33,7 @@
                 <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="logo">
+                <div class="logo" id="dashboardLogo" style="cursor:pointer;">
                     <i class="fas fa-graduation-cap"></i>
                     <span>CTSV Dashboard</span>
                 </div>
@@ -808,6 +808,19 @@
 
     <!-- Scripts -->
     <script src="dashboard-clean.js"></script>
+
+    <script>
+        // Cuộn lên đầu trang khi click vào logo
+        document.addEventListener('DOMContentLoaded', function () {
+            var logo = document.getElementById('dashboardLogo');
+            if (logo) {
+                logo.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
 
     <!-- Loading Spinner -->
     <div id="loadingSpinner" class="loading-spinner" style="display: none;">
