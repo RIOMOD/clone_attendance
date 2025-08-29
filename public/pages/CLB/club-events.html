@@ -5,13 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
-    <title>Sự kiện CLB - Hệ thống chấm công CTSV</title>
-    <meta name="description" content="Quản lý và theo dõi các sự kiện của câu lạc bộ sinh viên CTSV">
-    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
+    <title>Sự kiện CLB - Hệ thống Điểm danh</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Modern Light Mode Stylesheets -->
-    <link rel="stylesheet" href="../dashboard/dashboard-modern.css">
-    <link rel="stylesheet" href="club-events-enhanced.css">
+    <link rel="stylesheet" href="../../pages/dashboard/dashboard-modern.css">
+    <link rel="stylesheet" href="clb-dashboard-sync.css">
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,28 +29,34 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Dashboard Light Mode JavaScript -->
-    <script src="club-events-manager.js" defer></script>
+    <!-- Meta tags -->
+    <meta name="description"
+        content="Quản lý sự kiện câu lạc bộ sinh viên CTSV - Tổ chức, quản lý và theo dõi các hoạt động CLB">
+    <meta name="keywords" content="sự kiện, câu lạc bộ, sinh viên, hoạt động, CLB, CTSV">
+    <meta name="author" content="CodeKing Team">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
 </head>
 
 <body>
     <div class="dashboard-container">
-        <!-- Enhanced Header với Full Functionality -->
+        <!-- Header -->
         <header class="dashboard-header">
+            <!-- Left Section -->
             <div class="header-left">
                 <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
+
                 <div class="logo">
                     <i class="fas fa-graduation-cap"></i>
                     <span>CTSV Dashboard</span>
                 </div>
             </div>
 
+            <!-- Center Search -->
             <div class="header-center">
                 <div class="search-box">
-                    <input type="text" id="globalSearch" placeholder="Tìm kiếm sự kiện, CLB, thành viên..."
-                        autocomplete="off">
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm sự kiện, CLB..." autocomplete="off">
                     <button type="button" id="searchBtn" title="Tìm kiếm">
                         <i class="fas fa-search"></i>
                     </button>
@@ -53,6 +66,7 @@
                 </div>
             </div>
 
+            <!-- Right Actions -->
             <div class="header-right">
                 <div class="header-actions">
                     <!-- Theme Toggle -->
@@ -68,13 +82,13 @@
                     <!-- Notifications -->
                     <button class="action-btn" id="notificationBtn" title="Thông báo">
                         <i class="fas fa-bell"></i>
-                        <span class="badge" id="notificationBadge">7</span>
+                        <span class="badge" id="notificationBadge">5</span>
                     </button>
 
                     <!-- Messages -->
                     <button class="action-btn" id="messageBtn" title="Tin nhắn">
                         <i class="fas fa-comment"></i>
-                        <span class="badge" id="messageBadge">4</span>
+                        <span class="badge" id="messageBadge">3</span>
                     </button>
 
                     <!-- Settings -->
@@ -130,7 +144,7 @@
 
         <div class="dashboard-main">
             <!-- Modern Sidebar Navigation -->
-            <aside class="sidebar" aria-label="Main navigation">
+            <aside class="sidebar">
                 <div class="sidebar-header">
                     <div class="sidebar-logo">
                         <i class="fas fa-graduation-cap"></i>
@@ -159,13 +173,7 @@
                         <ul class="nav-list">
                             <li class="nav-item">
                                 <a href="index.html" class="nav-link">
-                                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                                    <span class="nav-text">CLB Dashboard</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="clubs-list.html" class="nav-link">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fas fa-users"></i>
                                     <span class="nav-text">Danh sách CLB</span>
                                 </a>
                             </li>
@@ -177,7 +185,7 @@
                             </li>
                             <li class="nav-item active">
                                 <a href="club-events.html" class="nav-link active">
-                                    <i class="nav-icon fas fa-calendar-check"></i>
+                                    <i class="nav-icon fas fa-calendar-alt"></i>
                                     <span class="nav-text">Sự kiện CLB</span>
                                 </a>
                             </li>
@@ -251,6 +259,9 @@
                     </div>
                 </nav>
             </aside>
+
+            <!-- Sidebar Overlay for Mobile -->
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
             <!-- Enhanced Content -->
             <main class="content">
@@ -741,179 +752,258 @@
             </main>
         </div>
 
-        <!-- Event Modals -->
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Create Event Modal -->
-        <div class="modal" id="createEventModal">
-            <div class="modal-content large">
-                <div class="modal-header">
-                    <h3><i class="fas fa-plus-circle"></i> Tạo sự kiện mới</h3>
-                    <button class="modal-close" onclick="eventsManager.closeModal('createEventModal')">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form id="createEventForm" class="event-form">
-                        <div class="form-section">
-                            <h4><i class="fas fa-info-circle"></i> Thông tin cơ bản</h4>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="eventTitle">Tên sự kiện *</label>
-                                    <input type="text" id="eventTitle" name="title" required
-                                        placeholder="Nhập tên sự kiện">
-                                </div>
-                                <div class="form-group">
-                                    <label for="eventClub">Câu lạc bộ *</label>
-                                    <select id="eventClub" name="club" required>
-                                        <option value="">Chọn CLB</option>
-                                        <option value="technology">CLB Công nghệ</option>
-                                        <option value="sport">CLB Thể thao</option>
-                                        <option value="art">CLB Nghệ thuật</option>
-                                        <option value="volunteer">CLB Tình nguyện</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="eventDescription">Mô tả sự kiện</label>
-                                <textarea id="eventDescription" name="description" rows="4"
-                                    placeholder="Mô tả chi tiết về sự kiện"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h4><i class="fas fa-calendar"></i> Thời gian & Địa điểm</h4>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="eventStartDate">Ngày bắt đầu *</label>
-                                    <input type="date" id="eventStartDate" name="startDate" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="eventStartTime">Giờ bắt đầu *</label>
-                                    <input type="time" id="eventStartTime" name="startTime" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="eventEndDate">Ngày kết thúc</label>
-                                    <input type="date" id="eventEndDate" name="endDate">
-                                </div>
-                                <div class="form-group">
-                                    <label for="eventEndTime">Giờ kết thúc</label>
-                                    <input type="time" id="eventEndTime" name="endTime">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="eventLocation">Địa điểm *</label>
-                                    <input type="text" id="eventLocation" name="location" required
-                                        placeholder="Phòng, tòa nhà, địa chỉ">
-                                </div>
-                                <div class="form-group">
-                                    <label for="eventType">Loại sự kiện</label>
-                                    <select id="eventType" name="type">
-                                        <option value="workshop">Workshop</option>
-                                        <option value="seminar">Hội thảo</option>
-                                        <option value="competition">Thi đấu</option>
-                                        <option value="social">Giao lưu</option>
-                                        <option value="volunteer">Tình nguyện</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h4><i class="fas fa-users"></i> Tham gia & Đăng ký</h4>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="eventCapacity">Số lượng tối đa</label>
-                                    <input type="number" id="eventCapacity" name="capacity"
-                                        placeholder="Không giới hạn để trống">
-                                </div>
-                                <div class="form-group">
-                                    <label for="registrationDeadline">Hạn đăng ký</label>
-                                    <input type="datetime-local" id="registrationDeadline" name="registrationDeadline">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="requireRegistration" name="requireRegistration" checked>
-                                    <span>Yêu cầu đăng ký trước</span>
-                                </label>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="allowGuestRegistration" name="allowGuestRegistration">
-                                    <span>Cho phép khách mời đăng ký</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h4><i class="fas fa-image"></i> Hình ảnh & Tài liệu</h4>
-                            <div class="form-group">
-                                <label for="eventImage">Ảnh sự kiện</label>
-                                <div class="file-upload">
-                                    <input type="file" id="eventImage" name="image" accept="image/*">
-                                    <div class="upload-area">
-                                        <i class="fas fa-cloud-upload-alt"></i>
-                                        <p>Kéo thả ảnh vào đây hoặc nhấn để chọn</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-cancel"
-                        onclick="eventsManager.closeModal('createEventModal')">Hủy</button>
-                    <button type="button" class="btn-secondary" onclick="eventsManager.saveEventDraft()">Lưu
-                        nháp</button>
-                    <button type="submit" form="createEventForm" class="btn-primary">
-                        <i class="fas fa-save"></i> Tạo sự kiện
-                    </button>
-                </div>
+        <!-- Notification Panel -->
+        <div class="notification-panel" id="notificationPanel">
+            <div class="notification-header">
+                <h3>Thông báo CLB</h3>
+                <button class="notification-close" onclick="closeNotificationPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-        </div>
-
-        <!-- Event Details Modal -->
-        <div class="modal" id="eventDetailsModal">
-            <div class="modal-content large">
-                <div class="modal-header">
-                    <h3><i class="fas fa-calendar-alt"></i> Chi tiết sự kiện</h3>
-                    <button class="modal-close" onclick="eventsManager.closeModal('eventDetailsModal')">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="eventDetailsContent">
-                        <!-- Content will be populated dynamically -->
+            <div class="notification-list">
+                <div class="notification-item unread">
+                    <div class="notification-item-icon success">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Sự kiện mới</div>
+                        <div class="notification-item-message">3 sự kiện mới được thêm trong tuần này</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            45 phút trước
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="eventsManager.editCurrentEvent()">
-                        <i class="fas fa-edit"></i> Chỉnh sửa
-                    </button>
-                    <button type="button" class="btn-cancel"
-                        onclick="eventsManager.closeModal('eventDetailsModal')">Đóng</button>
+
+                <div class="notification-item">
+                    <div class="notification-item-icon primary">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Sự kiện sắp diễn ra</div>
+                        <div class="notification-item-message">Workshop React Advanced - 25/12/2024</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            1 giờ trước
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Loading Overlay -->
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loading-spinner">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Đang xử lý...</p>
+    <!-- Create Event Modal -->
+    <div class="modal" id="createEventModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Tạo sự kiện mới</h3>
+                <button class="modal-close" onclick="eventsManager.closeModal('createEventModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createEventForm" class="event-form">
+                    <div class="form-section">
+                        <h4><i class="fas fa-info-circle"></i> Thông tin cơ bản</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventTitle">Tên sự kiện *</label>
+                                <input type="text" id="eventTitle" name="title" required placeholder="Nhập tên sự kiện">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventClub">Câu lạc bộ *</label>
+                                <select id="eventClub" name="club" required>
+                                    <option value="">Chọn CLB</option>
+                                    <option value="technology">CLB Công nghệ</option>
+                                    <option value="sport">CLB Thể thao</option>
+                                    <option value="art">CLB Nghệ thuật</option>
+                                    <option value="volunteer">CLB Tình nguyện</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventDescription">Mô tả sự kiện</label>
+                            <textarea id="eventDescription" name="description" rows="4"
+                                placeholder="Mô tả chi tiết về sự kiện"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-calendar"></i> Thời gian & Địa điểm</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventStartDate">Ngày bắt đầu *</label>
+                                <input type="date" id="eventStartDate" name="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="eventStartTime">Giờ bắt đầu *</label>
+                                <input type="time" id="eventStartTime" name="startTime" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventEndDate">Ngày kết thúc</label>
+                                <input type="date" id="eventEndDate" name="endDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventEndTime">Giờ kết thúc</label>
+                                <input type="time" id="eventEndTime" name="endTime">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventLocation">Địa điểm *</label>
+                                <input type="text" id="eventLocation" name="location" required
+                                    placeholder="Phòng, tòa nhà, địa chỉ">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventType">Loại sự kiện</label>
+                                <select id="eventType" name="type">
+                                    <option value="workshop">Workshop</option>
+                                    <option value="seminar">Hội thảo</option>
+                                    <option value="competition">Thi đấu</option>
+                                    <option value="social">Giao lưu</option>
+                                    <option value="volunteer">Tình nguyện</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-users"></i> Tham gia & Đăng ký</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventCapacity">Số lượng tối đa</label>
+                                <input type="number" id="eventCapacity" name="capacity"
+                                    placeholder="Không giới hạn để trống">
+                            </div>
+                            <div class="form-group">
+                                <label for="registrationDeadline">Hạn đăng ký</label>
+                                <input type="datetime-local" id="registrationDeadline" name="registrationDeadline">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="requireRegistration" name="requireRegistration" checked>
+                                <span>Yêu cầu đăng ký trước</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="allowGuestRegistration" name="allowGuestRegistration">
+                                <span>Cho phép khách mời đăng ký</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-image"></i> Hình ảnh & Tài liệu</h4>
+                        <div class="form-group">
+                            <label for="eventImage">Ảnh sự kiện</label>
+                            <div class="file-upload">
+                                <input type="file" id="eventImage" name="image" accept="image/*">
+                                <div class="upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Kéo thả ảnh vào đây hoặc nhấn để chọn</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel"
+                    onclick="eventsManager.closeModal('createEventModal')">Hủy</button>
+                <button type="button" class="btn-secondary" onclick="eventsManager.saveEventDraft()">Lưu
+                    nháp</button>
+                <button type="submit" form="createEventForm" class="btn-primary">
+                    <i class="fas fa-save"></i> Tạo sự kiện
+                </button>
             </div>
         </div>
+    </div>
 
-        <!-- Toast Notifications -->
-        <div class="toast-container" id="toastContainer"></div>
+    <!-- Event Details Modal -->
+    <div class="modal" id="eventDetailsModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-alt"></i> Chi tiết sự kiện</h3>
+                <button class="modal-close" onclick="eventsManager.closeModal('eventDetailsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="eventDetailsContent">
+                    <!-- Content will be populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="eventsManager.editCurrentEvent()">
+                    <i class="fas fa-edit"></i> Chỉnh sửa
+                </button>
+                <button type="button" class="btn-cancel"
+                    onclick="eventsManager.closeModal('eventDetailsModal')">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Đang xử lý...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
     </div>
 
     <!-- Scripts -->
-    <script src="club-events-manager.js"></script>
+    <script src="../../pages/dashboard/dashboard-clean.js"></script>
+    <script src="clb-dashboard-sync.js"></script>
+
+    <!-- Additional initialization -->
+    <script>
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            if (performance.getEntriesByType) {
+                const paintMetrics = performance.getEntriesByType('paint');
+                paintMetrics.forEach(metric => {
+                    console.log(`${metric.name}: ${Math.round(metric.startTime)}ms`);
+                });
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', (e) => {
+            console.error('JavaScript Error:', {
+                message: e.message,
+                filename: e.filename,
+                line: e.lineno,
+                column: e.colno,
+                error: e.error
+            });
+        });
+
+        // Page-specific initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update page title and meta
+            document.title = 'Sự kiện CLB - AttendanceHub';
+
+            // Set active navigation
+            const currentNavItem = document.querySelector('.nav-item.active .nav-link');
+            if (currentNavItem) {
+                currentNavItem.setAttribute('aria-current', 'page');
+            }
+
+            console.log('✅ Club Events page loaded successfully');
+        });
+    </script>
 </body>
 
 </html>

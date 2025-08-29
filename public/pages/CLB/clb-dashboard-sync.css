@@ -28,6 +28,17 @@
 
 /* ===== CLB-SPECIFIC DASHBOARD CUSTOMIZATIONS ===== */
 
+/* Main content area fixes */
+.content {
+    position: relative;
+    z-index: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1;
+    padding: var(--space-6);
+    background: var(--bg-secondary);
+}
+
 /* Page Header Customization */
 .page-header h1 i {
     color: var(--clb-primary);
@@ -313,6 +324,29 @@
         height: 40px;
         font-size: 1.25rem;
     }
+
+    /* Mobile fixes for section-card and reports */
+    .section-card {
+        padding: var(--space-4) !important;
+        margin-bottom: var(--space-4) !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .activity-section,
+    .reports-section {
+        margin-bottom: var(--space-6);
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+    }
+
+    .section-actions {
+        justify-content: center;
+    }
 }
 
 /* ===== TABLET RESPONSIVE ===== */
@@ -401,6 +435,237 @@
     100% {
         left: 100%;
     }
+}
+
+/* ===== REPORTS SECTION FIXES ===== */
+/* Ensuring reports-section has same styling as activity-section */
+.reports-section {
+    margin-bottom: var(--space-8);
+    position: relative;
+    z-index: 1;
+}
+
+.reports-section .section-card {
+    background: var(--color-surface, var(--bg-primary));
+    border-radius: var(--border-radius-2xl, var(--radius-2xl));
+    padding: var(--space-8);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border, var(--border-color));
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    z-index: auto;
+}
+
+.reports-section .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--clb-gradient);
+}
+
+/* Ensuring section-card has proper positioning and visibility */
+.section-card {
+    position: relative;
+    z-index: auto;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    margin-bottom: var(--space-6);
+}
+
+/* Fix for any section-card that might be getting covered */
+.dashboard-main .section-card {
+    background: var(--color-surface, var(--bg-primary)) !important;
+    border-radius: var(--border-radius-2xl, var(--radius-2xl)) !important;
+    padding: var(--space-8) !important;
+    box-shadow: var(--shadow-card) !important;
+    border: 1px solid var(--color-border, var(--border-color)) !important;
+    position: relative !important;
+    overflow: visible !important;
+    min-height: auto !important;
+    height: auto !important;
+    z-index: 1 !important;
+}
+
+/* Ensuring proper spacing and positioning */
+.activity-section,
+.reports-section {
+    position: relative;
+    z-index: 1;
+    margin-bottom: var(--space-8);
+    clear: both;
+    width: 100%;
+}
+
+/* Fix for section headers being covered */
+.section-header {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border, var(--border-color));
+}
+
+/* Additional fixes to prevent content being covered */
+.featured-clubs-grid,
+.activity-list,
+.reports-list {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.club-card,
+.activity-item,
+.report-item {
+    position: relative;
+    z-index: 1;
+    background: var(--color-surface, var(--bg-primary));
+    border-radius: var(--border-radius-lg, var(--radius-lg));
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm, var(--shadow-card));
+    border: 1px solid var(--color-border, var(--border-color));
+    margin-bottom: var(--space-3);
+}
+
+/* Report Item Specific Styles */
+.report-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.report-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.report-icon {
+    width: 3rem;
+    height: 3rem;
+    background: var(--clb-gradient);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.report-content {
+    flex: 1;
+}
+
+.report-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text-primary, var(--text-primary));
+    margin-bottom: var(--space-1);
+}
+
+.report-description {
+    color: var(--color-text-secondary, var(--text-secondary));
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-2);
+}
+
+.report-meta {
+    display: flex;
+    gap: var(--space-3);
+    font-size: var(--font-size-xs);
+}
+
+.report-type {
+    background: var(--color-surface-secondary, var(--bg-tertiary));
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-sm, var(--radius-sm));
+    color: var(--color-text-secondary, var(--text-secondary));
+}
+
+.report-status {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-sm, var(--radius-sm));
+    font-weight: 500;
+}
+
+.report-status.ready {
+    background: var(--success);
+    color: white;
+}
+
+.report-status.processing {
+    background: var(--warning);
+    color: white;
+}
+
+.report-actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.btn-download {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--color-surface-secondary, var(--bg-tertiary));
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-md, var(--radius-md));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    color: var(--color-text-secondary, var(--text-secondary));
+}
+
+.btn-download:hover:not(:disabled) {
+    background: var(--clb-primary);
+    color: var(--text-white);
+    transform: translateY(-1px);
+}
+
+.btn-download:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Ensure content inside section-card is visible */
+.section-card>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* Fix for any layout issues with content flow */
+.dashboard-main {
+    display: flex;
+    flex-direction: row;
+    min-height: calc(100vh - 4.5rem);
+    position: relative;
+}
+
+/* Ensure proper stacking context for all main content sections */
+.page-header,
+.dashboard-controls,
+.dashboard-stats,
+.quick-actions-section,
+.activity-section,
+.reports-section {
+    position: relative;
+    z-index: 1;
+    margin-bottom: var(--space-6);
 }
 
 /* ===== PRINT STYLES ===== */
