@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
     <title>Lịch cá nhân - Hệ thống chấm công CTSV</title>
-    <meta name="description" content="Lịch cá nhân và quản lý thời gian cá nhân hệ thống chấm công CTSV">
+    <meta name="description" content="Lịch cá nhân và quản lý công việc cá nhân">
     <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
 
-    <!-- Personal Calendar Stylesheet -->
+    <!-- Modern Dashboard Stylesheet -->
+    <link rel="stylesheet" href="../dashboard/dashboard-modern.css">
+    
+    <!-- Calendar-specific Stylesheet -->
     <link rel="stylesheet" href="personal-calendar.css">
 
     <!-- FontAwesome -->
@@ -19,12 +22,11 @@
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
-    <!-- Chart.js for analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Dashboard Light Mode JavaScript -->
+    <script src="../dashboard/dashboard-lightmode.js" defer></script>
 </head>
 
 <body>
@@ -35,7 +37,7 @@
                 <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="logo">
+                <div class="logo" id="dashboardLogo" style="cursor:pointer;">
                     <i class="fas fa-graduation-cap"></i>
                     <span>CTSV Dashboard</span>
                 </div>
@@ -43,7 +45,7 @@
 
             <div class="header-center">
                 <div class="search-box">
-                    <input type="text" id="globalSearch" placeholder="Tìm kiếm lịch trình, ghi chú..."
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm công việc, ghi chú, nhắc nhở..."
                         autocomplete="off">
                     <button type="button" id="searchBtn" title="Tìm kiếm">
                         <i class="fas fa-search"></i>
@@ -128,645 +130,592 @@
                 </div>
             </div>
         </header>
-        <a href="../statistics/index.html" class="dropdown-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Thống kê học tập</span>
-        </a>
-        <a href="#" class="dropdown-item">
-            <i class="fas fa-calendar-check"></i>
-            <span>Lịch sử hoạt động</span>
-        </a>
-    </div>
 
-    <div class="dropdown-section">
-        <h6 class="dropdown-title">Hệ thống</h6>
-        <a href="../dashboard/dashboard.html" class="dropdown-item">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Dashboard chính</span>
-        </a>
-        <a href="index.html" class="dropdown-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Lịch tổng quan</span>
-        </a>
-    </div>
-
-    <div class="dropdown-section">
-        <a href="../../index.html" class="dropdown-item logout">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Đăng xuất</span>
-        </a>
-    </div>
-    </div>
-    </div>
-    </div>
-    </header>
-
-    <!-- Enhanced Sidebar Navigation -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <i class="fas fa-user-calendar"></i>
-                <span>Lịch cá nhân</span>
-            </div>
-            <button class="sidebar-toggle" id="sidebarToggle">
-                <i class="fas fa-angle-left"></i>
-            </button>
-        </div>
-
-        <!-- Personal Calendar Categories -->
-        <div class="sidebar-categories">
-            <div class="category-header">
-                <h4>Danh mục cá nhân</h4>
-                <button class="add-category-btn" id="addCategoryBtn" title="Thêm danh mục">
-                    <i class="fas fa-plus"></i>
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Lịch cá nhân</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-angle-left"></i>
                 </button>
             </div>
 
-            <div class="categories-list">
-                <div class="category-item active" data-category="personal">
-                    <div class="category-color" style="background: #3b82f6;"></div>
-                    <span class="category-name">Cá nhân</span>
-                    <span class="category-count">8</span>
-                </div>
-                <div class="category-item" data-category="study">
-                    <div class="category-color" style="background: #10b981;"></div>
-                    <span class="category-name">Học tập</span>
-                    <span class="category-count">12</span>
-                </div>
-                <div class="category-item" data-category="work">
-                    <div class="category-color" style="background: #f59e0b;"></div>
-                    <span class="category-name">Công việc</span>
-                    <span class="category-count">5</span>
-                </div>
-                <div class="category-item" data-category="health">
-                    <div class="category-color" style="background: #ef4444;"></div>
-                    <span class="category-name">Sức khỏe</span>
-                    <span class="category-count">3</span>
-                </div>
-                <div class="category-item" data-category="hobby">
-                    <div class="category-color" style="background: #8b5cf6;"></div>
-                    <span class="category-name">Sở thích</span>
-                    <span class="category-count">6</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation Menu -->
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <div class="nav-section-title">
-                    <i class="fas fa-calendar"></i>
-                    <span>Quản lý lịch</span>
-                </div>
-                <ul class="nav-list">
-                    <li class="nav-item active">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-day"></i>
-                            <span class="nav-text">Lịch cá nhân</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span class="nav-text">Lịch tổng quan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-clock"></i>
-                            <span class="nav-text">Chấm công</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">
-                    <i class="fas fa-tasks"></i>
-                    <span>Nhiệm vụ</span>
-                </div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-list-check"></i>
-                            <span class="nav-text">Danh sách việc làm</span>
-                            <span class="nav-badge">7</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-flag"></i>
-                            <span class="nav-text">Mục tiêu</span>
-                            <span class="nav-badge">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-chart-pie"></i>
-                            <span class="nav-text">Theo dõi tiến độ</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">
-                    <i class="fas fa-users"></i>
-                    <span>Hoạt động CLB</span>
-                </div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="../CLB/clubs-list.html" class="nav-link">
-                            <i class="fas fa-list"></i>
-                            <span class="nav-text">CLB tham gia</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../CLB/club-events.html" class="nav-link">
-                            <i class="fas fa-calendar-check"></i>
-                            <span class="nav-text">Sự kiện CLB</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <!-- Mini Weather Widget -->
-        <div class="sidebar-widget weather-widget">
-            <div class="widget-header">
-                <i class="fas fa-cloud-sun"></i>
-                <span>Thời tiết</span>
-            </div>
-            <div class="weather-info">
-                <div class="weather-temp">28°C</div>
-                <div class="weather-desc">Nắng ít mây</div>
-                <div class="weather-location">Hà Nội</div>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Sidebar Overlay for Mobile -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="content-wrapper">
-            <!-- Enhanced Page Header -->
-            <div class="page-header">
-                <div class="page-title-section">
-                    <div class="page-title">
-                        <h1>
-                            <i class="fas fa-user-calendar"></i>
-                            Lịch cá nhân của tôi
-                        </h1>
-                        <p class="page-subtitle">Quản lý thời gian và lên kế hoạch cho cuộc sống cá nhân</p>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
                     </div>
-
-                    <div class="productivity-score">
-                        <div class="score-circle">
-                            <div class="score-text">
-                                <span class="score-value">92</span>
-                                <span class="score-unit">%</span>
-                            </div>
-                        </div>
-                        <div class="score-info">
-                            <div class="score-label">Hiệu suất tuần này</div>
-                            <div class="score-trend up">
-                                <i class="fas fa-arrow-up"></i>
-                                +5% so với tuần trước
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../dashboard/dashboard.html" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span class="nav-text">Trang chủ</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../operations/operations.html" class="nav-link">
+                                <i class="fas fa-cogs"></i>
+                                <span class="nav-text">Vận hành</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="page-actions">
-                    <div class="view-controls">
-                        <div class="view-toggles">
-                            <button class="toggle-btn active" data-view="month">
-                                <i class="fas fa-calendar"></i>
-                                <span>Tháng</span>
-                            </button>
-                            <button class="toggle-btn" data-view="week">
-                                <i class="fas fa-calendar-week"></i>
-                                <span>Tuần</span>
-                            </button>
-                            <button class="toggle-btn" data-view="day">
-                                <i class="fas fa-calendar-day"></i>
-                                <span>Ngày</span>
-                            </button>
-                            <button class="toggle-btn" data-view="agenda">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-users"></i>
+                        <span>CLB & Sự kiện</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../CLB/clubs-list.html" class="nav-link">
                                 <i class="fas fa-list"></i>
-                                <span>Lịch trình</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn btn-outline" id="importCalendarBtn">
-                            <i class="fas fa-upload"></i>
-                            <span>Nhập lịch</span>
-                        </button>
-                        <button class="btn btn-outline" id="exportCalendarBtn">
-                            <i class="fas fa-download"></i>
-                            <span>Xuất lịch</span>
-                        </button>
-                        <button class="btn btn-primary" id="addPersonalEventBtn">
-                            <i class="fas fa-plus"></i>
-                            <span>Thêm lịch trình</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Personal Dashboard Cards -->
-            <div class="personal-dashboard">
-                <!-- Today's Overview -->
-                <div class="dashboard-card today-overview">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <i class="fas fa-calendar-day"></i>
-                            <span>Hôm nay - Thứ Hai, 19/08/2025</span>
-                        </div>
-                        <div class="card-actions">
-                            <button class="card-action-btn" title="Thêm lịch trình">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="today-stats">
-                            <div class="today-stat">
-                                <div class="stat-icon">
-                                    <i class="fas fa-tasks"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <div class="stat-value">5/8</div>
-                                    <div class="stat-label">Nhiệm vụ</div>
-                                </div>
-                            </div>
-                            <div class="today-stat">
-                                <div class="stat-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <div class="stat-value">6.5h</div>
-                                    <div class="stat-label">Thời gian</div>
-                                </div>
-                            </div>
-                            <div class="today-stat">
-                                <div class="stat-icon">
-                                    <i class="fas fa-calendar-check"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <div class="stat-value">3</div>
-                                    <div class="stat-label">Sự kiện</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="today-progress">
-                            <div class="progress-info">
-                                <span>Tiến độ ngày</span>
-                                <span>62%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 62%"></div>
-                            </div>
-                        </div>
-                    </div>
+                                <span class="nav-text">Danh sách CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../CLB/club-events.html" class="nav-link">
+                                <i class="fas fa-calendar-check"></i>
+                                <span class="nav-text">Sự kiện CLB</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- Quick Stats -->
-                <div class="dashboard-card quick-stats">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Thống kê nhanh</span>
-                        </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Thống kê & Báo cáo</span>
                     </div>
-                    <div class="card-content">
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">23</div>
-                                <div class="stat-label">Sự kiện tuần này</div>
-                                <div class="stat-trend up">+12%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">45h</div>
-                                <div class="stat-label">Thời gian học</div>
-                                <div class="stat-trend up">+8%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">18</div>
-                                <div class="stat-label">Nhiệm vụ hoàn thành</div>
-                                <div class="stat-trend down">-2%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">94%</div>
-                                <div class="stat-label">Tỷ lệ tham dự</div>
-                                <div class="stat-trend neutral">0%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Upcoming Events -->
-                <div class="dashboard-card upcoming-events">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <i class="fas fa-clock"></i>
-                            <span>Sắp tới</span>
-                        </div>
-                        <a href="#" class="card-link">Xem tất cả</a>
-                    </div>
-                    <div class="card-content">
-                        <div class="events-timeline" id="upcomingEventsList">
-                            <!-- Events will be populated by JavaScript -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendar and Sidebar Layout -->
-            <div class="calendar-layout">
-                <!-- Main Calendar Section -->
-                <div class="calendar-section">
-                    <div class="calendar-header">
-                        <div class="calendar-nav">
-                            <button class="nav-btn" id="prevBtn">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <h2 id="currentMonth">Tháng 8, 2025</h2>
-                            <button class="nav-btn" id="nextBtn">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="calendar-actions">
-                            <button class="btn btn-sm btn-outline" id="todayBtn">
-                                <i class="fas fa-calendar-day"></i>
-                                <span>Hôm nay</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="calendar-container">
-                        <div id="personalCalendar"></div>
-                    </div>
-                </div>
-
-                <!-- Right Sidebar -->
-                <div class="calendar-sidebar">
-                    <!-- Task Manager -->
-                    <div class="sidebar-section tasks-section">
-                        <div class="section-header">
-                            <h3>
-                                <i class="fas fa-tasks"></i>
-                                Nhiệm vụ hôm nay
-                            </h3>
-                            <button class="add-task-btn" id="addTaskBtn">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="tasks-list" id="todayTasksList">
-                            <!-- Tasks will be populated by JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Notes Section -->
-                    <div class="sidebar-section notes-section">
-                        <div class="section-header">
-                            <h3>
-                                <i class="fas fa-sticky-note"></i>
-                                Ghi chú nhanh
-                            </h3>
-                        </div>
-                        <div class="notes-container">
-                            <textarea id="quickNotes" placeholder="Viết ghi chú của bạn tại đây..."
-                                class="notes-textarea"></textarea>
-                            <div class="notes-actions">
-                                <button class="btn btn-sm btn-primary" id="saveNotesBtn">
-                                    <i class="fas fa-save"></i>
-                                    Lưu
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Focus Timer -->
-                    <div class="sidebar-section focus-section">
-                        <div class="section-header">
-                            <h3>
-                                <i class="fas fa-stopwatch"></i>
-                                Pomodoro Timer
-                            </h3>
-                        </div>
-                        <div class="focus-timer">
-                            <div class="timer-display">
-                                <div class="timer-circle">
-                                    <div class="timer-time" id="timerTime">25:00</div>
-                                </div>
-                            </div>
-                            <div class="timer-controls">
-                                <button class="timer-btn" id="startTimerBtn">
-                                    <i class="fas fa-play"></i>
-                                    Bắt đầu
-                                </button>
-                                <button class="timer-btn" id="pauseTimerBtn" style="display: none;">
-                                    <i class="fas fa-pause"></i>
-                                    Tạm dừng
-                                </button>
-                                <button class="timer-btn secondary" id="resetTimerBtn">
-                                    <i class="fas fa-redo"></i>
-                                    Đặt lại
-                                </button>
-                            </div>
-                            <div class="timer-settings">
-                                <label>
-                                    <input type="radio" name="timerMode" value="pomodoro" checked>
-                                    Tập trung (25 phút)
-                                </label>
-                                <label>
-                                    <input type="radio" name="timerMode" value="shortBreak">
-                                    Nghỉ ngắn (5 phút)
-                                </label>
-                                <label>
-                                    <input type="radio" name="timerMode" value="longBreak">
-                                    Nghỉ dài (15 phút)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Weekly Analytics -->
-                    <div class="sidebar-section analytics-section">
-                        <div class="section-header">
-                            <h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../statistics/index.html" class="nav-link">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="nav-text">Thống kê cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
                                 <i class="fas fa-chart-bar"></i>
-                                Phân tích tuần
-                            </h3>
+                                <span class="nav-text">Báo cáo tổng quan</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="nav-text">Xuất báo cáo</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-calendar"></i>
+                        <span>Lịch trình</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="index.html" class="nav-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span class="nav-text">Lịch tổng quan</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="personal-calendar.html" class="nav-link">
+                                <i class="fas fa-calendar-day"></i>
+                                <span class="nav-text">Lịch cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-user"></i>
+                        <span>Cá nhân</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../profile/profile.html" class="nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="nav-text">Hồ sơ cá nhân</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span class="nav-text">Cài đặt</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="dashboard-main">
+            <!-- Enhanced Content -->
+            <main class="content">
+                <div class="page-header">
+                    <h1><i class="fas fa-calendar-day"></i> Lịch cá nhân</h1>
+                    <p>Quản lý công việc và lịch trình cá nhân của bạn</p>
+                </div>
+
+                <!-- Personal Calendar Dashboard -->
+                <div class="personal-calendar-dashboard">
+                    <!-- Personal Stats Cards -->
+                    <div class="dashboard-stats">
+                        <div class="stat-card primary" data-stat="todayTasks">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>8</h3>
+                                <p>Công việc hôm nay</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-check"></i>
+                                <span>3 hoàn thành</span>
+                            </div>
                         </div>
-                        <div class="analytics-content">
-                            <canvas id="weeklyChart" width="280" height="200"></canvas>
+
+                        <div class="stat-card success" data-stat="completedTasks">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>24</h3>
+                                <p>Đã hoàn thành tuần</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card warning" data-stat="upcomingDeadlines">
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>4</h3>
+                                <p>Deadline tuần này</p>
+                            </div>
+                            <div class="stat-trend down">
+                                <i class="fas fa-clock"></i>
+                                <span>2 quá hạn</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card info" data-stat="productivityScore">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>92%</h3>
+                                <p>Hiệu suất làm việc</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+8%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Calendar Controls -->
+                    <div class="dashboard-controls">
+                        <div class="controls-left">
+                            <div class="date-selector">
+                                <select id="personalFilter" class="setting-select">
+                                    <option value="all">Tất cả</option>
+                                    <option value="work">Công việc</option>
+                                    <option value="personal">Cá nhân</option>
+                                    <option value="meetings">Cuộc họp</option>
+                                    <option value="deadlines">Deadline</option>
+                                    <option value="reminders">Nhắc nhở</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="controls-right">
+                            <button class="btn-control" id="todayViewBtn">
+                                <i class="fas fa-calendar-day"></i> Hôm nay
+                            </button>
+                            <button class="btn-control" id="weekViewBtn">
+                                <i class="fas fa-calendar-week"></i> Tuần
+                            </button>
+                            <button class="btn-control primary" id="addTaskBtn">
+                                <i class="fas fa-plus"></i> Thêm công việc
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Personal Calendar Layout -->
+                    <div class="personal-calendar-layout">
+                        <!-- Main Calendar -->
+                        <div class="personal-calendar-main">
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-calendar-day"></i>
+                                        Lịch cá nhân - Tháng 8/2025
+                                    </h3>
+                                    <div class="section-actions">
+                                        <button class="btn-filter" title="Bộ lọc">
+                                            <i class="fas fa-filter"></i>
+                                        </button>
+                                        <button class="btn-refresh" title="Làm mới">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                        <button class="btn-filter" title="Xem theo ngày">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="personal-calendar-container" id="personalCalendar">
+                                    <!-- Personal FullCalendar sẽ được render ở đây -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Tasks Sidebar -->
+                        <div class="personal-tasks-sidebar">
+                            <!-- Today's Tasks -->
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-list-check"></i>
+                                        Công việc hôm nay
+                                    </h3>
+                                    <span class="badge">8</span>
+                                </div>
+                                
+                                <div class="task-list">
+                                    <div class="task-item completed">
+                                        <div class="task-checkbox">
+                                            <input type="checkbox" checked>
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="task-info">
+                                            <div class="task-title">Hoàn thành báo cáo tuần</div>
+                                            <div class="task-meta">
+                                                <span class="task-priority high">Cao</span>
+                                                <span class="task-time">
+                                                    <i class="fas fa-clock"></i>
+                                                    09:00
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="task-item">
+                                        <div class="task-checkbox">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="task-info">
+                                            <div class="task-title">Chuẩn bị thuyết trình</div>
+                                            <div class="task-meta">
+                                                <span class="task-priority medium">Trung bình</span>
+                                                <span class="task-time">
+                                                    <i class="fas fa-clock"></i>
+                                                    14:00
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="task-item urgent">
+                                        <div class="task-checkbox">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="task-info">
+                                            <div class="task-title">Gửi email khách hàng</div>
+                                            <div class="task-meta">
+                                                <span class="task-priority urgent">Khẩn cấp</span>
+                                                <span class="task-time overdue">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                    Quá hạn
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="task-item">
+                                        <div class="task-checkbox">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="task-info">
+                                            <div class="task-title">Họp team 1:1</div>
+                                            <div class="task-meta">
+                                                <span class="task-priority low">Thấp</span>
+                                                <span class="task-time">
+                                                    <i class="fas fa-clock"></i>
+                                                    16:30
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming Deadlines -->
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-clock"></i>
+                                        Deadline sắp tới
+                                    </h3>
+                                </div>
+
+                                <div class="deadline-list">
+                                    <div class="deadline-item urgent">
+                                        <div class="deadline-date">
+                                            <div class="date-number">30</div>
+                                            <div class="date-month">Th8</div>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-title">Nộp báo cáo tháng</div>
+                                            <div class="deadline-status urgent">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                                Còn 1 ngày
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="deadline-item">
+                                        <div class="deadline-date">
+                                            <div class="date-number">02</div>
+                                            <div class="date-month">Th9</div>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-title">Hoàn thành dự án X</div>
+                                            <div class="deadline-status">
+                                                <i class="fas fa-clock"></i>
+                                                Còn 4 ngày
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="deadline-item">
+                                        <div class="deadline-date">
+                                            <div class="date-number">05</div>
+                                            <div class="date-month">Th9</div>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-title">Đánh giá hiệu suất</div>
+                                            <div class="deadline-status">
+                                                <i class="fas fa-clock"></i>
+                                                Còn 7 ngày
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Notes -->
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-sticky-note"></i>
+                                        Ghi chú nhanh
+                                    </h3>
+                                </div>
+
+                                <div class="quick-notes">
+                                    <div class="note-input">
+                                        <textarea placeholder="Thêm ghi chú nhanh..." id="quickNoteInput"></textarea>
+                                        <button class="add-note-btn" onclick="addQuickNote()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="notes-list">
+                                        <div class="note-item">
+                                            <div class="note-content">Nhớ mua quà sinh nhật cho mẹ</div>
+                                            <div class="note-actions">
+                                                <button class="note-action-btn" title="Chỉnh sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="note-action-btn" title="Xóa">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="note-item">
+                                            <div class="note-content">Đặt lịch khám sức khỏe định kỳ</div>
+                                            <div class="note-actions">
+                                                <button class="note-action-btn" title="Chỉnh sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="note-action-btn" title="Xóa">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personal Quick Actions -->
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h3>
+                                        <i class="fas fa-bolt"></i>
+                                        Thao tác nhanh
+                                    </h3>
+                                </div>
+
+                                <div class="quick-actions-grid">
+                                    <button class="quick-action-btn" onclick="addTask()">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Thêm công việc</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="addReminder()">
+                                        <i class="fas fa-bell"></i>
+                                        <span>Tạo nhắc nhở</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="viewProductivity()">
+                                        <i class="fas fa-chart-bar"></i>
+                                        <span>Xem hiệu suất</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="exportPersonalCalendar()">
+                                        <i class="fas fa-download"></i>
+                                        <span>Xuất lịch</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </main>
-    </div>
-
-    <!-- Personal Event Modal -->
-    <div class="modal-overlay" id="personalEventModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 id="personalModalTitle">Thêm lịch trình cá nhân</h3>
-                <button class="modal-close" id="personalModalCloseBtn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="personalEventForm">
-                    <div class="form-section">
-                        <h4>Thông tin cơ bản</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="personalEventTitle">Tiêu đề *</label>
-                                <input type="text" id="personalEventTitle" name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="personalEventCategory">Danh mục</label>
-                                <select id="personalEventCategory" name="category">
-                                    <option value="personal">Cá nhân</option>
-                                    <option value="study">Học tập</option>
-                                    <option value="work">Công việc</option>
-                                    <option value="health">Sức khỏe</option>
-                                    <option value="hobby">Sở thích</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="personalEventDescription">Mô tả</label>
-                            <textarea id="personalEventDescription" name="description" rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h4>Thời gian</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="personalEventDate">Ngày *</label>
-                                <input type="date" id="personalEventDate" name="date" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="personalEventTime">Giờ bắt đầu</label>
-                                <input type="time" id="personalEventTime" name="time">
-                            </div>
-                            <div class="form-group">
-                                <label for="personalEventDuration">Thời lượng (phút)</label>
-                                <input type="number" id="personalEventDuration" name="duration" min="15" step="15"
-                                    value="60">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="personalEventAllDay" name="allDay">
-                                Sự kiện cả ngày
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h4>Tùy chọn</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="personalEventLocation">Địa điểm</label>
-                                <input type="text" id="personalEventLocation" name="location">
-                            </div>
-                            <div class="form-group">
-                                <label for="personalEventPriority">Độ ưu tiên</label>
-                                <select id="personalEventPriority" name="priority">
-                                    <option value="low">Thấp</option>
-                                    <option value="normal" selected>Bình thường</option>
-                                    <option value="high">Cao</option>
-                                    <option value="urgent">Khẩn cấp</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Nhắc nhở</label>
-                            <div class="reminder-options">
-                                <label>
-                                    <input type="checkbox" name="reminder" value="15">
-                                    15 phút trước
-                                </label>
-                                <label>
-                                    <input type="checkbox" name="reminder" value="30">
-                                    30 phút trước
-                                </label>
-                                <label>
-                                    <input type="checkbox" name="reminder" value="60">
-                                    1 giờ trước
-                                </label>
-                                <label>
-                                    <input type="checkbox" name="reminder" value="1440">
-                                    1 ngày trước
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="personalModalCancelBtn">Hủy</button>
-                <button class="btn btn-primary" id="personalModalSaveBtn">Lưu lịch trình</button>
-            </div>
+            </main>
         </div>
     </div>
 
-    <!-- Task Modal -->
-    <div class="modal-overlay" id="taskModal">
-        <div class="modal-container task-modal">
+    <!-- Personal Task Modal -->
+    <div class="modal" id="personalTaskModal" style="display: none;">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3 id="taskModalTitle">Thêm nhiệm vụ mới</h3>
+                <h3 id="taskModalTitle">
+                    <i class="fas fa-tasks"></i>
+                    Thêm công việc mới
+                </h3>
                 <button class="modal-close" id="taskModalCloseBtn">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="taskForm">
+                <form id="personalTaskForm">
                     <div class="form-group">
-                        <label for="taskTitle">Tiêu đề nhiệm vụ *</label>
-                        <input type="text" id="taskTitle" name="title" required>
+                        <label for="taskTitle">Tiêu đề công việc</label>
+                        <input type="text" id="taskTitle" name="title" required placeholder="Nhập tên công việc...">
                     </div>
-                    <div class="form-group">
-                        <label for="taskDescription">Mô tả</label>
-                        <textarea id="taskDescription" name="description" rows="2"></textarea>
-                    </div>
+                    
                     <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskCategory">Danh mục</label>
+                            <select id="taskCategory" name="category" required>
+                                <option value="">Chọn danh mục</option>
+                                <option value="work">Công việc</option>
+                                <option value="personal">Cá nhân</option>
+                                <option value="study">Học tập</option>
+                                <option value="health">Sức khỏe</option>
+                                <option value="finance">Tài chính</option>
+                                <option value="family">Gia đình</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="taskPriority">Độ ưu tiên</label>
                             <select id="taskPriority" name="priority">
                                 <option value="low">Thấp</option>
-                                <option value="normal" selected>Bình thường</option>
+                                <option value="medium" selected>Trung bình</option>
                                 <option value="high">Cao</option>
+                                <option value="urgent">Khẩn cấp</option>
                             </select>
                         </div>
+                    </div>
+                    
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="taskDueDate">Hạn cuối</label>
-                            <input type="date" id="taskDueDate" name="dueDate">
+                            <label for="taskDate">Ngày thực hiện</label>
+                            <input type="date" id="taskDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskTime">Giờ thực hiện</label>
+                            <input type="time" id="taskTime" name="time">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDuration">Thời gian (phút)</label>
+                            <input type="number" id="taskDuration" name="duration" min="5" step="5" value="30">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskLocation">Địa điểm (tùy chọn)</label>
+                        <input type="text" id="taskLocation" name="location" placeholder="Ví dụ: Văn phòng, Nhà, Online...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskDescription">Mô tả</label>
+                        <textarea id="taskDescription" name="description" rows="3" placeholder="Mô tả chi tiết công việc..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="taskReminder" name="reminder" checked>
+                                Nhắc nhở trước (15 phút)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="taskRecurring" name="recurring">
+                                Lặp lại hàng ngày
+                            </label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" id="taskModalCancelBtn">Hủy</button>
-                <button class="btn btn-primary" id="taskModalSaveBtn">Lưu nhiệm vụ</button>
+                <button class="btn-secondary" id="taskModalCancelBtn">Hủy</button>
+                <button class="btn-primary" id="taskModalSaveBtn">
+                    <i class="fas fa-save"></i>
+                    Lưu công việc
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="personal-calendar.js"></script>
+    <script src="../dashboard/dashboard-clean.js"></script>
+    
+    <script>
+        // Cuộn lên đầu trang khi click vào logo
+        document.addEventListener('DOMContentLoaded', function () {
+            var logo = document.getElementById('dashboardLogo');
+            if (logo) {
+                logo.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

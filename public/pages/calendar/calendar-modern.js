@@ -1,6 +1,9 @@
 // Modern Calendar Manager - Dashboard Synchronized
 class CalendarManager {
+    // Track editing event
+    editingEventId = null;
     constructor() {
+        console.log('🏗️ CalendarManager constructor called');
         this.calendar = null;
         this.currentView = 'dayGridMonth';
         this.events = [];
@@ -9,17 +12,25 @@ class CalendarManager {
             club: 'all',
             priority: 'all'
         };
-        this.init();
+
+        // Setup basic functionality immediately (synchronous only)
+        this.setupEventListeners();
+
+        console.log('✅ CalendarManager constructor completed');
+    } async initialize() {
+        await this.init();
     }
 
-    init() {
+    async init() {
         console.log('🚀 Initializing Calendar Manager...');
-        this.setupEventListeners();
         this.initializeCalendar();
-        this.loadEvents();
+        await this.loadEvents(); // Wait for events to load
         this.updateStats();
         this.renderTodayEvents();
         this.renderUpcomingEvents();
+        this.setupNotificationSystem();
+        this.setupGlobalSearch();
+        this.setupKeyboardShortcuts();
         console.log('✅ Calendar Manager initialized successfully!');
     }
 
@@ -37,67 +48,29 @@ class CalendarManager {
             sidebarToggle.addEventListener('click', () => this.toggleSidebar());
         }
 
-        // Calendar navigation
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+        // Calendar controls
         const todayBtn = document.getElementById('todayBtn');
+        const syncBtn = document.getElementById('syncBtn');
+        const addEventBtn = document.getElementById('addEventBtn');
 
-        if (prevBtn) prevBtn.addEventListener('click', () => this.navigateCalendar('prev'));
-        if (nextBtn) nextBtn.addEventListener('click', () => this.navigateCalendar('next'));
         if (todayBtn) todayBtn.addEventListener('click', () => this.goToToday());
+        if (syncBtn) syncBtn.addEventListener('click', () => this.syncCalendar());
+        if (addEventBtn) addEventBtn.addEventListener('click', () => this.showEventModal());
 
-        // View toggles
-        const toggleButtons = document.querySelectorAll('.toggle-btn');
-        toggleButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const view = btn.getAttribute('data-view');
-                this.changeView(view, btn);
-            });
-        });
-
-        // Filter controls
+        // Filter control
         const calendarFilter = document.getElementById('calendarFilter');
         if (calendarFilter) {
-            calendarFilter.addEventListener('change', (e) => {
-                this.applyFilter('type', e.target.value);
-            });
-        }
-
-        // Add event buttons
-        const addEventBtns = document.querySelectorAll('#addEventBtn, .quick-action-btn[id*="quick"]');
-        addEventBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const type = this.getEventTypeFromButton(btn);
-                this.showEventModal(type);
-            });
-        });
-
-        // Sync button
-        const syncBtn = document.getElementById('syncBtn');
-        if (syncBtn) {
-            syncBtn.addEventListener('click', () => this.syncCalendar());
-        }
-
-        // Search functionality
-        const searchInput = document.getElementById('globalSearch');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
+            calendarFilter.addEventListener('change', (e) => this.applyFilter(e.target.value));
         }
 
         // Modal controls
-        this.setupModalListeners();
+        this.setupModalEventListeners();
 
-        // User menu
-        this.setupUserMenu();
-
-        // Window resize handler
-        window.addEventListener('resize', () => this.handleResize());
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
+        // Quick action buttons
+        this.setupQuickActions();
     }
 
-    setupModalListeners() {
+    setupModalEventListeners() {
         const modal = document.getElementById('eventModal');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
         const modalCancelBtn = document.getElementById('modalCancelBtn');
@@ -115,22 +88,47 @@ class CalendarManager {
             modalSaveBtn.addEventListener('click', () => this.saveEvent());
         }
 
+        // Close modal on backdrop click
         if (modal) {
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) this.hideEventModal();
+                if (e.target === modal) {
+                    this.hideEventModal();
+                }
             });
         }
     }
 
-    setupUserMenu() {
-        const userMenu = document.getElementById('userMenu');
-        if (userMenu) {
-            userMenu.addEventListener('mouseenter', () => this.showUserDropdown());
-            userMenu.addEventListener('mouseleave', () => this.hideUserDropdown());
+    setupQuickActions() {
+        // Add event action
+        window.addEvent = () => this.showEventModal();
+
+        // Import calendar action
+        window.importCalendar = () => this.importCalendar();
+
+        // Export calendar action
+        window.exportCalendar = () => this.exportCalendar();
+
+        // Sync calendar action
+        window.syncCalendar = () => this.syncCalendar();
+    }
+
+    // Mobile menu toggle
+    toggleMobileMenu() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('mobile-open');
         }
     }
 
-    // Calendar Initialization
+    // Sidebar toggle
+    toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('collapsed');
+        }
+    }
+
+    // Initialize FullCalendar
     initializeCalendar() {
         const calendarEl = document.getElementById('calendar');
         if (!calendarEl) return;
@@ -138,585 +136,494 @@ class CalendarManager {
         this.calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'vi',
-            firstDay: 1, // Monday
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            buttonText: {
+                today: 'Hôm nay',
+                month: 'Tháng',
+                week: 'Tuần',
+                day: 'Ngày',
+                list: 'Danh sách'
+            },
             height: 'auto',
-            headerToolbar: false, // We use custom header
-
-            // Event handling
+            events: this.events,
             eventClick: (info) => this.handleEventClick(info),
             dateClick: (info) => this.handleDateClick(info),
-            eventMouseEnter: (info) => this.showEventTooltip(info),
-            eventMouseLeave: () => this.hideEventTooltip(),
-
-            // Styling
-            dayMaxEvents: 3,
-            moreLinkClick: 'popover',
-
-            // Event rendering
-            eventDisplay: 'block',
-            eventClassNames: (arg) => this.getEventClasses(arg),
-
-            // Date formatting
-            dayHeaderFormat: { weekday: 'short' },
-
-            // View configuration
-            views: {
-                dayGridMonth: {
-                    dayMaxEventRows: 3
-                },
-                timeGridWeek: {
-                    slotMinTime: '06:00:00',
-                    slotMaxTime: '22:00:00',
-                    slotDuration: '00:30:00'
-                },
-                timeGridDay: {
-                    slotMinTime: '06:00:00',
-                    slotMaxTime: '22:00:00',
-                    slotDuration: '00:30:00'
-                }
-            },
-
-            // Business hours
-            businessHours: {
-                daysOfWeek: [1, 2, 3, 4, 5], // Monday - Friday
-                startTime: '08:00',
-                endTime: '17:00'
-            },
-
-            // Events
-            events: (fetchInfo, successCallback, failureCallback) => {
-                successCallback(this.getFilteredEvents());
-            }
+            eventDidMount: (info) => this.styleEvent(info),
+            datesSet: () => this.updateStats()
         });
 
         this.calendar.render();
-        this.updateCurrentMonthDisplay();
+        console.log('✅ Calendar rendered successfully');
     }
 
-    // Event Management
-    loadEvents() {
-        // Sample events data - in production, this would come from API
-        this.events = [
-            {
-                id: '1',
-                title: 'Họp Ban Chủ nhiệm',
-                start: new Date().toISOString().split('T')[0] + 'T09:00:00',
-                end: new Date().toISOString().split('T')[0] + 'T11:00:00',
-                type: 'meeting',
-                priority: 'high',
-                location: 'Phòng 301, Tòa A2',
-                description: 'Họp định kỳ ban chủ nhiệm các CLB',
-                organizer: 'Ban CTSV',
-                backgroundColor: '#3b82f6',
-                borderColor: '#2563eb'
-            },
-            {
-                id: '2',
-                title: 'Workshop JavaScript',
-                start: new Date().toISOString().split('T')[0] + 'T14:00:00',
-                end: new Date().toISOString().split('T')[0] + 'T17:00:00',
-                type: 'event',
-                priority: 'normal',
-                location: 'Lab B201',
-                description: 'Workshop học JavaScript cơ bản cho thành viên mới',
-                organizer: 'CLB CodeKing',
-                backgroundColor: '#10b981',
-                borderColor: '#059669'
-            },
-            {
-                id: '3',
-                title: 'Họp CLB Yume',
-                start: new Date().toISOString().split('T')[0] + 'T16:30:00',
-                end: new Date().toISOString().split('T')[0] + 'T18:00:00',
-                type: 'meeting',
-                priority: 'normal',
-                location: 'Phòng 205, Tòa C1',
-                description: 'Họp team thảo luận kế hoạch tháng tới',
-                organizer: 'CLB Yume',
-                backgroundColor: '#f59e0b',
-                borderColor: '#d97706'
-            },
-            {
-                id: '4',
-                title: 'Hackathon 2025',
-                start: this.getNextDate(1) + 'T08:00:00',
-                end: this.getNextDate(1) + 'T18:00:00',
-                type: 'event',
-                priority: 'high',
-                location: 'Trường Đại học',
-                description: 'Cuộc thi lập trình Hackathon năm 2025',
-                organizer: 'Ban tổ chức',
-                backgroundColor: '#8b5cf6',
-                borderColor: '#7c3aed'
-            },
-            {
-                id: '5',
-                title: 'Deadline Báo cáo tháng',
-                start: this.getNextDate(4) + 'T23:59:00',
-                type: 'deadline',
-                priority: 'urgent',
-                description: 'Hạn cuối nộp báo cáo hoạt động tháng của các CLB',
-                organizer: 'Ban CTSV',
-                backgroundColor: '#ef4444',
-                borderColor: '#dc2626'
-            },
-            {
-                id: '6',
-                title: 'Tổng kết CLB CodeKing',
-                start: this.getNextDate(7) + 'T19:00:00',
-                end: this.getNextDate(7) + 'T21:00:00',
-                type: 'meeting',
-                priority: 'normal',
-                location: 'Hội trường A',
-                description: 'Buổi tổng kết và định hướng hoạt động CLB CodeKing',
-                organizer: 'CLB CodeKing',
-                backgroundColor: '#06b6d4',
-                borderColor: '#0891b2'
+    // Load sample events from JSON file or use embedded data
+    async loadEvents() {
+        try {
+            // Try to load from JSON file first
+            const response = await fetch('../../calendar_export_1756551450459.json');
+            if (response.ok) {
+                this.events = await response.json();
+                console.log('✅ Events loaded from JSON file:', this.events.length);
+            } else {
+                throw new Error('Failed to load JSON file');
             }
-        ];
+        } catch (error) {
+            console.warn('⚠️ Failed to load external JSON file:', error.message);
+            console.log('🔄 Using embedded sample data instead');
+            // Fallback to embedded data with many more events
+            this.events = [
+                {
+                    id: '1',
+                    title: 'Họp CLB Code King',
+                    start: '2025-08-30T09:00:00',
+                    end: '2025-08-30T11:00:00',
+                    description: 'Họp định kỳ hàng tuần của CLB Code King',
+                    location: 'Phòng 301',
+                    type: 'meeting',
+                    priority: 'high',
+                    organizer: 'CLB Code King',
+                    backgroundColor: '#2563eb'
+                },
+                {
+                    id: '2',
+                    title: 'Workshop React',
+                    start: '2025-08-30T14:30:00',
+                    end: '2025-08-30T17:00:00',
+                    description: 'Workshop học React cho thành viên mới',
+                    location: 'Lab 205',
+                    type: 'workshop',
+                    priority: 'medium',
+                    organizer: 'CLB Code King',
+                    backgroundColor: '#10b981'
+                },
+                {
+                    id: '3',
+                    title: 'Hackathon 2024',
+                    start: '2025-08-31T08:00:00',
+                    end: '2025-08-31T20:00:00',
+                    description: 'Cuộc thi lập trình Hackathon 2024',
+                    location: 'Hội trường A',
+                    type: 'event',
+                    priority: 'urgent',
+                    organizer: 'Khoa CNTT',
+                    backgroundColor: '#ef4444'
+                },
+                {
+                    id: '4',
+                    title: 'Seminar AI/ML',
+                    start: '2025-09-02T13:30:00',
+                    end: '2025-09-02T16:30:00',
+                    description: 'Hội thảo về AI và Machine Learning',
+                    location: 'Hội trường B',
+                    type: 'seminar',
+                    priority: 'high',
+                    organizer: 'Khoa CNTT',
+                    backgroundColor: '#f59e0b'
+                },
+                {
+                    id: '5',
+                    title: 'Báo cáo tiến độ',
+                    start: '2025-08-30T16:00:00',
+                    end: '2025-08-30T17:30:00',
+                    description: 'Báo cáo tiến độ dự án',
+                    location: 'Online',
+                    type: 'meeting',
+                    priority: 'medium',
+                    organizer: 'Team Dev',
+                    backgroundColor: '#06b6d4'
+                },
+                {
+                    id: '6',
+                    title: 'Họp CLB English Club',
+                    start: '2025-09-01T08:00:00',
+                    end: '2025-09-01T10:00:00',
+                    description: 'Họp định kỳ CLB tiếng Anh, thảo luận kế hoạch hoạt động tháng 9',
+                    location: 'Phòng 203',
+                    type: 'meeting',
+                    priority: 'medium',
+                    organizer: 'CLB English Club',
+                    backgroundColor: '#2563eb'
+                },
+                {
+                    id: '7',
+                    title: 'Workshop Git/GitHub',
+                    start: '2025-09-01T14:00:00',
+                    end: '2025-09-01T17:00:00',
+                    description: 'Hướng dẫn sử dụng Git và GitHub cho người mới bắt đầu',
+                    location: 'Lab 301',
+                    type: 'workshop',
+                    priority: 'high',
+                    organizer: 'CLB Code King',
+                    backgroundColor: '#10b981'
+                },
+                {
+                    id: '8',
+                    title: 'Buổi thuyết trình dự án cuối kỳ',
+                    start: '2025-09-03T09:00:00',
+                    end: '2025-09-03T12:00:00',
+                    description: 'Các nhóm sinh viên thuyết trình dự án cuối kỳ môn Phát triển ứng dụng Web',
+                    location: 'Hội trường C',
+                    type: 'presentation',
+                    priority: 'urgent',
+                    organizer: 'Khoa CNTT',
+                    backgroundColor: '#ef4444'
+                },
+                {
+                    id: '9',
+                    title: 'CLB Photography - Chụp ảnh outdoor',
+                    start: '2025-09-03T15:30:00',
+                    end: '2025-09-03T18:00:00',
+                    description: 'Buổi chụp ảnh ngoại cảnh tại công viên Thống Nhất',
+                    location: 'Công viên Thống Nhất',
+                    type: 'activity',
+                    priority: 'medium',
+                    organizer: 'CLB Photography',
+                    backgroundColor: '#8b5cf6'
+                },
+                {
+                    id: '10',
+                    title: 'Seminar Blockchain Technology',
+                    start: '2025-09-04T10:00:00',
+                    end: '2025-09-04T12:30:00',
+                    description: 'Hội thảo về công nghệ Blockchain và ứng dụng trong thực tế',
+                    location: 'Phòng hội thảo 401',
+                    type: 'seminar',
+                    priority: 'high',
+                    organizer: 'Khoa CNTT',
+                    backgroundColor: '#f59e0b'
+                }
+            ];
+        }
 
         if (this.calendar) {
-            this.calendar.refetchEvents();
-        }
-    }
-
-    getNextDate(days) {
-        const date = new Date();
-        date.setDate(date.getDate() + days);
-        return date.toISOString().split('T')[0];
-    }
-
-    getFilteredEvents() {
-        let filtered = [...this.events];
-
-        // Apply type filter
-        if (this.filters.type !== 'all') {
-            filtered = filtered.filter(event => event.type === this.filters.type);
+            this.calendar.removeAllEvents();
+            this.calendar.addEventSource(this.events);
         }
 
-        // Apply other filters as needed
-        return filtered;
+        console.log('✅ Total events loaded:', this.events.length);
     }
 
-    // Event Handlers
-    handleEventClick(info) {
-        const event = info.event;
-        this.showEventDetails({
-            id: event.id,
-            title: event.title,
-            start: event.start,
-            end: event.end,
-            location: event.extendedProps.location,
-            description: event.extendedProps.description,
-            organizer: event.extendedProps.organizer,
-            type: event.extendedProps.type,
-            priority: event.extendedProps.priority
-        });
-    }
-
-    handleDateClick(info) {
-        this.showEventModal('event', info.date);
-    }
-
-    showEventDetails(eventData) {
-        // Create and show event details modal
-        console.log('Showing event details:', eventData.title);
-        this.showNotification(`Chi tiết sự kiện: ${eventData.title}`, 'info');
-    }
-
-    showEventTooltip(info) {
-        // Implementation for event tooltip on hover
-        const tooltip = this.createTooltip(info.event);
-        document.body.appendChild(tooltip);
-    }
-
-    hideEventTooltip() {
-        const tooltip = document.querySelector('.event-tooltip');
-        if (tooltip) {
-            tooltip.remove();
-        }
-    }
-
-    createTooltip(event) {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'event-tooltip';
-        tooltip.innerHTML = `
-            <div class="tooltip-header">
-                <h4>${event.title}</h4>
-                <span class="tooltip-time">${this.formatEventTime(event)}</span>
-            </div>
-            <div class="tooltip-body">
-                ${event.extendedProps.location ? `<p><i class="fas fa-map-marker-alt"></i> ${event.extendedProps.location}</p>` : ''}
-                ${event.extendedProps.organizer ? `<p><i class="fas fa-user"></i> ${event.extendedProps.organizer}</p>` : ''}
-                ${event.extendedProps.description ? `<p>${event.extendedProps.description}</p>` : ''}
-            </div>
-        `;
-        return tooltip;
-    }
-
-    formatEventTime(event) {
-        const start = new Date(event.start);
-        const end = event.end ? new Date(event.end) : null;
-
-        const timeFormat = { hour: '2-digit', minute: '2-digit' };
-
-        if (end && start.toDateString() === end.toDateString()) {
-            return `${start.toLocaleTimeString('vi-VN', timeFormat)} - ${end.toLocaleTimeString('vi-VN', timeFormat)}`;
-        } else {
-            return start.toLocaleTimeString('vi-VN', timeFormat);
-        }
-    }
-
-    getEventClasses(arg) {
-        const classes = ['calendar-event'];
-        if (arg.event.extendedProps.type) {
-            classes.push(`event-type-${arg.event.extendedProps.type}`);
-        }
-        if (arg.event.extendedProps.priority) {
-            classes.push(`event-priority-${arg.event.extendedProps.priority}`);
-        }
-        return classes;
-    }
-
-    // Navigation
-    navigateCalendar(direction) {
-        if (!this.calendar) return;
-
-        if (direction === 'prev') {
-            this.calendar.prev();
-        } else if (direction === 'next') {
-            this.calendar.next();
-        }
-
-        this.updateCurrentMonthDisplay();
-        this.showLoadingState();
-
-        setTimeout(() => {
-            this.hideLoadingState();
-            this.showNotification('Lịch đã được cập nhật', 'success');
-        }, 500);
-    }
-
-    goToToday() {
-        if (!this.calendar) return;
-
-        this.calendar.today();
-        this.updateCurrentMonthDisplay();
-        this.showNotification('Đã chuyển đến ngày hôm nay', 'info');
-    }
-
-    changeView(viewName, button) {
-        if (!this.calendar) return;
-
-        const viewMap = {
-            'month': 'dayGridMonth',
-            'week': 'timeGridWeek',
-            'day': 'timeGridDay',
-            'list': 'listWeek'
-        };
-
-        const fullCalendarView = viewMap[viewName] || 'dayGridMonth';
-
-        this.calendar.changeView(fullCalendarView);
-        this.currentView = fullCalendarView;
-
-        // Update active button
-        document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        this.updateCurrentMonthDisplay();
-        this.showNotification(`Đã chuyển sang chế độ xem ${this.getViewDisplayName(viewName)}`, 'info');
-    }
-
-    getViewDisplayName(viewName) {
-        const names = {
-            'month': 'Tháng',
-            'week': 'Tuần',
-            'day': 'Ngày',
-            'list': 'Danh sách'
-        };
-        return names[viewName] || 'Tháng';
-    }
-
-    updateCurrentMonthDisplay() {
-        if (!this.calendar) return;
-
-        const currentDate = this.calendar.getDate();
-        const monthNames = [
-            'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-            'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-        ];
-
-        const displayText = `${monthNames[currentDate.getMonth()]}, ${currentDate.getFullYear()}`;
-
-        const monthDisplay = document.getElementById('currentMonth');
-        if (monthDisplay) {
-            monthDisplay.textContent = displayText;
-        }
-    }
-
-    // Filter Management
-    applyFilter(filterType, value) {
-        this.filters[filterType] = value;
-
-        if (this.calendar) {
-            this.calendar.refetchEvents();
-        }
-
-        this.updateStats();
-        this.renderTodayEvents();
-        this.renderUpcomingEvents();
-
-        this.showNotification(`Đã áp dụng bộ lọc: ${this.getFilterDisplayName(value)}`, 'info');
-    }
-
-    getFilterDisplayName(value) {
-        const names = {
-            'all': 'Tất cả sự kiện',
-            'meeting': 'Họp/Gặp mặt',
-            'event': 'Sự kiện CLB',
-            'deadline': 'Deadline',
-            'personal': 'Lịch cá nhân'
-        };
-        return names[value] || value;
-    }
-
-    // Stats Management
+    // Update statistics
     updateStats() {
-        const today = new Date().toISOString().split('T')[0];
-        const todayEvents = this.events.filter(event => event.start.startsWith(today));
+        const today = new Date();
+        const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+        const endOfWeek = new Date(startOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000);
 
-        const weekStart = this.getWeekStart();
-        const weekEnd = this.getWeekEnd();
+        // Count events
+        const todayEvents = this.events.filter(event => {
+            const eventDate = new Date(event.start);
+            return this.isSameDay(eventDate, today);
+        }).length;
+
         const weekEvents = this.events.filter(event => {
-            const eventDate = event.start.split('T')[0];
-            return eventDate >= weekStart && eventDate <= weekEnd;
-        });
+            const eventDate = new Date(event.start);
+            return eventDate >= startOfWeek && eventDate <= endOfWeek;
+        }).length;
 
-        const upcomingDeadlines = this.events.filter(event =>
-            event.type === 'deadline' && new Date(event.start) > new Date()
-        );
+        const upcomingDeadlines = this.events.filter(event => {
+            const eventDate = new Date(event.start);
+            return event.type === 'deadline' && eventDate >= today;
+        }).length;
 
-        // Update stats cards
-        this.updateStatCard('today-events', todayEvents.length, '+2 so với hôm qua');
-        this.updateStatCard('week-events', weekEvents.length, '-3 so với tuần trước');
-        this.updateStatCard('upcoming-deadlines', upcomingDeadlines.length, 'Không đổi');
-        this.updateStatCard('attendance-rate', '94.2%', '+1.2% so với tháng trước');
+        // Calculate attendance rate (mock data)
+        const attendanceRate = 87;
+
+        // Update stat cards
+        this.updateStatCard('todayEvents', todayEvents);
+        this.updateStatCard('weekEvents', weekEvents);
+        this.updateStatCard('upcomingDeadlines', upcomingDeadlines);
+        this.updateStatCard('attendanceRate', attendanceRate + '%');
     }
 
-    updateStatCard(cardClass, value, trend) {
-        const card = document.querySelector(`.${cardClass}`);
-        if (!card) return;
-
-        const numberEl = card.querySelector('.stat-number');
-        const trendEl = card.querySelector('.stat-trend span');
-
-        if (numberEl) {
-            numberEl.textContent = value;
-        }
-        if (trendEl) {
-            trendEl.textContent = trend;
+    updateStatCard(statKey, value) {
+        const statCard = document.querySelector(`[data-stat="${statKey}"] .stat-info h3`);
+        if (statCard) {
+            statCard.textContent = value;
         }
     }
 
-    getWeekStart() {
-        const date = new Date();
-        const day = date.getDay();
-        const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Monday
-        const monday = new Date(date.setDate(diff));
-        return monday.toISOString().split('T')[0];
-    }
-
-    getWeekEnd() {
-        const date = new Date();
-        const day = date.getDay();
-        const diff = date.getDate() - day + (day === 0 ? 0 : 7); // Sunday
-        const sunday = new Date(date.setDate(diff));
-        return sunday.toISOString().split('T')[0];
-    }
-
-    // Event Rendering
+    // Render today's events
     renderTodayEvents() {
-        const today = new Date().toISOString().split('T')[0];
-        const todayEvents = this.events.filter(event => event.start.startsWith(today));
-
-        const container = document.getElementById('todayEvents');
-        if (!container) return;
-
-        container.innerHTML = todayEvents.map(event => this.createEventHTML(event)).join('');
-    }
-
-    renderUpcomingEvents() {
-        const upcomingEvents = this.events
-            .filter(event => new Date(event.start) > new Date())
-            .sort((a, b) => new Date(a.start) - new Date(b.start))
-            .slice(0, 5);
-
-        const container = document.getElementById('upcomingEvents');
-        if (!container) return;
-
-        container.innerHTML = upcomingEvents.map(event => this.createUpcomingEventHTML(event)).join('');
-    }
-
-    createEventHTML(event) {
-        const startTime = new Date(event.start).toLocaleTimeString('vi-VN', {
-            hour: '2-digit',
-            minute: '2-digit'
+        const today = new Date();
+        const todayEvents = this.events.filter(event => {
+            const eventDate = new Date(event.start);
+            return this.isSameDay(eventDate, today);
         });
 
-        const priorityClass = event.priority === 'urgent' ? 'urgent' : '';
+        const eventListContainer = document.querySelector('.events-sidebar .section-card .event-list');
+        if (!eventListContainer) return;
 
-        return `
-            <div class="event-item ${priorityClass}">
-                <div class="event-time">${startTime}</div>
-                <div class="event-details">
-                    <h4>${event.title}</h4>
-                    <p>${event.location || 'Chưa xác định địa điểm'}</p>
-                    <div class="event-tags">
-                        <span class="tag ${event.priority}">${this.getPriorityLabel(event.priority)}</span>
-                        <span class="tag ${event.type}">${this.getTypeLabel(event.type)}</span>
+        eventListContainer.innerHTML = '';
+
+        todayEvents.forEach(event => {
+            const eventStart = new Date(event.start);
+            const timeStr = eventStart.toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const eventElement = document.createElement('div');
+            eventElement.className = 'event-item';
+            eventElement.innerHTML = `
+                <div class="event-time">${timeStr}</div>
+                <div class="event-info">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-location">
+                        <i class="fas ${event.location === 'Online' ? 'fa-video' : 'fa-map-marker-alt'}"></i>
+                        ${event.location}
                     </div>
                 </div>
-                <div class="event-actions">
-                    <button class="btn-icon" onclick="calendarManager.editEvent('${event.id}')" title="Chỉnh sửa">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-icon" onclick="calendarManager.deleteEvent('${event.id}')" title="Xóa">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                <div class="event-status pending">
+                    <i class="fas fa-clock"></i>
                 </div>
-            </div>
-        `;
-    }
+            `;
 
-    createUpcomingEventHTML(event) {
-        const eventDate = new Date(event.start);
-        const day = eventDate.getDate();
-        const month = eventDate.toLocaleDateString('vi-VN', { month: 'short' });
+            eventElement.addEventListener('click', () => this.viewEvent(event.id));
+            eventListContainer.appendChild(eventElement);
+        });
 
-        return `
-            <div class="event-item">
-                <div class="event-date">
-                    <span class="day">${day}</span>
-                    <span class="month">${month}</span>
-                </div>
-                <div class="event-details">
-                    <h4>${event.title}</h4>
-                    <p>${this.formatUpcomingEventTime(event)}</p>
-                    <div class="event-tags">
-                        <span class="tag ${event.type}">${this.getTypeLabel(event.type)}</span>
-                        <span class="tag ${event.priority}">${this.getPriorityLabel(event.priority)}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    formatUpcomingEventTime(event) {
-        if (event.type === 'deadline') {
-            return `23:59 - ${event.description || 'Hạn cuối'}`;
-        } else if (event.end) {
-            const start = new Date(event.start).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-            return `${start} - ${event.location || 'Chưa xác định'}`;
-        } else {
-            return event.location || 'Cả ngày';
+        // Update today events count badge
+        const badge = document.querySelector('.events-sidebar .section-card .badge');
+        if (badge) {
+            badge.textContent = todayEvents.length;
         }
     }
 
-    getPriorityLabel(priority) {
-        const labels = {
-            'low': 'Thấp',
-            'normal': 'Bình thường',
-            'high': 'Cao',
-            'urgent': 'Khẩn cấp'
-        };
-        return labels[priority] || 'Bình thường';
+    // Render upcoming events
+    renderUpcomingEvents() {
+        const today = new Date();
+        const upcomingEvents = this.events.filter(event => {
+            const eventDate = new Date(event.start);
+            return eventDate > today;
+        }).sort((a, b) => new Date(a.start) - new Date(b.start)).slice(0, 5);
+
+        const upcomingContainer = document.querySelectorAll('.events-sidebar .section-card')[1];
+        if (!upcomingContainer) return;
+
+        const eventList = upcomingContainer.querySelector('.event-list');
+        if (!eventList) return;
+
+        eventList.innerHTML = '';
+
+        upcomingEvents.forEach(event => {
+            const eventDate = new Date(event.start);
+            const day = eventDate.getDate();
+            const month = eventDate.toLocaleString('vi-VN', { month: 'short' });
+
+            const eventElement = document.createElement('div');
+            eventElement.className = 'event-item';
+            eventElement.innerHTML = `
+                <div class="event-date">
+                    <div class="date-number">${day}</div>
+                    <div class="date-month">${month}</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-meta">
+                        <span class="event-type">${this.getEventTypeLabel(event.type)}</span>
+                        <span class="event-participants">
+                            <i class="fas fa-users"></i>
+                            ${this.getRandomParticipants()} người
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            eventElement.addEventListener('click', () => this.viewEvent(event.id));
+            eventList.appendChild(eventElement);
+        });
     }
 
-    getTypeLabel(type) {
+    // Helper methods
+    isSameDay(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate();
+    }
+
+    getEventTypeLabel(type) {
         const labels = {
-            'meeting': 'Họp',
+            'meeting': 'Cuộc họp',
+            'workshop': 'Workshop',
             'event': 'Sự kiện',
-            'deadline': 'Deadline',
-            'personal': 'Cá nhân'
+            'seminar': 'Hội thảo',
+            'deadline': 'Deadline'
         };
-        return labels[type] || 'Sự kiện';
+        return labels[type] || 'Khác';
     }
 
-    // Modal Management
-    showEventModal(type = 'event', date = null) {
-        const modal = document.getElementById('eventModal');
-        const form = document.getElementById('eventForm');
+    getRandomParticipants() {
+        return Math.floor(Math.random() * 150) + 10;
+    }
 
-        if (!modal || !form) return;
+    // Calendar navigation
+    goToToday() {
+        if (this.calendar) {
+            this.calendar.today();
+            this.updateStats();
+        }
+    }
+
+    // Apply filters
+    applyFilter(filterValue) {
+        this.filters.type = filterValue;
+
+        if (this.calendar) {
+            let filteredEvents = this.events;
+
+            if (filterValue !== 'all') {
+                filteredEvents = this.events.filter(event => event.type === filterValue);
+            }
+
+            this.calendar.removeAllEvents();
+            this.calendar.addEventSource(filteredEvents);
+        }
+    }
+
+    // Event modal management
+    showEventModal(eventData = null) {
+        const modal = document.getElementById('eventModal');
+        if (!modal) return;
 
         // Reset form
-        form.reset();
-
-        // Set default values
-        if (date) {
-            const dateStr = date.toISOString().split('T')[0];
-            const timeStr = date.toTimeString().slice(0, 5);
-            document.getElementById('eventDate').value = dateStr;
-            document.getElementById('eventTime').value = timeStr;
+        const form = document.getElementById('eventForm');
+        if (form) {
+            form.reset();
         }
 
-        if (type !== 'event') {
-            document.getElementById('eventType').value = type;
+        if (eventData) {
+            this.editingEventId = eventData.id;
+            this.populateEventForm(eventData);
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Chỉnh sửa sự kiện';
+        } else {
+            this.editingEventId = null;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-calendar-plus"></i> Thêm sự kiện mới';
         }
 
-        // Show modal
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        // Focus first input
-        setTimeout(() => {
-            document.getElementById('eventTitle').focus();
-        }, 100);
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
     }
 
     hideEventModal() {
         const modal = document.getElementById('eventModal');
         if (!modal) return;
 
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
     }
 
+    // Save event (add or edit)
     saveEvent() {
         const form = document.getElementById('eventForm');
         if (!form) return;
 
-        const formData = new FormData(form);
-        const eventData = Object.fromEntries(formData);
+        const dateValue = form.elements['date'].value;
+        const timeValue = form.elements['time'].value;
+        const titleValue = form.elements['title'].value;
+        const descriptionValue = form.elements['description'].value;
+        const locationValue = form.elements['location'].value;
+        const typeValue = form.elements['type'].value;
+        const priorityValue = form.elements['priority'].value;
+        const organizerValue = form.elements['organizer'].value;
+        const durationValue = form.elements['duration'].value;
 
         // Validate required fields
-        if (!eventData.title || !eventData.date || !eventData.time) {
-            this.showNotification('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
+        if (!titleValue || !dateValue || !timeValue || !typeValue) {
+            this.showNotification('Vui lòng điền đầy đủ thông tin bắt buộc!', 'error');
             return;
         }
 
-        // Create new event
-        const newEvent = {
+        // If editing, update existing event
+        if (this.editingEventId) {
+            const idx = this.events.findIndex(ev => ev.id === this.editingEventId);
+            if (idx !== -1) {
+                // Update event object
+                const updatedEvent = {
+                    ...this.events[idx],
+                    title: titleValue,
+                    start: `${dateValue}T${timeValue}:00`,
+                    description: descriptionValue || '',
+                    location: locationValue || '',
+                    type: typeValue,
+                    priority: priorityValue || 'medium',
+                    organizer: organizerValue || 'Không xác định',
+                    backgroundColor: this.getPriorityColor(priorityValue || 'medium')
+                };
+                // Add duration if specified
+                if (durationValue && !isNaN(parseInt(durationValue))) {
+                    const startDate = new Date(updatedEvent.start);
+                    const endDate = new Date(startDate.getTime() + (parseInt(durationValue) * 60000));
+                    updatedEvent.end = endDate.toISOString().slice(0, 19);
+                } else {
+                    updatedEvent.end = undefined;
+                }
+                this.events[idx] = updatedEvent;
+
+                // Update event in FullCalendar
+                if (this.calendar) {
+                    const calEvent = this.calendar.getEventById(this.editingEventId);
+                    if (calEvent) {
+                        calEvent.setProp('title', updatedEvent.title);
+                        calEvent.setStart(updatedEvent.start);
+                        if (updatedEvent.end) {
+                            calEvent.setEnd(updatedEvent.end);
+                        } else {
+                            calEvent.setEnd(null);
+                        }
+                        calEvent.setExtendedProp('description', updatedEvent.description);
+                        calEvent.setExtendedProp('location', updatedEvent.location);
+                        calEvent.setExtendedProp('type', updatedEvent.type);
+                        calEvent.setExtendedProp('priority', updatedEvent.priority);
+                        calEvent.setExtendedProp('organizer', updatedEvent.organizer);
+                        calEvent.setProp('backgroundColor', updatedEvent.backgroundColor);
+                    }
+                }
+
+                // Update displays
+                this.updateStats();
+                this.renderTodayEvents();
+                this.renderUpcomingEvents();
+
+                // Hide modal
+                this.hideEventModal();
+
+                // Show success notification
+                this.showNotification('Sự kiện đã được cập nhật!', 'success');
+                this.editingEventId = null;
+                return;
+            }
+        }
+
+        // Otherwise, add new event
+        const eventData = {
             id: Date.now().toString(),
-            title: eventData.title,
-            start: `${eventData.date}T${eventData.time}:00`,
-            end: eventData.duration ? this.calculateEndTime(eventData.date, eventData.time, eventData.duration) : null,
-            type: eventData.type || 'event',
-            priority: eventData.priority || 'normal',
-            location: eventData.location || '',
-            description: eventData.description || '',
-            organizer: eventData.organizer || '',
-            backgroundColor: this.getEventColor(eventData.type),
-            borderColor: this.getEventBorderColor(eventData.type)
+            title: titleValue,
+            start: `${dateValue}T${timeValue}:00`,
+            description: descriptionValue || '',
+            location: locationValue || '',
+            type: typeValue,
+            priority: priorityValue || 'medium',
+            organizer: organizerValue || 'Không xác định',
+            backgroundColor: this.getPriorityColor(priorityValue || 'medium')
         };
 
-        // Add to events array
-        this.events.push(newEvent);
+        // Add duration if specified
+        if (durationValue && !isNaN(parseInt(durationValue))) {
+            const startDate = new Date(eventData.start);
+            const endDate = new Date(startDate.getTime() + (parseInt(durationValue) * 60000));
+            eventData.end = endDate.toISOString().slice(0, 19);
+        }
 
-        // Refresh calendar
+        // Add to events array
+        this.events.push(eventData);
+
+        // Add to calendar
         if (this.calendar) {
-            this.calendar.refetchEvents();
+            this.calendar.addEvent(eventData);
         }
 
         // Update displays
@@ -727,279 +634,177 @@ class CalendarManager {
         // Hide modal
         this.hideEventModal();
 
-        // Show success message
-        this.showNotification(`Đã thêm sự kiện: ${newEvent.title}`, 'success');
+        // Show success notification
+        this.showNotification('Sự kiện đã được thêm thành công!', 'success');
+
+        console.log('✅ Event saved:', eventData);
+    }
+    // Populate form fields for editing
+    populateEventForm(eventData) {
+        const form = document.getElementById('eventForm');
+        if (!form) return;
+        form.reset();
+        form.elements['title'].value = eventData.title || '';
+        if (eventData.start) {
+            const dt = new Date(eventData.start);
+            form.elements['date'].value = dt.toISOString().slice(0, 10);
+            form.elements['time'].value = dt.toTimeString().slice(0, 5);
+        }
+        form.elements['type'].value = eventData.type || '';
+        form.elements['priority'].value = eventData.priority || 'medium';
+        form.elements['location'].value = eventData.location || '';
+        form.elements['description'].value = eventData.description || '';
+        form.elements['organizer'].value = eventData.organizer || '';
+        // Duration: calculate from start/end if available
+        if (eventData.start && eventData.end) {
+            const start = new Date(eventData.start);
+            const end = new Date(eventData.end);
+            const duration = Math.round((end - start) / 60000);
+            form.elements['duration'].value = duration;
+        } else {
+            form.elements['duration'].value = 60;
+        }
+        // Reminder checkbox (default checked)
+        if (form.elements['reminder']) {
+            form.elements['reminder'].checked = true;
+        }
     }
 
-    calculateEndTime(date, time, duration) {
-        const startDateTime = new Date(`${date}T${time}:00`);
-        const endDateTime = new Date(startDateTime.getTime() + (duration * 60000));
-        return endDateTime.toISOString();
-    }
-
-    getEventColor(type) {
+    getPriorityColor(priority) {
         const colors = {
-            'meeting': '#3b82f6',
-            'event': '#10b981',
-            'deadline': '#ef4444',
-            'personal': '#8b5cf6'
+            'urgent': '#ef4444',
+            'high': '#f59e0b',
+            'medium': '#06b6d4',
+            'low': '#10b981'
         };
-        return colors[type] || '#6b7280';
+        return colors[priority] || '#6366f1';
     }
 
-    getEventBorderColor(type) {
-        const colors = {
-            'meeting': '#2563eb',
-            'event': '#059669',
-            'deadline': '#dc2626',
-            'personal': '#7c3aed'
-        };
-        return colors[type] || '#4b5563';
-    }
-
-    getEventTypeFromButton(button) {
-        if (button.id.includes('Meeting')) return 'meeting';
-        if (button.id.includes('Event')) return 'event';
-        if (button.id.includes('Deadline')) return 'deadline';
-        return 'event';
-    }
-
-    // Event CRUD Operations
-    editEvent(eventId) {
-        const event = this.events.find(e => e.id === eventId);
-        if (!event) return;
-
-        // Populate modal with event data
-        this.showEventModal(event.type);
-
-        // Fill form fields
-        document.getElementById('eventTitle').value = event.title;
-        document.getElementById('eventType').value = event.type;
-        document.getElementById('eventDate').value = event.start.split('T')[0];
-        document.getElementById('eventTime').value = event.start.split('T')[1].slice(0, 5);
-        document.getElementById('eventLocation').value = event.location || '';
-        document.getElementById('eventDescription').value = event.description || '';
-        document.getElementById('eventOrganizer').value = event.organizer || '';
-        document.getElementById('eventPriority').value = event.priority || 'normal';
-
-        // Update modal title
-        document.getElementById('modalTitle').textContent = 'Chỉnh sửa sự kiện';
-
-        // Store current event ID for updating
-        this.editingEventId = eventId;
-    }
-
-    deleteEvent(eventId) {
-        const event = this.events.find(e => e.id === eventId);
-        if (!event) return;
-
-        if (confirm(`Bạn có chắc chắn muốn xóa sự kiện "${event.title}"?`)) {
-            // Remove from events array
-            this.events = this.events.filter(e => e.id !== eventId);
-
-            // Refresh calendar
-            if (this.calendar) {
-                this.calendar.refetchEvents();
-            }
-
-            // Update displays
-            this.updateStats();
-            this.renderTodayEvents();
-            this.renderUpcomingEvents();
-
-            this.showNotification(`Đã xóa sự kiện: ${event.title}`, 'success');
-        }
-    }
-
-    // Utility Functions
-    toggleMobileMenu() {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) {
-            sidebar.classList.toggle('active');
-        }
-    }
-
-    toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) {
-            sidebar.classList.toggle('collapsed');
-        }
-    }
-
-    showUserDropdown() {
-        const dropdown = document.getElementById('userDropdown');
-        if (dropdown) {
-            dropdown.style.opacity = '1';
-            dropdown.style.visibility = 'visible';
-            dropdown.style.transform = 'translateY(0)';
-        }
-    }
-
-    hideUserDropdown() {
-        const dropdown = document.getElementById('userDropdown');
-        if (dropdown) {
-            dropdown.style.opacity = '0';
-            dropdown.style.visibility = 'hidden';
-            dropdown.style.transform = 'translateY(-10px)';
-        }
-    }
-
+    // Calendar actions
     syncCalendar() {
-        this.showLoadingState();
+        this.showNotification('Đang đồng bộ lịch...', 'info');
 
-        // Simulate API sync
+        // Simulate sync delay
         setTimeout(() => {
             this.loadEvents();
-            this.updateStats();
-            this.renderTodayEvents();
-            this.renderUpcomingEvents();
-            this.hideLoadingState();
-            this.showNotification('Đã đồng bộ lịch thành công!', 'success');
-        }, 2000);
+            this.showNotification('Đồng bộ lịch thành công!', 'success');
+        }, 1500);
     }
 
-    handleSearch(query) {
-        if (query.length < 2) {
-            this.hideSearchResults();
-            return;
-        }
-
-        // Filter events based on search query
-        const results = this.events.filter(event =>
-            event.title.toLowerCase().includes(query.toLowerCase()) ||
-            (event.description && event.description.toLowerCase().includes(query.toLowerCase())) ||
-            (event.location && event.location.toLowerCase().includes(query.toLowerCase()))
-        );
-
-        this.showSearchResults(results);
-    }
-
-    showSearchResults(results) {
-        const searchResults = document.getElementById('searchResults');
-        if (!searchResults) return;
-
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="search-no-results">Không tìm thấy sự kiện nào</div>';
-        } else {
-            searchResults.innerHTML = results.map(event => `
-                <div class="search-result-item" onclick="calendarManager.goToEvent('${event.id}')">
-                    <div class="search-result-title">${event.title}</div>
-                    <div class="search-result-details">
-                        ${new Date(event.start).toLocaleDateString('vi-VN')} - ${event.location || 'Chưa xác định địa điểm'}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        searchResults.style.display = 'block';
-    }
-
-    hideSearchResults() {
-        const searchResults = document.getElementById('searchResults');
-        if (searchResults) {
-            searchResults.style.display = 'none';
-        }
-    }
-
-    goToEvent(eventId) {
-        const event = this.events.find(e => e.id === eventId);
-        if (!event) return;
-
-        // Navigate calendar to event date
-        const eventDate = new Date(event.start);
-        if (this.calendar) {
-            this.calendar.gotoDate(eventDate);
-        }
-
-        // Hide search results
-        this.hideSearchResults();
-
-        // Clear search input
-        const searchInput = document.getElementById('globalSearch');
-        if (searchInput) {
-            searchInput.value = '';
-        }
-
-        this.showNotification(`Đã chuyển đến sự kiện: ${event.title}`, 'info');
-    }
-
-    handleKeyboardShortcuts(e) {
-        // ESC key to close modals
-        if (e.key === 'Escape') {
-            this.hideEventModal();
-            this.hideSearchResults();
-        }
-
-        // Ctrl/Cmd + N to add new event
-        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-            e.preventDefault();
-            this.showEventModal();
-        }
-
-        // Ctrl/Cmd + F to focus search
-        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-            e.preventDefault();
-            const searchInput = document.getElementById('globalSearch');
-            if (searchInput) {
-                searchInput.focus();
-            }
-        }
-
-        // Arrow keys for calendar navigation
-        if (e.key === 'ArrowLeft' && e.ctrlKey) {
-            e.preventDefault();
-            this.navigateCalendar('prev');
-        }
-        if (e.key === 'ArrowRight' && e.ctrlKey) {
-            e.preventDefault();
-            this.navigateCalendar('next');
-        }
-    }
-
-    handleResize() {
-        if (this.calendar) {
-            this.calendar.updateSize();
-        }
-
-        // Hide sidebar on mobile when resizing
-        if (window.innerWidth <= 968) {
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar && sidebar.classList.contains('active')) {
+    importCalendar() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.ics,.csv';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                this.showNotification(`Đang import file: ${file.name}`, 'info');
+                // Simulate import
                 setTimeout(() => {
-                    sidebar.classList.remove('active');
-                }, 100);
+                    this.showNotification('Import lịch thành công!', 'success');
+                }, 2000);
             }
-        }
+        };
+        input.click();
     }
 
-    showLoadingState() {
-        const statsCards = document.querySelectorAll('.stats-card');
-        statsCards.forEach(card => card.classList.add('loading'));
+    exportCalendar() {
+        const data = JSON.stringify(this.events, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `calendar_export_${new Date().getTime()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        this.showNotification('Xuất lịch thành công!', 'success');
     }
 
-    hideLoadingState() {
-        const statsCards = document.querySelectorAll('.stats-card');
-        statsCards.forEach(card => card.classList.remove('loading'));
+    // Event handlers
+    handleEventClick(info) {
+        const event = info.event;
+        const eventData = {
+            id: event.id,
+            title: event.title,
+            start: event.start,
+            end: event.end,
+            description: event.extendedProps.description,
+            location: event.extendedProps.location,
+            type: event.extendedProps.type,
+            priority: event.extendedProps.priority,
+            organizer: event.extendedProps.organizer
+        };
+
+        this.viewEventDetails(eventData);
     }
 
+    handleDateClick(info) {
+        // Set date in form and show modal
+        document.getElementById('eventDate').value = info.dateStr;
+        this.showEventModal();
+    }
+
+    viewEventDetails(eventData) {
+        // Create and show event details modal
+        const detailsModal = this.createEventDetailsModal(eventData);
+        document.body.appendChild(detailsModal);
+    }
+
+    createEventDetailsModal(eventData) {
+        const modal = document.createElement('div');
+        modal.className = 'modal show';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-calendar-alt"></i> Chi tiết sự kiện</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>${eventData.title}</h4>
+                    <p><strong>Thời gian:</strong> ${new Date(eventData.start).toLocaleString('vi-VN')}</p>
+                    <p><strong>Địa điểm:</strong> ${eventData.location}</p>
+                    <p><strong>Người tổ chức:</strong> ${eventData.organizer}</p>
+                    <p><strong>Mô tả:</strong> ${eventData.description}</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary close-btn">Đóng</button>
+                    <button class="btn-primary edit-btn">Chỉnh sửa</button>
+                </div>
+            </div>
+        `;
+
+        // Event listeners
+        modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+        modal.querySelector('.close-btn').addEventListener('click', () => modal.remove());
+        modal.querySelector('.edit-btn').addEventListener('click', () => {
+            modal.remove();
+            this.showEventModal(eventData);
+        });
+
+        return modal;
+    }
+
+    // Notification system
     showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas ${this.getNotificationIcon(type)}"></i>
-                <span>${message}</span>
-            </div>
-            <button class="notification-close" onclick="this.parentElement.remove()">
-                <i class="fas fa-times"></i>
-            </button>
+            <i class="fas ${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
         `;
 
-        let container = document.getElementById('notificationContainer');
+        // Add to container or create one
+        let container = document.getElementById('notifications');
         if (!container) {
             container = document.createElement('div');
-            container.id = 'notificationContainer';
-            container.className = 'notification-container';
+            container.id = 'notifications';
+            container.className = 'notifications-container';
             document.body.appendChild(container);
         }
 
@@ -1007,32 +812,204 @@ class CalendarManager {
 
         // Auto remove after 5 seconds
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.style.animation = 'slideOutRight 0.3s ease forwards';
-                setTimeout(() => notification.remove(), 300);
-            }
+            notification.remove();
         }, 5000);
     }
 
     getNotificationIcon(type) {
         const icons = {
-            success: 'fa-check-circle',
-            error: 'fa-exclamation-circle',
-            warning: 'fa-exclamation-triangle',
-            info: 'fa-info-circle'
+            'success': 'fa-check-circle',
+            'error': 'fa-exclamation-circle',
+            'warning': 'fa-exclamation-triangle',
+            'info': 'fa-info-circle'
         };
         return icons[type] || 'fa-info-circle';
     }
+
+    styleEvent(info) {
+        const priority = info.event.extendedProps.priority;
+        if (priority) {
+            info.el.classList.add(`priority-${priority}`);
+        }
+    }
+
+    // Additional utility methods for enhanced functionality
+    setupNotificationSystem() {
+        // Create notification container if it doesn't exist
+        if (!document.getElementById('notifications')) {
+            const container = document.createElement('div');
+            container.id = 'notifications';
+            container.className = 'notifications-container';
+            container.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                max-width: 350px;
+            `;
+            document.body.appendChild(container);
+        }
+    }
+
+    // Enhanced search functionality
+    setupGlobalSearch() {
+        const searchInput = document.getElementById('globalSearch');
+        const searchResults = document.getElementById('searchResults');
+
+        if (searchInput && searchResults) {
+            let searchTimeout;
+
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    this.performSearch(e.target.value);
+                }, 300);
+            });
+
+            // Close results when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+    }
+
+    performSearch(query) {
+        const searchResults = document.getElementById('searchResults');
+        if (!searchResults || !query.trim()) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        const results = this.events.filter(event =>
+            event.title.toLowerCase().includes(query.toLowerCase()) ||
+            event.description?.toLowerCase().includes(query.toLowerCase()) ||
+            event.location?.toLowerCase().includes(query.toLowerCase()) ||
+            event.organizer?.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5); // Limit to 5 results
+
+        if (results.length === 0) {
+            searchResults.innerHTML = '<div class="search-no-results">Không tìm thấy kết quả</div>';
+        } else {
+            searchResults.innerHTML = results.map(event => `
+                <div class="search-result-item" data-event-id="${event.id}">
+                    <div class="search-result-title">${event.title}</div>
+                    <div class="search-result-meta">
+                        <span>${new Date(event.start).toLocaleDateString('vi-VN')}</span>
+                        <span>${event.location}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers for search results
+            searchResults.querySelectorAll('.search-result-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const eventId = item.dataset.eventId;
+                    this.goToEvent(eventId);
+                    searchResults.style.display = 'none';
+                    document.getElementById('globalSearch').value = '';
+                });
+            });
+        }
+
+        searchResults.style.display = 'block';
+    }
+
+    goToEvent(eventId) {
+        const event = this.events.find(e => e.id === eventId);
+        if (event && this.calendar) {
+            const eventDate = new Date(event.start);
+            this.calendar.gotoDate(eventDate);
+
+            // Highlight the event briefly
+            setTimeout(() => {
+                const eventEl = document.querySelector(`[data-event-id="${eventId}"]`);
+                if (eventEl) {
+                    eventEl.style.animation = 'pulse 2s';
+                    setTimeout(() => {
+                        eventEl.style.animation = '';
+                    }, 2000);
+                }
+            }, 100);
+
+            this.showNotification(`Đã chuyển đến sự kiện: ${event.title}`, 'info');
+        }
+    }
+
+    // Export functionality with better formatting
+    exportToICS() {
+        let icsContent = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Calendar//Calendar//EN\n';
+
+        this.events.forEach(event => {
+            const startDate = new Date(event.start);
+            const endDate = event.end ? new Date(event.end) : new Date(startDate.getTime() + 3600000); // 1 hour default
+
+            icsContent += 'BEGIN:VEVENT\n';
+            icsContent += `UID:${event.id}@calendar.ctsv.edu.vn\n`;
+            icsContent += `DTSTART:${this.formatDateForICS(startDate)}\n`;
+            icsContent += `DTEND:${this.formatDateForICS(endDate)}\n`;
+            icsContent += `SUMMARY:${event.title}\n`;
+            icsContent += `DESCRIPTION:${event.description || ''}\n`;
+            icsContent += `LOCATION:${event.location || ''}\n`;
+            icsContent += `ORGANIZER:${event.organizer || ''}\n`;
+            icsContent += 'END:VEVENT\n';
+        });
+
+        icsContent += 'END:VCALENDAR';
+
+        const blob = new Blob([icsContent], { type: 'text/calendar' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `calendar_${new Date().toISOString().slice(0, 10)}.ics`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        this.showNotification('Xuất lịch ICS thành công!', 'success');
+    }
+
+    formatDateForICS(date) {
+        return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    }
+
+    // Keyboard shortcuts
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + N: New event
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                this.showEventModal();
+            }
+
+            // Ctrl/Cmd + T: Go to today
+            if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+                e.preventDefault();
+                this.goToToday();
+            }
+
+            // Ctrl/Cmd + S: Sync calendar
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                this.syncCalendar();
+            }
+
+            // Escape: Close modal
+            if (e.key === 'Escape') {
+                this.hideEventModal();
+            }
+        });
+    }
 }
 
-// Initialize calendar when DOM is loaded
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 DOM loaded, initializing Calendar Manager...');
     window.calendarManager = new CalendarManager();
+    window.calendarManager.initialize(); // Call initialize after creation
 });
 
-// Export for potential use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CalendarManager;
-}
-
-console.log('📅 Calendar Modern Script loaded successfully!');
+console.log('📅 Calendar Modern JS loaded successfully!');

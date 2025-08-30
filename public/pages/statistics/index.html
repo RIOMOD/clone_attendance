@@ -9,8 +9,9 @@
     <meta name="description" content="Thống kê và phân tích hiệu suất cá nhân trong hệ thống chấm công CTSV">
     <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
 
-    <!-- Modern Statistics Stylesheet -->
-    <link rel="stylesheet" href="statistics.css">
+    <!-- Modern Statistics Stylesheet - Synchronized with Dashboard -->
+    <link rel="stylesheet" href="../dashboard/dashboard-modern.css">
+    <link rel="stylesheet" href="statistics-enhanced.css">
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,6 +21,10 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Statistics Light Mode JavaScript -->
+    <script src="../dashboard/dashboard-lightmode.js" defer></script>
+    <script src="statistics-enhanced.js" defer></script>
 </head>
 
 <body>
@@ -30,7 +35,7 @@
                 <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="logo">
+                <div class="logo" id="dashboardLogo" style="cursor:pointer;">
                     <i class="fas fa-graduation-cap"></i>
                     <span>CTSV Dashboard</span>
                 </div>
@@ -190,7 +195,7 @@
                     </div>
                     <ul class="nav-list">
                         <li class="nav-item active">
-                            <a href="#" class="nav-link">
+                            <a href="index.html" class="nav-link">
                                 <i class="fas fa-chart-line"></i>
                                 <span class="nav-text">Thống kê cá nhân</span>
                                 <i class="fas fa-angle-right nav-arrow"></i>
@@ -207,6 +212,22 @@
                             <a href="#" class="nav-link">
                                 <i class="fas fa-file-alt"></i>
                                 <span class="nav-text">Xuất báo cáo</span>
+                                <i class="fas fa-angle-right nav-arrow"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <i class="fas fa-calendar"></i>
+                        <span>Lịch trình</span>
+                    </div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="../calendar/index.html" class="nav-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span class="nav-text">Lịch học</span>
                                 <i class="fas fa-angle-right nav-arrow"></i>
                             </a>
                         </li>
@@ -238,381 +259,507 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="content-wrapper">
+        <div class="dashboard-main">
+            <!-- Enhanced Content -->
+            <main class="content">
                 <!-- Page Header -->
                 <div class="page-header">
-                    <div class="page-title">
-                        <h1>
-                            <i class="fas fa-chart-line"></i>
-                            Thống kê cá nhân
-                        </h1>
-                        <p class="page-subtitle">Theo dõi và phân tích hiệu suất cá nhân của bạn</p>
-                    </div>
-                    <div class="page-actions">
-                        <div class="filter-controls">
-                            <select id="timeRange" class="filter-select">
+                    <h1>
+                        <i class="fas fa-chart-line"></i>
+                        Thống kê cá nhân
+                    </h1>
+                    <p>Theo dõi và phân tích hiệu suất cá nhân của bạn</p>
+                </div>
+
+                <!-- Dashboard Controls -->
+                <div class="dashboard-controls">
+                    <div class="controls-left">
+                        <div class="date-selector">
+                            <select id="timeRange">
                                 <option value="week">7 ngày qua</option>
                                 <option value="month" selected>30 ngày qua</option>
                                 <option value="quarter">3 tháng qua</option>
                                 <option value="year">12 tháng qua</option>
                             </select>
-                            <button class="btn btn-outline" id="refreshBtn">
-                                <i class="fas fa-sync-alt"></i>
-                                <span>Làm mới</span>
-                            </button>
-                            <button class="btn btn-primary" id="exportBtn">
-                                <i class="fas fa-download"></i>
-                                <span>Xuất báo cáo</span>
-                            </button>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn-control" id="refreshBtn">
+                            <i class="fas fa-sync"></i> Làm mới
+                        </button>
+                        <button class="btn-control export-btn" data-type="pdf">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn-control export-btn" data-type="excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn-control primary" id="exportBtn">
+                            <i class="fas fa-download"></i> Xuất báo cáo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enhanced Stats Section -->
+                <div class="dashboard-stats">
+                    <div class="stat-card primary" data-stat="attendanceRate">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>96.5%</h3>
+                            <p>Tỷ lệ chấm công</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+2.1%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success" data-stat="workHours">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>8.2 giờ</h3>
+                            <p>Trung bình mỗi ngày</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+5.3%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning" data-stat="eventsParticipated">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>15</h3>
+                            <p>Sự kiện tham gia</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+25.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card info" data-stat="performanceScore">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>9.2/10</h3>
+                            <p>Điểm hiệu suất</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+0.8</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Overview Cards -->
-                <div class="overview-section">
-                    <div class="overview-grid">
-                        <div class="overview-card attendance-rate">
-                            <div class="card-header">
-                                <div class="card-icon success">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>+2.1%</span>
-                                </div>
+                <!-- Modern Charts Section -->
+                <div class="dashboard-charts">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <h3 class="chart-title">
+                                    <i class="fas fa-chart-line"></i>
+                                    Thống kê chấm công tuần
+                                </h3>
+                                <p>Biểu đồ theo dõi giờ làm việc hàng ngày</p>
                             </div>
-                            <div class="card-content">
-                                <h3 class="stat-value">96.5%</h3>
-                                <p class="stat-label">Tỷ lệ chấm công</p>
-                                <div class="stat-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 96.5%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="overview-card work-hours">
-                            <div class="card-header">
-                                <div class="card-icon primary">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>+0.3h</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h3 class="stat-value">8.2 <small>giờ</small></h3>
-                                <p class="stat-label">Trung bình mỗi ngày</p>
-                                <div class="stat-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 82%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="overview-card events-participated">
-                            <div class="card-header">
-                                <div class="card-icon warning">
-                                    <i class="fas fa-calendar-check"></i>
-                                </div>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>+5</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h3 class="stat-value">15</h3>
-                                <p class="stat-label">Sự kiện tham gia</p>
-                                <div class="stat-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 75%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="overview-card performance-score">
-                            <div class="card-header">
-                                <div class="card-icon info">
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>+0.1</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h3 class="stat-value">9.2<small>/10</small></h3>
-                                <p class="stat-label">Điểm hiệu suất</p>
-                                <div class="stat-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 92%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Detailed Statistics -->
-                <div class="stats-section">
-                    <div class="stats-grid">
-                        <!-- Attendance Chart -->
-                        <div class="stats-card chart-card">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <h3><i class="fas fa-chart-line"></i> Thống kê chấm công</h3>
-                                    <p>Biểu đồ theo dõi giờ làm việc hàng ngày</p>
-                                </div>
-                                <div class="card-actions">
-                                    <div class="view-toggles">
-                                        <button class="toggle-btn active" data-view="chart">
-                                            <i class="fas fa-chart-line"></i>
-                                        </button>
-                                        <button class="toggle-btn" data-view="calendar">
-                                            <i class="fas fa-calendar"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-container" id="attendanceChartView">
-                                    <canvas id="attendanceChart"></canvas>
-                                </div>
-                                <div class="calendar-container" id="attendanceCalendarView" style="display: none;">
-                                    <div class="calendar-header">
-                                        <button class="btn-nav" id="prevMonth">
-                                            <i class="fas fa-chevron-left"></i>
-                                        </button>
-                                        <h4 id="currentMonth">Tháng 12, 2024</h4>
-                                        <button class="btn-nav" id="nextMonth">
-                                            <i class="fas fa-chevron-right"></i>
-                                        </button>
-                                    </div>
-                                    <div class="calendar-grid" id="calendarGrid">
-                                        <!-- Calendar will be generated by JavaScript -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Performance Metrics -->
-                        <div class="stats-card performance-card">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <h3><i class="fas fa-trophy"></i> Chỉ số hiệu suất</h3>
-                                    <p>Đánh giá chi tiết các khía cạnh hiệu suất</p>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="performance-metrics">
-                                    <div class="metric-item">
-                                        <div class="metric-info">
-                                            <span class="metric-label">Hoàn thành đúng hạn</span>
-                                            <span class="metric-value">95.2%</span>
-                                        </div>
-                                        <div class="metric-bar">
-                                            <div class="progress-fill success" style="width: 95.2%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="metric-item">
-                                        <div class="metric-info">
-                                            <span class="metric-label">Chất lượng công việc</span>
-                                            <span class="metric-value">9.1/10</span>
-                                        </div>
-                                        <div class="metric-bar">
-                                            <div class="progress-fill primary" style="width: 91%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="metric-item">
-                                        <div class="metric-info">
-                                            <span class="metric-label">Tương tác nhóm</span>
-                                            <span class="metric-value">8.8/10</span>
-                                        </div>
-                                        <div class="metric-bar">
-                                            <div class="progress-fill info" style="width: 88%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="metric-item">
-                                        <div class="metric-info">
-                                            <span class="metric-label">Sáng tạo & Đổi mới</span>
-                                            <span class="metric-value">8.7/10</span>
-                                        </div>
-                                        <div class="metric-bar">
-                                            <div class="progress-fill warning" style="width: 87%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Goals Progress -->
-                        <div class="stats-card goals-card">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <h3><i class="fas fa-target"></i> Tiến độ mục tiêu</h3>
-                                    <p>Theo dõi các mục tiêu cá nhân</p>
-                                </div>
-                                <button class="btn btn-sm btn-ghost" id="addGoalBtn">
-                                    <i class="fas fa-plus"></i>
+                            <div class="chart-actions">
+                                <button class="btn-filter" title="Bộ lọc">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                                <button class="btn-refresh" title="Làm mới">
+                                    <i class="fas fa-sync-alt"></i>
                                 </button>
                             </div>
-                            <div class="card-body">
-                                <div class="goals-list">
-                                    <div class="goal-item completed">
-                                        <div class="goal-icon">
-                                            <i class="fas fa-calendar-check"></i>
-                                        </div>
-                                        <div class="goal-content">
-                                            <h4>Chấm công hoàn hảo</h4>
-                                            <p>96.5% / 98%</p>
-                                            <div class="goal-progress">
-                                                <div class="progress-bar">
-                                                    <div class="progress-fill" style="width: 98.5%"></div>
-                                                </div>
-                                                <span>98.5%</span>
-                                            </div>
-                                        </div>
-                                        <div class="goal-badge completed">Gần hoàn thành</div>
-                                    </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
 
-                                    <div class="goal-item in-progress">
-                                        <div class="goal-icon">
-                                            <i class="fas fa-calendar-alt"></i>
-                                        </div>
-                                        <div class="goal-content">
-                                            <h4>Sự kiện tham gia</h4>
-                                            <p>15 / 20 sự kiện</p>
-                                            <div class="goal-progress">
-                                                <div class="progress-bar">
-                                                    <div class="progress-fill" style="width: 75%"></div>
-                                                </div>
-                                                <span>75%</span>
-                                            </div>
-                                        </div>
-                                        <div class="goal-badge in-progress">Đang thực hiện</div>
-                                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <h3 class="chart-title">
+                                    <i class="fas fa-chart-pie"></i>
+                                    Hiệu suất cá nhân
+                                </h3>
+                                <p>Phân bố chỉ số hiệu suất</p>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                                    <div class="goal-item in-progress">
-                                        <div class="goal-icon">
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <div class="goal-content">
-                                            <h4>Điểm hiệu suất</h4>
-                                            <p>9.2 / 10 điểm</p>
-                                            <div class="goal-progress">
-                                                <div class="progress-bar">
-                                                    <div class="progress-fill" style="width: 92%"></div>
-                                                </div>
-                                                <span>92%</span>
-                                            </div>
-                                        </div>
-                                        <div class="goal-badge in-progress">Đang thực hiện</div>
+                <!-- Activity Section -->
+                <div class="activity-section">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3>
+                                <i class="fas fa-clock"></i>
+                                Hoạt động gần đây
+                            </h3>
+                            <div class="section-actions">
+                                <button class="btn-filter" id="activityFilter" title="Lọc hoạt động">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                                <button class="btn-refresh" id="refreshActivity" title="Làm mới">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                                <a href="#" class="view-all">Xem tất cả</a>
+                            </div>
+                        </div>
+
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon success">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Chấm công thành công</div>
+                                    <div class="activity-description">Bạn đã chấm công cho sự kiện "Workshop React
+                                        Advanced"</div>
+                                    <div class="activity-meta">
+                                        <span class="activity-time">
+                                            <i class="fas fa-clock"></i>
+                                            5 phút trước
+                                        </span>
+                                        <span class="activity-type">Chấm công</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon info">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Tham gia sự kiện mới</div>
+                                    <div class="activity-description">Đăng ký tham gia "Hackathon 2025"</div>
+                                    <div class="activity-meta">
+                                        <span class="activity-time">
+                                            <i class="fas fa-clock"></i>
+                                            15 phút trước
+                                        </span>
+                                        <span class="activity-type">Sự kiện</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon success">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Đạt mục tiêu hiệu suất</div>
+                                    <div class="activity-description">Hoàn thành mục tiêu chấm công 95% trong tháng
+                                    </div>
+                                    <div class="activity-meta">
+                                        <span class="activity-time">
+                                            <i class="fas fa-clock"></i>
+                                            1 giờ trước
+                                        </span>
+                                        <span class="activity-type">Thành tựu</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Activity Timeline -->
-                        <div class="stats-card timeline-card">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <h3><i class="fas fa-history"></i> Hoạt động gần đây</h3>
-                                    <p>Lịch sử hoạt động của bạn</p>
+                <!-- Quick Actions Section -->
+                <div class="quick-actions-section">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3>
+                                <i class="fas fa-bolt"></i>
+                                Hành động nhanh
+                            </h3>
+                        </div>
+
+                        <div class="quick-actions-grid">
+                            <a href="#" class="quick-action-card" id="exportDetailedReport">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-file-export"></i>
                                 </div>
-                                <div class="card-actions">
-                                    <button class="btn btn-sm btn-ghost">
-                                        <i class="fas fa-filter"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-ghost">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
+                                <div class="quick-action-title">Xuất báo cáo chi tiết</div>
+                                <div class="quick-action-description">Tạo và tải xuống báo cáo thống kê</div>
+                            </a>
+
+                            <a href="../calendar/personal-calendar.html" class="quick-action-card">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-calendar-alt"></i>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="activity-timeline">
-                                    <div class="timeline-item">
-                                        <div class="timeline-marker success">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <div class="timeline-header">
-                                                <h5>Hoàn thành dự án Website CLB</h5>
-                                                <span class="timeline-time">2 giờ trước</span>
-                                            </div>
-                                            <p>Đã submit và demo thành công dự án website mới cho CLB CodeKing</p>
-                                            <div class="timeline-tags">
-                                                <span class="tag success">Dự án</span>
-                                                <span class="tag primary">Website</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="quick-action-title">Xem lịch cá nhân</div>
+                                <div class="quick-action-description">Quản lý lịch trình và sự kiện</div>
+                            </a>
 
-                                    <div class="timeline-item">
-                                        <div class="timeline-marker info">
-                                            <i class="fas fa-calendar"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <div class="timeline-header">
-                                                <h5>Tham gia họp team</h5>
-                                                <span class="timeline-time">5 giờ trước</span>
-                                            </div>
-                                            <p>Meeting review progress và lên kế hoạch sprint tiếp theo</p>
-                                            <div class="timeline-tags">
-                                                <span class="tag info">Họp</span>
-                                                <span class="tag warning">Sprint</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item">
-                                        <div class="timeline-marker primary">
-                                            <i class="fas fa-clock"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <div class="timeline-header">
-                                                <h5>Chấm công buổi sáng</h5>
-                                                <span class="timeline-time">8:30 AM</span>
-                                            </div>
-                                            <p>Check-in đúng giờ tại trụ sở chính</p>
-                                            <div class="timeline-tags">
-                                                <span class="tag success">Đúng giờ</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item">
-                                        <div class="timeline-marker warning">
-                                            <i class="fas fa-graduation-cap"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <div class="timeline-header">
-                                                <h5>Hoàn thành khóa học JavaScript</h5>
-                                                <span class="timeline-time">Hôm qua</span>
-                                            </div>
-                                            <p>Đạt certificate với điểm số 95/100</p>
-                                            <div class="timeline-tags">
-                                                <span class="tag success">Học tập</span>
-                                                <span class="tag primary">JavaScript</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <a href="../profile/profile.html" class="quick-action-card">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-user-cog"></i>
                                 </div>
-                            </div>
+                                <div class="quick-action-title">Cài đặt mục tiêu</div>
+                                <div class="quick-action-description">Thiết lập mục tiêu hiệu suất</div>
+                            </a>
+
+                            <a href="#" class="quick-action-card" id="shareStatistics">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-share-alt"></i>
+                                </div>
+                                <div class="quick-action-title">Chia sẻ thống kê</div>
+                                <div class="quick-action-description">Chia sẻ thành tích với đồng nghiệp</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Enhanced Notification Panel - Same as Dashboard -->
+        <div class="notification-panel" id="notificationPanel">
+            <div class="notification-header">
+                <div class="panel-title">
+                    <i class="fas fa-bell"></i>
+                    <h3>Thông báo</h3>
+                    <span class="notification-count">5</span>
+                </div>
+                <div class="panel-actions">
+                    <button class="action-btn-small" id="markAllReadBtn" title="Đánh dấu tất cả đã đọc">
+                        <i class="fas fa-check-double"></i>
+                    </button>
+                    <button class="action-btn-small" id="clearAllNotificationsBtn" title="Xóa tất cả">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="notification-close" onclick="closeNotificationPanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="notification-filters">
+                <button class="filter-btn active" data-filter="all">Tất cả</button>
+                <button class="filter-btn" data-filter="unread">Chưa đọc</button>
+                <button class="filter-btn" data-filter="important">Quan trọng</button>
+                <button class="filter-btn" data-filter="system">Hệ thống</button>
+            </div>
+
+            <div class="notification-list">
+                <div class="notification-item unread important" data-type="achievement">
+                    <div class="notification-item-icon success">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Đạt thành tích mới</div>
+                        <div class="notification-item-message">Chúc mừng! Bạn đã đạt tỷ lệ chấm công 95% trong tháng
+                            này.</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            2 phút trước
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item unread" data-type="reminder">
+                    <div class="notification-item-icon info">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Nhắc nhở sự kiện</div>
+                        <div class="notification-item-message">Sự kiện "Workshop AI/ML" sẽ diễn ra vào 14:00 hôm nay.
+                        </div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            30 phút trước
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+
+            <div class="notification-footer">
+                <a href="#" class="view-all-notifications">Xem tất cả thông báo</a>
+            </div>
+        </div>
+
+        <!-- Enhanced Message Panel - Same as Dashboard -->
+        <div class="message-panel" id="messagePanel">
+            <div class="message-header">
+                <div class="panel-title">
+                    <i class="fas fa-comment"></i>
+                    <h3>Tin nhắn</h3>
+                    <span class="message-count">3</span>
+                </div>
+                <div class="panel-actions">
+                    <button class="action-btn-small" id="composeMessageBtn" title="Soạn tin nhắn mới">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="message-close" onclick="closeMessagePanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="message-search">
+                <input type="text" placeholder="Tìm kiếm tin nhắn..." id="messageSearchInput">
+                <button class="search-btn" id="messageSearchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="message-list">
+                <div class="message-item unread" data-id="msg-stats-1">
+                    <div class="message-avatar">
+                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header-info">
+                            <div class="sender-name">Chủ nhiệm CLB</div>
+                            <div class="message-time">10:30</div>
+                        </div>
+                        <div class="message-subject">📊 Báo cáo thống kê tháng</div>
+                        <div class="message-preview">Bạn có thể gửi báo cáo thống kê hoạt động cá nhân trong tháng này
+                            không?</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-footer">
+                <a href="#" class="view-all-messages">Xem tất cả tin nhắn</a>
+            </div>
+        </div>
+
+        <!-- Enhanced Settings Panel - Same as Dashboard -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-header">
+                <div class="panel-title">
+                    <i class="fas fa-cog"></i>
+                    <h3>Cài đặt nhanh</h3>
+                </div>
+                <button class="settings-close" onclick="closeSettingsPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="settings-content">
+                <div class="settings-section">
+                    <div class="section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Thống kê
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Tự động cập nhật</div>
+                            <div class="setting-description">Tự động làm mới dữ liệu thống kê</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoRefreshStats" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-footer">
+                <button class="btn-secondary" onclick="closeSettingsPanel()">Hủy</button>
+                <button class="btn-primary" id="saveSettingsBtn">Lưu cài đặt</button>
+            </div>
+        </div>
+
+        <!-- Enhanced Compose Message Modal -->
+        <div class="compose-message-modal" id="composeMessageModal">
+            <div class="compose-modal-content">
+                <div class="compose-header">
+                    <h3>
+                        <i class="fas fa-edit"></i>
+                        Soạn tin nhắn mới
+                    </h3>
+                    <button class="compose-close-btn" onclick="closeComposeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="compose-body">
+                    <form class="compose-form" id="composeForm">
+                        <div class="form-group">
+                            <label for="composeTo" class="form-label">Gửi đến:</label>
+                            <input type="text" id="composeTo" class="form-input"
+                                placeholder="Nhập tên hoặc email người nhận..." autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="composeSubject" class="form-label">Chủ đề:</label>
+                            <input type="text" id="composeSubject" class="form-input"
+                                placeholder="Nhập chủ đề tin nhắn...">
+                        </div>
+                        <div class="form-group">
+                            <label for="composeMessage" class="form-label">Nội dung:</label>
+                            <textarea id="composeMessage" class="form-input form-textarea"
+                                placeholder="Nhập nội dung tin nhắn..."></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="compose-actions">
+                    <div class="compose-actions-right">
+                        <button type="button" class="btn-compose-secondary" onclick="closeComposeModal()">Hủy</button>
+                        <button type="submit" class="btn-compose-primary" id="sendMessageBtn">
+                            <i class="fas fa-paper-plane"></i> Gửi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden file input for attachments -->
+        <input type="file" id="fileInput" multiple style="display: none;">
     </div>
 
-    <!-- Scripts -->
-    <script src="statistics.js"></script>
+    <script>
+        // Cuộn lên đầu trang khi click vào logo
+        document.addEventListener('DOMContentLoaded', function () {
+            var logo = document.getElementById('dashboardLogo');
+            if (logo) {
+                logo.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // Initialize Statistics Dashboard
+            if (typeof StatisticsDashboard !== 'undefined') {
+                const statistics = new StatisticsDashboard();
+            }
+        });
+
+        // Global Functions for Panel Management
+        function closeNotificationPanel() {
+            const panel = document.getElementById('notificationPanel');
+            if (panel) panel.classList.remove('show');
+        }
+
+        function closeMessagePanel() {
+            const panel = document.getElementById('messagePanel');
+            if (panel) panel.classList.remove('show');
+        }
+
+        function closeSettingsPanel() {
+            const panel = document.getElementById('settingsPanel');
+            if (panel) panel.classList.remove('show');
+        }
+
+        function closeComposeModal() {
+            const modal = document.getElementById('composeMessageModal');
+            if (modal) modal.classList.remove('show');
+        }
+    </script>
 </body>
 
 </html>

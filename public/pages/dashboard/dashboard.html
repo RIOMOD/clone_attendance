@@ -747,62 +747,689 @@
             </main>
         </div>
 
-        <!-- Notification Panel (Initially Hidden) -->
+        <!-- Enhanced Notification Panel -->
         <div class="notification-panel" id="notificationPanel">
             <div class="notification-header">
-                <h3>Thông báo</h3>
-                <button class="notification-close" onclick="closeNotificationPanel()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="panel-title">
+                    <i class="fas fa-bell"></i>
+                    <h3>Thông báo</h3>
+                    <span class="notification-count">5</span>
+                </div>
+                <div class="panel-actions">
+                    <button class="action-btn-small" id="markAllReadBtn" title="Đánh dấu tất cả đã đọc">
+                        <i class="fas fa-check-double"></i>
+                    </button>
+                    <button class="action-btn-small" id="clearAllNotificationsBtn" title="Xóa tất cả">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="notification-close" onclick="closeNotificationPanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
+
+            <!-- Notification Filters -->
+            <div class="notification-filters">
+                <button class="filter-btn active" data-filter="all">Tất cả</button>
+                <button class="filter-btn" data-filter="unread">Chưa đọc</button>
+                <button class="filter-btn" data-filter="important">Quan trọng</button>
+                <button class="filter-btn" data-filter="system">Hệ thống</button>
+            </div>
+
             <div class="notification-list">
-                <div class="notification-item unread">
+                <div class="notification-item unread important" data-type="event">
                     <div class="notification-item-icon info">
-                        <i class="fas fa-info-circle"></i>
+                        <i class="fas fa-star"></i>
                     </div>
                     <div class="notification-item-content">
-                        <div class="notification-item-title">Sự kiện mới được tạo</div>
-                        <div class="notification-item-message">Sự kiện "Workshop React Advanced" đã được tạo và sẽ diễn
-                            ra vào thứ 6 tới.</div>
+                        <div class="notification-item-title">Sự kiện quan trọng được tạo</div>
+                        <div class="notification-item-message">Sự kiện "Hội thảo Khoa học Sinh viên 2025" đã được tạo và
+                            cần phê duyệt ngay.</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            2 phút trước
+                        </div>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="btn-quick-action success" title="Phê duyệt">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn-quick-action primary" title="Xem chi tiết">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="notification-item unread" data-type="attendance">
+                    <div class="notification-item-icon success">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Chấm công thành công</div>
+                        <div class="notification-item-message">Có 25 thành viên đã chấm công cho sự kiện "Workshop React
+                            Advanced".</div>
                         <div class="notification-item-time">
                             <i class="fas fa-clock"></i>
                             5 phút trước
                         </div>
                     </div>
+                    <div class="notification-actions">
+                        <button class="btn-quick-action primary" title="Xem danh sách">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="notification-item unread">
-                    <div class="notification-item-icon success">
-                        <i class="fas fa-check-circle"></i>
+                <div class="notification-item unread" data-type="system">
+                    <div class="notification-item-icon warning">
+                        <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="notification-item-content">
-                        <div class="notification-item-title">Chấm công hoàn tất</div>
-                        <div class="notification-item-message">Tất cả thành viên đã chấm công cho sự kiện "Meeting
-                            tuần".</div>
+                        <div class="notification-item-title">Cảnh báo hệ thống</div>
+                        <div class="notification-item-message">Dung lượng database đạt 78%. Cần thực hiện dọn dẹp dữ
+                            liệu.</div>
                         <div class="notification-item-time">
                             <i class="fas fa-clock"></i>
                             15 phút trước
                         </div>
                     </div>
+                    <div class="notification-actions">
+                        <button class="btn-quick-action warning" title="Xử lý ngay">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="notification-item">
-                    <div class="notification-item-icon warning">
-                        <i class="fas fa-exclamation-triangle"></i>
+                <div class="notification-item" data-type="club">
+                    <div class="notification-item-icon info">
+                        <i class="fas fa-users"></i>
                     </div>
                     <div class="notification-item-content">
-                        <div class="notification-item-title">Tỷ lệ tham gia thấp</div>
-                        <div class="notification-item-message">Sự kiện "Training Git" có tỷ lệ tham gia chỉ 60%.</div>
+                        <div class="notification-item-title">Thành viên mới tham gia</div>
+                        <div class="notification-item-message">5 thành viên mới đã đăng ký tham gia CLB Code King.</div>
                         <div class="notification-item-time">
                             <i class="fas fa-clock"></i>
                             1 giờ trước
                         </div>
                     </div>
+                    <div class="notification-actions">
+                        <button class="btn-quick-action success" title="Phê duyệt">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn-quick-action primary" title="Xem danh sách">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
+
+                <div class="notification-item" data-type="report">
+                    <div class="notification-item-icon success">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="notification-item-content">
+                        <div class="notification-item-title">Báo cáo đã hoàn thành</div>
+                        <div class="notification-item-message">Báo cáo chấm công tháng 8 đã được tạo và sẵn sàng tải
+                            xuống.</div>
+                        <div class="notification-item-time">
+                            <i class="fas fa-clock"></i>
+                            2 giờ trước
+                        </div>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="btn-quick-action primary" title="Tải xuống">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-footer">
+                <a href="#" class="view-all-notifications">Xem tất cả thông báo</a>
+            </div>
+        </div>
+
+        <!-- Enhanced Message Panel -->
+        <div class="message-panel" id="messagePanel">
+            <div class="message-header">
+                <div class="panel-title">
+                    <i class="fas fa-comment"></i>
+                    <h3>Tin nhắn</h3>
+                    <span class="message-count">3</span>
+                </div>
+                <div class="panel-actions">
+                    <button class="action-btn-small" id="composeMessageBtn" title="Soạn tin nhắn mới">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn-small" id="markAllReadMessagesBtn" title="Đánh dấu tất cả đã đọc">
+                        <i class="fas fa-check-double"></i>
+                    </button>
+                    <button class="action-btn-small" id="refreshMessagesBtn" title="Làm mới tin nhắn">
+                        <i class="fas fa-sync"></i>
+                    </button>
+                    <button class="message-close" onclick="closeMessagePanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Message Counter -->
+            <div class="message-counter">
+                <span id="messageCounterText">3 tin nhắn mới</span>
+            </div>
+
+            <!-- Enhanced Message Search -->
+            <div class="message-search">
+                <input type="text" placeholder="Tìm kiếm người gửi, chủ đề hoặc nội dung..." id="messageSearchInput">
+                <button class="search-btn" id="messageSearchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="search-btn" id="advancedSearchBtn" title="Tìm kiếm nâng cao">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+            </div>
+
+            <!-- Message Filters -->
+            <div class="message-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-inbox"></i>
+                    Tất cả
+                </button>
+                <button class="filter-btn" data-filter="unread">
+                    <i class="fas fa-envelope"></i>
+                    Chưa đọc
+                    <span class="filter-count">3</span>
+                </button>
+                <button class="filter-btn" data-filter="important">
+                    <i class="fas fa-star"></i>
+                    Quan trọng
+                </button>
+                <button class="filter-btn" data-filter="archived">
+                    <i class="fas fa-archive"></i>
+                    Lưu trữ
+                </button>
+                <button class="filter-btn" data-filter="sent">
+                    <i class="fas fa-paper-plane"></i>
+                    Đã gửi
+                </button>
+            </div>
+
+            <div class="message-list">
+                <div class="message-item unread priority-high" data-id="msg-1" data-type="urgent">
+                    <div class="message-status-indicator"></div>
+                    <div class="message-priority-badge high">Khẩn</div>
+                    <div class="message-avatar">
+                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                        <span class="online-indicator"></span>
+                    </div>
+                    <div class="message-content" onclick="toggleMessageExpand(this)">
+                        <div class="message-header-info">
+                            <div class="sender-name">Dr. Nguyễn Văn A</div>
+                            <div class="message-time">10:30</div>
+                            <i class="fas fa-star message-star"></i>
+                        </div>
+                        <div class="message-subject">🚨 Thông báo khẩn cấp về Hội thảo</div>
+                        <div class="message-preview message-content-collapsed">
+                            Xin chào admin, có một vấn đề quan trọng cần giải quyết ngay về việc tổ chức hội thảo khoa
+                            học.
+                            Tôi cần gặp bạn để thảo luận chi tiết về các vấn đề sau:
+                            1. Thay đổi địa điểm tổ chức do phòng hội thảo có sự cố
+                            2. Cập nhật danh sách diễn giả mời
+                            3. Điều chỉnh lịch trình sự kiện
+                            Vui lòng liên hệ lại sớm nhất có thể.
+                        </div>
+                        <button class="message-expand-btn">
+                            <span>Xem thêm</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="message-meta">
+                            <span class="attachment-indicator">
+                                <i class="fas fa-paperclip"></i> 3 tệp đính kèm
+                            </span>
+                            <span class="message-type-badge urgent">Khẩn cấp</span>
+                        </div>
+                        <div class="message-attachments">
+                            <div class="attachment-item" onclick="downloadAttachment('doc1.pdf')">
+                                <i class="fas fa-file-pdf attachment-icon"></i>
+                                <span>Thông tin hội thảo.pdf</span>
+                                <small>(2.3 MB)</small>
+                            </div>
+                            <div class="attachment-item" onclick="downloadAttachment('list.xlsx')">
+                                <i class="fas fa-file-excel attachment-icon"></i>
+                                <span>Danh sách diễn giả.xlsx</span>
+                                <small>(845 KB)</small>
+                            </div>
+                            <div class="attachment-item" onclick="downloadAttachment('schedule.docx')">
+                                <i class="fas fa-file-word attachment-icon"></i>
+                                <span>Lịch trình cập nhật.docx</span>
+                                <small>(1.2 MB)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-actions">
+                        <button class="btn-quick-action primary" title="Trả lời" onclick="replyToMessage('msg-1')">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button class="btn-quick-action warning" title="Đánh dấu quan trọng"
+                            onclick="toggleImportant('msg-1')">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="btn-quick-action success" title="Lưu trữ" onclick="archiveMessage('msg-1')">
+                            <i class="fas fa-archive"></i>
+                        </button>
+                        <button class="btn-quick-action info" title="Chuyển tiếp" onclick="forwardMessage('msg-1')">
+                            <i class="fas fa-share"></i>
+                        </button>
+                        <button class="btn-quick-action danger" title="Xóa" onclick="deleteMessage('msg-1')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="message-quick-reply">
+                        <textarea class="quick-reply-input" placeholder="Nhập phản hồi của bạn..."></textarea>
+                        <div class="quick-reply-actions">
+                            <div class="quick-reply-tools">
+                                <button class="reply-tool-btn" title="Đính kèm tệp">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <button class="reply-tool-btn" title="Emoji">
+                                    <i class="fas fa-smile"></i>
+                                </button>
+                                <button class="reply-tool-btn" title="Định dạng">
+                                    <i class="fas fa-bold"></i>
+                                </button>
+                                <button class="reply-tool-btn" title="Ảnh">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                            </div>
+                            <div class="quick-reply-send">
+                                <button class="cancel-reply-btn" onclick="cancelReply('msg-1')">Hủy</button>
+                                <button class="send-btn" onclick="sendReply('msg-1')">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Gửi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-item unread priority-medium" data-id="msg-2" data-type="work">
+                    <div class="message-status-indicator"></div>
+                    <div class="message-priority-badge medium">TB</div>
+                    <div class="message-avatar">
+                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                    </div>
+                    <div class="message-content" onclick="toggleMessageExpand(this)">
+                        <div class="message-header-info">
+                            <div class="sender-name">Trần Thị B - Chủ nhiệm CLB</div>
+                            <div class="message-time">09:15</div>
+                        </div>
+                        <div class="message-subject">📋 Cập nhật danh sách thành viên CLB</div>
+                        <div class="message-preview message-content-collapsed">
+                            Chào admin, tôi đã cập nhật danh sách thành viên mới của CLB Code King.
+                            Hiện tại có 15 thành viên mới đăng ký tham gia. Tôi đã gửi kèm danh sách chi tiết...
+                        </div>
+                        <button class="message-expand-btn">
+                            <span>Xem thêm</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="message-meta">
+                            <span class="attachment-indicator">
+                                <i class="fas fa-paperclip"></i> 1 tệp đính kèm
+                            </span>
+                        </div>
+                        <div class="message-attachments">
+                            <div class="attachment-item" onclick="downloadAttachment('members.xlsx')">
+                                <i class="fas fa-file-excel attachment-icon"></i>
+                                <span>Danh sách thành viên mới.xlsx</span>
+                                <small>(1.5 MB)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-actions">
+                        <button class="btn-quick-action primary" title="Trả lời" onclick="replyToMessage('msg-2')">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button class="btn-quick-action success" title="Lưu trữ" onclick="archiveMessage('msg-2')">
+                            <i class="fas fa-archive"></i>
+                        </button>
+                        <button class="btn-quick-action info" title="Chuyển tiếp" onclick="forwardMessage('msg-2')">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="message-item priority-low" data-id="msg-3" data-type="info">
+                    <div class="message-priority-badge low">TT</div>
+                    <div class="message-avatar">
+                        <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                    </div>
+                    <div class="message-content" onclick="toggleMessageExpand(this)">
+                        <div class="message-header-info">
+                            <div class="sender-name">Lê Văn C - Thành viên</div>
+                            <div class="message-time">Hôm qua</div>
+                        </div>
+                        <div class="message-subject">🔧 Báo cáo sự cố hệ thống</div>
+                        <div class="message-preview message-content-collapsed">
+                            Admin ơi, có một số lỗi nhỏ trong hệ thống chấm công, anh check giúp em với.
+                            Cụ thể là khi em chấm công thì có lúc không hiển thị thông báo thành công...
+                        </div>
+                        <button class="message-expand-btn">
+                            <span>Xem thêm</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="message-actions">
+                        <button class="btn-quick-action primary" title="Trả lời" onclick="replyToMessage('msg-3')">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button class="btn-quick-action success" title="Đánh dấu đã giải quyết"
+                            onclick="markResolved('msg-3')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="message-item system-message" data-id="msg-4" data-type="system">
+                    <div class="message-avatar">
+                        <div
+                            style="width: 2.5rem; height: 2.5rem; background: var(--info); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-cog" style="color: white;"></i>
+                        </div>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header-info">
+                            <div class="sender-name">🤖 Hệ thống</div>
+                            <div class="message-time">2 giờ trước</div>
+                        </div>
+                        <div class="message-subject">Báo cáo tự động - Backup hoàn tất</div>
+                        <div class="message-preview">
+                            Quá trình sao lưu dữ liệu đã hoàn tất thành công vào lúc 08:00 ngày 29/08/2025.
+                            Tổng dung lượng: 2.8 GB. Không có lỗi nào được phát hiện.
+                        </div>
+                        <div class="message-meta">
+                            <span class="message-type-badge system">Hệ thống</span>
+                        </div>
+                    </div>
+                    <div class="message-actions">
+                        <button class="btn-quick-action success" title="Lưu trữ" onclick="archiveMessage('msg-4')">
+                            <i class="fas fa-archive"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-footer">
+                <div class="message-footer-stats">
+                    <span>Hiển thị 4/24 tin nhắn</span>
+                </div>
+                <a href="#" class="view-all-messages">Xem tất cả tin nhắn</a>
+            </div>
+        </div>
+
+        <!-- Enhanced Quick Settings Panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-header">
+                <div class="panel-title">
+                    <i class="fas fa-cog"></i>
+                    <h3>Cài đặt nhanh</h3>
+                </div>
+                <div class="panel-actions">
+                    <button class="action-btn-small" title="Cài đặt nâng cao">
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
+                    <button class="settings-close" onclick="closeSettingsPanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="settings-content">
+                <!-- Appearance Settings -->
+                <div class="settings-section">
+                    <div class="section-title">
+                        <i class="fas fa-palette"></i>
+                        Giao diện
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Chế độ tối</div>
+                            <div class="setting-description">Chuyển đổi giữa chế độ sáng và tối</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Thu gọn sidebar</div>
+                            <div class="setting-description">Tự động thu gọn sidebar khi không sử dụng</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoCollapseSidebar">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Hiệu ứng animation</div>
+                            <div class="setting-description">Bật/tắt các hiệu ứng chuyển động</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="animationsEnabled" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="settings-section">
+                    <div class="section-title">
+                        <i class="fas fa-bell"></i>
+                        Thông báo
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Thông báo desktop</div>
+                            <div class="setting-description">Hiển thị thông báo trên desktop</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="desktopNotifications" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Âm thanh thông báo</div>
+                            <div class="setting-description">Phát âm thanh khi có thông báo mới</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notificationSounds">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Tần suất kiểm tra</div>
+                            <div class="setting-description">Thời gian kiểm tra thông báo mới</div>
+                        </div>
+                        <div class="setting-control">
+                            <select id="notificationFrequency" class="setting-select">
+                                <option value="30">30 giây</option>
+                                <option value="60" selected>1 phút</option>
+                                <option value="300">5 phút</option>
+                                <option value="600">10 phút</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Settings -->
+                <div class="settings-section">
+                    <div class="section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Hiệu năng
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Tự động làm mới</div>
+                            <div class="setting-description">Tự động cập nhật dữ liệu dashboard</div>
+                        </div>
+                        <div class="setting-control">
+                            <select id="autoRefreshInterval" class="setting-select">
+                                <option value="0">Tắt</option>
+                                <option value="30">30 giây</option>
+                                <option value="60" selected>1 phút</option>
+                                <option value="300">5 phút</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-label">Tối ưu hóa dữ liệu</div>
+                            <div class="setting-description">Giảm lượng dữ liệu tải để tăng tốc độ</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dataOptimization">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="settings-section">
+                    <div class="section-title">
+                        <i class="fas fa-bolt"></i>
+                        Thao tác nhanh
+                    </div>
+                    <div class="quick-settings-grid">
+                        <button class="quick-setting-btn" id="clearCacheBtn">
+                            <i class="fas fa-broom"></i>
+                            <span>Xóa cache</span>
+                        </button>
+                        <button class="quick-setting-btn" id="exportSettingsBtn">
+                            <i class="fas fa-download"></i>
+                            <span>Xuất cài đặt</span>
+                        </button>
+                        <button class="quick-setting-btn" id="resetSettingsBtn">
+                            <i class="fas fa-undo"></i>
+                            <span>Khôi phục mặc định</span>
+                        </button>
+                        <button class="quick-setting-btn" id="fullScreenBtn">
+                            <i class="fas fa-expand"></i>
+                            <span>Toàn màn hình</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-footer">
+                <button class="btn-secondary" onclick="closeSettingsPanel()">Hủy</button>
+                <button class="btn-primary" id="saveSettingsBtn">Lưu cài đặt</button>
             </div>
         </div>
     </div>
     </div>
+
+    <!-- Enhanced Compose Message Modal -->
+    <div class="compose-message-modal" id="composeMessageModal">
+        <div class="compose-modal-content">
+            <div class="compose-header">
+                <h3>
+                    <i class="fas fa-edit"></i>
+                    Soạn tin nhắn mới
+                </h3>
+                <button class="compose-close-btn" onclick="closeComposeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="compose-body">
+                <form class="compose-form" id="composeForm">
+                    <div class="form-group">
+                        <label for="composeTo" class="form-label">Gửi đến:</label>
+                        <div style="position: relative;">
+                            <input type="text" id="composeTo" class="form-input"
+                                placeholder="Nhập tên hoặc email người nhận..." autocomplete="off">
+                            <div class="recipient-suggestions" id="recipientSuggestions" style="display: none;">
+                                <div class="suggestion-item"
+                                    onclick="selectRecipient('admin@ctsv.edu.vn', 'Admin User')">
+                                    <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                                    <div>
+                                        <div class="suggestion-name">Admin User</div>
+                                        <div class="suggestion-email">admin@ctsv.edu.vn</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="composeSubject" class="form-label">Chủ đề:</label>
+                        <input type="text" id="composeSubject" class="form-input" placeholder="Nhập chủ đề tin nhắn...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="composePriority" class="form-label">Mức độ ưu tiên:</label>
+                        <select id="composePriority" class="form-input">
+                            <option value="low">Thấp</option>
+                            <option value="medium" selected>Trung bình</option>
+                            <option value="high">Cao</option>
+                            <option value="urgent">Khẩn cấp</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="composeMessage" class="form-label">Nội dung:</label>
+                        <textarea id="composeMessage" class="form-input form-textarea"
+                            placeholder="Nhập nội dung tin nhắn..."></textarea>
+                    </div>
+
+                    <!-- Enhanced Compose Tools -->
+                    <div class="compose-tools">
+                        <button type="button" class="compose-tool" id="attachFileBtn">
+                            <i class="fas fa-paperclip"></i>
+                            Đính kèm
+                        </button>
+                        <button type="button" class="compose-tool" id="addEmojiBtn">
+                            <i class="fas fa-smile"></i>
+                            Emoji
+                        </button>
+                        <button type="button" class="compose-tool" id="formatBoldBtn">
+                            <i class="fas fa-bold"></i>
+                            Đậm
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="compose-actions">
+                <div class="compose-actions-right">
+                    <button type="button" class="btn-compose-secondary" onclick="closeComposeModal()">
+                        Hủy
+                    </button>
+                    <button type="submit" class="btn-compose-primary" id="sendMessageBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Gửi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for attachments -->
+    <input type="file" id="fileInput" multiple style="display: none;">
 
     <!-- Scripts -->
     <script src="dashboard-clean.js"></script>

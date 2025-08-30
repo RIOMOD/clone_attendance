@@ -32,13 +32,13 @@ const App = {
     // Initialize application
     init() {
         console.log('Initializing CTSV Attendance System v' + this.config.version);
-        
+
         this.loadSettings();
         this.loadUser();
         this.bindGlobalEvents();
         this.initializeModules();
         this.setupErrorHandling();
-        
+
         console.log('Application initialized successfully');
     },
 
@@ -50,7 +50,7 @@ const App = {
         } else {
             this.state.settings = { ...this.config };
         }
-        
+
         // Apply theme
         this.applyTheme(this.state.settings.theme);
     },
@@ -58,7 +58,7 @@ const App = {
     // Save user settings
     saveSettings() {
         localStorage.setItem(
-            this.config.localStoragePrefix + 'settings', 
+            this.config.localStoragePrefix + 'settings',
             JSON.stringify(this.state.settings)
         );
     },
@@ -71,10 +71,20 @@ const App = {
             this.updateUserInterface();
         } else {
             // Redirect to login if no user data
-            if (!window.location.pathname.includes('login') && 
+            if (!window.location.pathname.includes('login') &&
                 !window.location.pathname.includes('register')) {
-                // Check if we're already in pages directory
-                const loginPath = window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';
+                // Calculate correct login path based on current location
+                let loginPath;
+                const currentPath = window.location.pathname;
+
+                if (currentPath.includes('/pages/')) {
+                    // We're in a pages subdirectory, go to authen folder
+                    loginPath = '../authen/login-professional.html';
+                } else {
+                    // We're in root, go to pages/authen
+                    loginPath = 'pages/authen/login-professional.html';
+                }
+
                 window.location.href = loginPath;
             }
         }
@@ -84,7 +94,7 @@ const App = {
     saveUser(userData) {
         this.currentUser = userData;
         localStorage.setItem(
-            this.config.localStoragePrefix + 'currentUser', 
+            this.config.localStoragePrefix + 'currentUser',
             JSON.stringify(userData)
         );
         this.updateUserInterface();
@@ -132,7 +142,7 @@ const App = {
     // Get user initials
     getUserInitials() {
         if (!this.currentUser) return '';
-        
+
         const name = this.currentUser.fullName || this.currentUser.email;
         const words = name.split(' ');
         if (words.length >= 2) {
@@ -155,7 +165,7 @@ const App = {
     // Apply theme
     applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        
+
         // Update theme toggle buttons
         const themeToggles = document.querySelectorAll('.theme-toggle');
         themeToggles.forEach(toggle => {
@@ -170,11 +180,11 @@ const App = {
     toggleTheme() {
         const currentTheme = this.state.settings.theme;
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
+
         this.state.settings.theme = newTheme;
         this.applyTheme(newTheme);
         this.saveSettings();
-        
+
         this.showNotification('Đã chuyển sang chủ đề ' + (newTheme === 'dark' ? 'tối' : 'sáng'));
     },
 
@@ -305,7 +315,7 @@ const App = {
     toggleSidebar() {
         this.state.sidebarCollapsed = !this.state.sidebarCollapsed;
         document.body.classList.toggle('sidebar-collapsed', this.state.sidebarCollapsed);
-        
+
         // Save preference
         localStorage.setItem(
             this.config.localStoragePrefix + 'sidebarCollapsed',
@@ -326,9 +336,9 @@ const App = {
 
         // Create notification element
         const notificationEl = this.createNotificationElement(notification);
-        const container = document.querySelector('.notification-container') || 
-                         this.createNotificationContainer();
-        
+        const container = document.querySelector('.notification-container') ||
+            this.createNotificationContainer();
+
         container.appendChild(notificationEl);
 
         // Auto-remove after duration
@@ -346,7 +356,7 @@ const App = {
         const div = document.createElement('div');
         div.className = `notification notification-${notification.type}`;
         div.dataset.id = notification.id;
-        
+
         const iconMap = {
             success: 'fa-check-circle',
             error: 'fa-exclamation-circle',
@@ -407,12 +417,12 @@ const App = {
         try {
             // Save current state
             this.saveSettings();
-            
+
             // Trigger auto-save in modules
             if (typeof TaskManager !== 'undefined') {
                 TaskManager.autoSave();
             }
-            
+
             if (typeof Calendar !== 'undefined') {
                 Calendar.autoSave();
             }
@@ -444,7 +454,7 @@ const App = {
         if (typeof Dashboard !== 'undefined') {
             Dashboard.refresh();
         }
-        
+
         if (typeof TaskManager !== 'undefined') {
             TaskManager.refresh();
         }
@@ -475,8 +485,18 @@ const App = {
 
         // Redirect to login page
         setTimeout(() => {
-            // Check if we're already in pages directory
-            const loginPath = window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';
+            // Calculate correct login path based on current location
+            let loginPath;
+            const currentPath = window.location.pathname;
+
+            if (currentPath.includes('/pages/')) {
+                // We're in a pages subdirectory, go to authen folder
+                loginPath = '../authen/login-professional.html';
+            } else {
+                // We're in root, go to pages/authen
+                loginPath = 'pages/authen/login-professional.html';
+            }
+
             window.location.href = loginPath;
         }, 1000);
     },
@@ -484,10 +504,10 @@ const App = {
     // Utility functions
     formatDate(date, format = null) {
         if (!date) return '';
-        
+
         const d = new Date(date);
         const fmt = format || this.state.settings.dateFormat;
-        
+
         if (fmt === 'DD/MM/YYYY') {
             return d.toLocaleDateString('vi-VN');
         } else if (fmt === 'MM/DD/YYYY') {
@@ -495,29 +515,29 @@ const App = {
         } else if (fmt === 'YYYY-MM-DD') {
             return d.toISOString().split('T')[0];
         }
-        
+
         return d.toLocaleDateString();
     },
 
     formatTime(date, format = null) {
         if (!date) return '';
-        
+
         const d = new Date(date);
         const fmt = format || this.state.settings.timeFormat;
-        
+
         if (fmt === 'HH:mm') {
-            return d.toLocaleTimeString('vi-VN', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
+            return d.toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit'
             });
         } else if (fmt === 'hh:mm A') {
-            return d.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
+            return d.toLocaleTimeString('en-US', {
+                hour: '2-digit',
                 minute: '2-digit',
-                hour12: true 
+                hour12: true
             });
         }
-        
+
         return d.toLocaleTimeString();
     },
 

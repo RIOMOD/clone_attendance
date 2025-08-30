@@ -234,3 +234,27 @@ public/pages/dashboard/dashboard.html
 
 ---
 
+# Log phát triển ngày 2025-08-29 20:03:49
+## Commit mới nhất:
+- 1a68401 lan2_28.5.2025 (RIOMOD)\n## Files thay đổi:
+docs/phattrien/log-phattrien-2025-08-29.md
+public/pages/CLB/clb-dashboard-sync.css
+public/pages/CLB/clb-modern-new.js
+public/pages/CLB/clb-modern.css
+public/pages/CLB/clb-modern.js
+public/pages/CLB/club-events-enhanced.css
+public/pages/CLB/club-events-manager.js
+public/pages/CLB/club-events.html
+public/pages/CLB/club-members-enhanced.css
+public/pages/CLB/club-members-enhanced.js
+public/pages/CLB/club-members.html
+public/pages/CLB/club-organizers-enhanced.css
+public/pages/CLB/club-organizers-manager.js
+public/pages/CLB/clubs-list-enhanced.css
+public/pages/CLB/clubs-list-manager.js
+public/pages/CLB/index.html
+public/pages/dashboard/dashboard-modern.css
+public/pages/dashboard/dashboard.html
+
+---
+
