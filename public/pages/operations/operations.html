@@ -9,8 +9,9 @@
     <meta name="description" content="Trang vận hành và quản lý hệ thống chấm công sinh viên CTSV">
     <link rel="icon" type="image/x-icon" href="../../assets/images/imageCLB/LOGO_CODEKING/LOGO CODEKING.png">
 
-    <!-- Modern Operations Stylesheet -->
-    <link rel="stylesheet" href="operations.css">
+    <!-- Modern Light Mode Stylesheets -->
+    <link rel="stylesheet" href="../dashboard/dashboard-modern.css">
+    <link rel="stylesheet" href="operations-enhanced.css">
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,6 +21,9 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Dashboard Light Mode JavaScript -->
+    <script src="../dashboard/dashboard-lightmode.js" defer></script>
 </head>
 
 <body>
@@ -30,15 +34,15 @@
                 <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="logo">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>CTSV Dashboard</span>
+                <div class="logo" id="dashboardLogo" style="cursor:pointer;">
+                    <i class="fas fa-cogs"></i>
+                    <span>Operations Dashboard</span>
                 </div>
             </div>
 
             <div class="header-center">
                 <div class="search-box">
-                    <input type="text" id="globalSearch" placeholder="Tìm kiếm sinh viên, CLB, sự kiện..."
+                    <input type="text" id="globalSearch" placeholder="Tìm kiếm nhiệm vụ, phòng ban..."
                         autocomplete="off">
                     <button type="button" id="searchBtn" title="Tìm kiếm">
                         <i class="fas fa-search"></i>
@@ -64,13 +68,13 @@
                     <!-- Notifications -->
                     <button class="action-btn" id="notificationBtn" title="Thông báo">
                         <i class="fas fa-bell"></i>
-                        <span class="badge" id="notificationBadge">5</span>
+                        <span class="badge" id="notificationBadge">3</span>
                     </button>
 
                     <!-- Messages -->
                     <button class="action-btn" id="messageBtn" title="Tin nhắn">
                         <i class="fas fa-comment"></i>
-                        <span class="badge" id="messageBadge">3</span>
+                        <span class="badge" id="messageBadge">2</span>
                     </button>
 
                     <!-- Settings -->
@@ -144,16 +148,9 @@
                     </div>
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="../../index.html" class="nav-link">
+                            <a href="../dashboard/dashboard.html" class="nav-link">
                                 <i class="fas fa-home"></i>
                                 <span class="nav-text">Trang chủ</span>
-                                <i class="fas fa-angle-right nav-arrow"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../dashboard/dashboard.html" class="nav-link">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span class="nav-text">Dashboard</span>
                                 <i class="fas fa-angle-right nav-arrow"></i>
                             </a>
                         </li>
@@ -262,8 +259,7 @@
         </aside>
 
         <div class="dashboard-main">
-
-            <!-- Enhanced Content -->
+            <!-- Main Content -->
             <main class="content">
                 <div class="page-header">
                     <h1><i class="fas fa-cogs"></i> Vận hành hệ thống</h1>
@@ -279,7 +275,6 @@
                                 <option value="week" selected>Tuần này</option>
                                 <option value="month">Tháng này</option>
                                 <option value="quarter">Quý này</option>
-                                <option value="year">Năm này</option>
                             </select>
                         </div>
                     </div>
@@ -299,7 +294,7 @@
                     </div>
                 </div>
 
-                <!-- Enhanced Stats Section -->
+                <!-- Stats Section -->
                 <div class="dashboard-stats">
                     <div class="stat-card primary" data-stat="ctsvMembers">
                         <div class="stat-icon">
@@ -334,7 +329,7 @@
                             <i class="fas fa-tasks"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>12</h3>
+                            <h3>3</h3>
                             <p>Nhiệm vụ đang chờ</p>
                         </div>
                         <div class="stat-trend stable">
@@ -348,7 +343,7 @@
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>3</h3>
+                            <h3>2</h3>
                             <p>Cảnh báo hệ thống</p>
                         </div>
                         <div class="stat-trend down">
@@ -358,77 +353,57 @@
                     </div>
                 </div>
 
-                <!-- Main Content Grid -->
-                <div class="operations-grid">
+                <!-- Main Dashboard Charts -->
+                <div class="dashboard-charts">
                     <!-- Left Column -->
                     <div class="left-column">
                         <!-- Department Management -->
-                        <div class="operations-card">
-                            <div class="card-header">
-                                <h3><i class="fas fa-sitemap"></i> Quản lý phòng ban</h3>
-                                <div class="card-actions">
-                                    <button class="btn-icon" title="Thêm phòng ban">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <button class="btn-icon" title="Cài đặt">
-                                        <i class="fas fa-cog"></i>
-                                    </button>
-                                </div>
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-building"></i> Quản lý phòng ban</h3>
+                                <button class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus"></i> Thêm
+                                </button>
                             </div>
                             <div class="department-list">
-                                <div class="department-item active">
-                                    <div class="dept-info">
-                                        <div class="dept-icon ctsv">
-                                            <i class="fas fa-building"></i>
-                                        </div>
-                                        <div class="dept-details">
-                                            <h4>CTSV</h4>
-                                            <p>Công tác sinh viên</p>
-                                            <small>45 thành viên</small>
-                                        </div>
+                                <div class="department-item active" data-dept="ctsv">
+                                    <div class="dept-icon ctsv">
+                                        <i class="fas fa-graduation-cap"></i>
                                     </div>
-                                    <div class="dept-stats">
-                                        <span class="attendance-rate high">98%</span>
-                                        <div class="dept-actions">
-                                            <button class="btn-sm primary">Quản lý</button>
+                                    <div class="dept-info">
+                                        <h4>CTSV</h4>
+                                        <p>Công tác sinh viên</p>
+                                        <div class="dept-meta">
+                                            <span class="members">45 thành viên</span>
+                                            <span class="rate success">98%</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="department-item">
-                                    <div class="dept-info">
-                                        <div class="dept-icon ctv">
-                                            <i class="fas fa-users"></i>
-                                        </div>
-                                        <div class="dept-details">
-                                            <h4>CTV</h4>
-                                            <p>Cộng tác viên</p>
-                                            <small>128 thành viên</small>
-                                        </div>
+                                <div class="department-item" data-dept="ctv">
+                                    <div class="dept-icon ctv">
+                                        <i class="fas fa-users"></i>
                                     </div>
-                                    <div class="dept-stats">
-                                        <span class="attendance-rate medium">85%</span>
-                                        <div class="dept-actions">
-                                            <button class="btn-sm secondary">Quản lý</button>
+                                    <div class="dept-info">
+                                        <h4>CTV</h4>
+                                        <p>Cộng tác viên</p>
+                                        <div class="dept-meta">
+                                            <span class="members">128 thành viên</span>
+                                            <span class="rate warning">85%</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="department-item">
-                                    <div class="dept-info">
-                                        <div class="dept-icon support">
-                                            <i class="fas fa-headset"></i>
-                                        </div>
-                                        <div class="dept-details">
-                                            <h4>Hỗ trợ kỹ thuật</h4>
-                                            <p>Technical Support</p>
-                                            <small>12 thành viên</small>
-                                        </div>
+                                <div class="department-item" data-dept="support">
+                                    <div class="dept-icon support">
+                                        <i class="fas fa-tools"></i>
                                     </div>
-                                    <div class="dept-stats">
-                                        <span class="attendance-rate high">96%</span>
-                                        <div class="dept-actions">
-                                            <button class="btn-sm info">Quản lý</button>
+                                    <div class="dept-info">
+                                        <h4>Hỗ trợ kỹ thuật</h4>
+                                        <p>Technical Support</p>
+                                        <div class="dept-meta">
+                                            <span class="members">12 thành viên</span>
+                                            <span class="rate success">96%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -436,82 +411,34 @@
                         </div>
 
                         <!-- Task Management -->
-                        <div class="operations-card">
-                            <div class="card-header">
+                        <div class="section-card">
+                            <div class="section-header">
                                 <h3><i class="fas fa-tasks"></i> Quản lý nhiệm vụ</h3>
-                                <div class="task-tabs">
-                                    <button class="tab-btn active" data-tab="pending">Đang thực hiện</button>
-                                    <button class="tab-btn" data-tab="completed">Hoàn thành</button>
-                                    <button class="tab-btn" data-tab="overdue">Quá hạn</button>
+                                <div class="task-stats">
+                                    <span class="task-count">3 nhiệm vụ</span>
                                 </div>
                             </div>
                             <div class="task-content">
-                                <div class="task-list" id="pendingTasks">
-                                    <div class="task-item high-priority">
-                                        <div class="task-checkbox">
-                                            <input type="checkbox" id="task1">
-                                            <label for="task1"></label>
-                                        </div>
-                                        <div class="task-info">
-                                            <h4>Cập nhật hệ thống chấm công</h4>
-                                            <p>Nâng cấp tính năng báo cáo và thống kê</p>
-                                            <div class="task-meta">
-                                                <span class="task-assignee">
-                                                    <i class="fas fa-user"></i> Nguyễn Văn A
-                                                </span>
-                                                <span class="task-deadline">
-                                                    <i class="fas fa-clock"></i> 2 ngày
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="task-priority high">
-                                            <span>Cao</span>
-                                        </div>
-                                    </div>
+                                <div class="task-tabs">
+                                    <button class="tab-btn active" data-tab="pending">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Đang chờ</span>
+                                        <span class="tab-count">3</span>
+                                    </button>
+                                    <button class="tab-btn" data-tab="completed">
+                                        <i class="fas fa-check"></i>
+                                        <span>Hoàn thành</span>
+                                        <span class="tab-count">1</span>
+                                    </button>
+                                    <button class="tab-btn" data-tab="overdue">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Quá hạn</span>
+                                        <span class="tab-count">1</span>
+                                    </button>
+                                </div>
 
-                                    <div class="task-item medium-priority">
-                                        <div class="task-checkbox">
-                                            <input type="checkbox" id="task2">
-                                            <label for="task2"></label>
-                                        </div>
-                                        <div class="task-info">
-                                            <h4>Đào tạo CTV mới</h4>
-                                            <p>Tổ chức khóa đào tạo cho 15 CTV mới</p>
-                                            <div class="task-meta">
-                                                <span class="task-assignee">
-                                                    <i class="fas fa-user"></i> Trần Thị B
-                                                </span>
-                                                <span class="task-deadline">
-                                                    <i class="fas fa-clock"></i> 5 ngày
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="task-priority medium">
-                                            <span>Trung bình</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="task-item low-priority">
-                                        <div class="task-checkbox">
-                                            <input type="checkbox" id="task3">
-                                            <label for="task3"></label>
-                                        </div>
-                                        <div class="task-info">
-                                            <h4>Kiểm tra thiết bị</h4>
-                                            <p>Bảo trì máy chấm công tại các điểm</p>
-                                            <div class="task-meta">
-                                                <span class="task-assignee">
-                                                    <i class="fas fa-user"></i> Lê Văn C
-                                                </span>
-                                                <span class="task-deadline">
-                                                    <i class="fas fa-clock"></i> 1 tuần
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="task-priority low">
-                                            <span>Thấp</span>
-                                        </div>
-                                    </div>
+                                <div class="task-list">
+                                    <!-- Tasks will be populated by JavaScript -->
                                 </div>
                             </div>
                         </div>
@@ -520,108 +447,100 @@
                     <!-- Right Column -->
                     <div class="right-column">
                         <!-- Performance Chart -->
-                        <div class="operations-card">
-                            <div class="card-header">
-                                <h3><i class="fas fa-chart-area"></i> Hiệu suất làm việc</h3>
-                                <div class="chart-period">
-                                    <select id="chartPeriod">
-                                        <option value="week">Tuần này</option>
-                                        <option value="month" selected>Tháng này</option>
-                                        <option value="quarter">Quý này</option>
-                                    </select>
-                                </div>
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3><i class="fas fa-chart-line"></i> Hiệu suất làm việc</h3>
+                                <select id="chartPeriod" class="form-select">
+                                    <option value="week">Tuần này</option>
+                                    <option value="month">Tháng này</option>
+                                    <option value="quarter">Quý này</option>
+                                </select>
                             </div>
                             <div class="chart-container">
                                 <canvas id="performanceChart"></canvas>
                             </div>
                             <div class="chart-legend">
                                 <div class="legend-item">
-                                    <span class="legend-color ctsv"></span>
-                                    <span>CTSV</span>
+                                    <div class="legend-color ctsv"></div>
+                                    <span>CTSV (98%)</span>
                                 </div>
                                 <div class="legend-item">
-                                    <span class="legend-color ctv"></span>
-                                    <span>CTV</span>
+                                    <div class="legend-color ctv"></div>
+                                    <span>CTV (85%)</span>
                                 </div>
                                 <div class="legend-item">
-                                    <span class="legend-color support"></span>
-                                    <span>Hỗ trợ</span>
+                                    <div class="legend-color support"></div>
+                                    <span>Hỗ trợ (96%)</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Recent Activities -->
-                        <div class="operations-card">
-                            <div class="card-header">
+                        <div class="section-card">
+                            <div class="section-header">
                                 <h3><i class="fas fa-history"></i> Hoạt động gần đây</h3>
-                                <button class="btn-text">Xem tất cả</button>
+                                <button class="btn btn-sm btn-outline">
+                                    <i class="fas fa-eye"></i> Xem tất cả
+                                </button>
                             </div>
                             <div class="activity-timeline">
                                 <div class="activity-item">
-                                    <div class="activity-time">10:30</div>
+                                    <div class="activity-time">14:30</div>
                                     <div class="activity-icon success">
                                         <i class="fas fa-check"></i>
                                     </div>
                                     <div class="activity-content">
                                         <h4>Nhiệm vụ hoàn thành</h4>
-                                        <p>Nguyễn Văn A đã hoàn thành cập nhật báo cáo tuần</p>
+                                        <p>Cập nhật hệ thống chấm công đã được hoàn thành</p>
                                     </div>
                                 </div>
 
                                 <div class="activity-item">
-                                    <div class="activity-time">09:15</div>
+                                    <div class="activity-time">13:15</div>
                                     <div class="activity-icon info">
                                         <i class="fas fa-user-plus"></i>
                                     </div>
                                     <div class="activity-content">
-                                        <h4>CTV mới tham gia</h4>
-                                        <p>Trần Thị D đã được thêm vào nhóm CTV phòng CTSV</p>
+                                        <h4>Thành viên mới</h4>
+                                        <p>Nguyễn Văn A đã tham gia vào phòng ban CTSV</p>
                                     </div>
                                 </div>
 
                                 <div class="activity-item">
-                                    <div class="activity-time">08:45</div>
+                                    <div class="activity-time">12:00</div>
                                     <div class="activity-icon warning">
                                         <i class="fas fa-exclamation-triangle"></i>
                                     </div>
                                     <div class="activity-content">
-                                        <h4>Cảnh báo deadline</h4>
-                                        <p>3 nhiệm vụ sắp hết hạn trong ngày hôm nay</p>
-                                    </div>
-                                </div>
-
-                                <div class="activity-item">
-                                    <div class="activity-time">07:30</div>
-                                    <div class="activity-icon primary">
-                                        <i class="fas fa-calendar-plus"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h4>Lịch họp mới</h4>
-                                        <p>Cuộc họp đánh giá hiệu suất được lên lịch</p>
+                                        <h4>Cảnh báo hệ thống</h4>
+                                        <p>Dung lượng lưu trữ đang gần đầy (85%)</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Quick Actions -->
-                        <div class="operations-card">
-                            <div class="card-header">
+                        <div class="section-card">
+                            <div class="section-header">
                                 <h3><i class="fas fa-bolt"></i> Thao tác nhanh</h3>
                             </div>
                             <div class="quick-actions-grid">
-                                <button class="quick-action-btn primary">
+                                <button class="quick-action-btn">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Thêm nhân viên</span>
                                 </button>
-                                <button class="quick-action-btn success">
+
+                                <button class="quick-action-btn">
                                     <i class="fas fa-tasks"></i>
                                     <span>Tạo nhiệm vụ</span>
                                 </button>
-                                <button class="quick-action-btn info">
+
+                                <button class="quick-action-btn">
                                     <i class="fas fa-chart-bar"></i>
-                                    <span>Xem báo cáo</span>
+                                    <span>Tạo báo cáo</span>
                                 </button>
-                                <button class="quick-action-btn warning">
+
+                                <button class="quick-action-btn">
                                     <i class="fas fa-cog"></i>
                                     <span>Cài đặt hệ thống</span>
                                 </button>
@@ -645,13 +564,15 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="taskTitle">Tiêu đề nhiệm vụ</label>
-                            <input type="text" id="taskTitle" name="taskTitle" required>
+                            <input type="text" id="taskTitle" name="taskTitle" required
+                                placeholder="Nhập tiêu đề nhiệm vụ">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="taskDescription">Mô tả</label>
-                            <textarea id="taskDescription" name="taskDescription" rows="3"></textarea>
+                            <textarea id="taskDescription" name="taskDescription" rows="3"
+                                placeholder="Mô tả chi tiết nhiệm vụ"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
@@ -659,17 +580,18 @@
                             <label for="taskAssignee">Phân công cho</label>
                             <select id="taskAssignee" name="taskAssignee" required>
                                 <option value="">Chọn người thực hiện</option>
-                                <option value="user1">Nguyễn Văn A</option>
-                                <option value="user2">Trần Thị B</option>
-                                <option value="user3">Lê Văn C</option>
+                                <option value="Nguyễn Văn A">Nguyễn Văn A</option>
+                                <option value="Trần Thị B">Trần Thị B</option>
+                                <option value="Lê Văn C">Lê Văn C</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="taskPriority">Độ ưu tiên</label>
                             <select id="taskPriority" name="taskPriority" required>
-                                <option value="low">Thấp</option>
-                                <option value="medium" selected>Trung bình</option>
+                                <option value="">Chọn độ ưu tiên</option>
                                 <option value="high">Cao</option>
+                                <option value="medium">Trung bình</option>
+                                <option value="low">Thấp</option>
                             </select>
                         </div>
                     </div>
@@ -697,40 +619,265 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="operations.js"></script>
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-container" style="display: none;">
+        <div class="spinner-content">
+            <div class="spinner"></div>
+            <p>Đang tải dữ liệu...</p>
+        </div>
+    </div>
+
+    <!-- Enhanced Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <div class="panel-title">
+                <i class="fas fa-bell"></i>
+                <h3>Thông báo</h3>
+                <span class="notification-count">3</span>
+            </div>
+            <div class="panel-actions">
+                <button class="action-btn-small" id="markAllReadBtn" title="Đánh dấu tất cả đã đọc">
+                    <i class="fas fa-check-double"></i>
+                </button>
+                <button class="action-btn-small" id="clearAllNotificationsBtn" title="Xóa tất cả">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="notification-close" onclick="closeNotificationPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Notification Filters -->
+        <div class="notification-filters">
+            <button class="filter-btn active" data-filter="all">Tất cả</button>
+            <button class="filter-btn" data-filter="unread">Chưa đọc</button>
+            <button class="filter-btn" data-filter="important">Quan trọng</button>
+            <button class="filter-btn" data-filter="system">Hệ thống</button>
+        </div>
+
+        <div class="notification-list">
+            <div class="notification-item unread important" data-type="task">
+                <div class="notification-item-icon info">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="notification-item-content">
+                    <div class="notification-item-title">Nhiệm vụ quan trọng được tạo</div>
+                    <div class="notification-item-message">Nhiệm vụ "Cập nhật hệ thống chấm công" đã được tạo và cần phê
+                        duyệt ngay.</div>
+                    <div class="notification-item-time">
+                        <i class="fas fa-clock"></i>
+                        2 phút trước
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-quick-action success" title="Phê duyệt">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn-quick-action primary" title="Xem chi tiết">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="notification-item unread" data-type="system">
+                <div class="notification-item-icon warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="notification-item-content">
+                    <div class="notification-item-title">Cảnh báo hệ thống</div>
+                    <div class="notification-item-message">Có 2 cảnh báo hệ thống cần được xử lý.</div>
+                    <div class="notification-item-time">
+                        <i class="fas fa-clock"></i>
+                        15 phút trước
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-quick-action warning" title="Xử lý ngay">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="notification-item" data-type="department">
+                <div class="notification-item-icon info">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="notification-item-content">
+                    <div class="notification-item-title">Cập nhật phòng ban</div>
+                    <div class="notification-item-message">CTSV có 5 thành viên mới được thêm vào hệ thống.</div>
+                    <div class="notification-item-time">
+                        <i class="fas fa-clock"></i>
+                        1 giờ trước
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-quick-action primary" title="Xem danh sách">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="notification-footer">
+            <a href="#" class="view-all-notifications">Xem tất cả thông báo</a>
+        </div>
+    </div>
+
+    <!-- Enhanced Message Panel -->
+    <div class="message-panel" id="messagePanel">
+        <div class="message-header">
+            <div class="panel-title">
+                <i class="fas fa-comment"></i>
+                <h3>Tin nhắn</h3>
+                <span class="message-count">2</span>
+            </div>
+            <div class="panel-actions">
+                <button class="action-btn-small" id="composeMessageBtn" title="Soạn tin nhắn mới">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn-small" id="markAllReadMessagesBtn" title="Đánh dấu tất cả đã đọc">
+                    <i class="fas fa-check-double"></i>
+                </button>
+                <button class="message-close" onclick="closeMessagePanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="message-list">
+            <div class="message-item unread priority-high" data-id="msg-1">
+                <div class="message-avatar">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                </div>
+                <div class="message-content">
+                    <div class="message-header-info">
+                        <div class="sender-name">Trưởng phòng CTSV</div>
+                        <div class="message-time">10:30</div>
+                    </div>
+                    <div class="message-subject">Báo cáo vận hành tháng 8</div>
+                    <div class="message-preview">
+                        Cần báo cáo chi tiết về hoạt động vận hành hệ thống trong tháng 8...
+                    </div>
+                </div>
+                <div class="message-actions">
+                    <button class="btn-quick-action primary" title="Trả lời">
+                        <i class="fas fa-reply"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="message-item unread" data-id="msg-2">
+                <div class="message-avatar">
+                    <img src="../../assets/images/avata/avata_admin.jpg" alt="Avatar">
+                </div>
+                <div class="message-content">
+                    <div class="message-header-info">
+                        <div class="sender-name">IT Support</div>
+                        <div class="message-time">09:15</div>
+                    </div>
+                    <div class="message-subject">Cập nhật hệ thống</div>
+                    <div class="message-preview">
+                        Hệ thống sẽ được cập nhật vào cuối tuần, chuẩn bị kế hoạch backup...
+                    </div>
+                </div>
+                <div class="message-actions">
+                    <button class="btn-quick-action primary" title="Trả lời">
+                        <i class="fas fa-reply"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="message-footer">
+            <a href="#" class="view-all-messages">Xem tất cả tin nhắn</a>
+        </div>
+    </div>
+
+    <!-- Enhanced Quick Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <div class="panel-title">
+                <i class="fas fa-cog"></i>
+                <h3>Cài đặt nhanh</h3>
+            </div>
+            <div class="panel-actions">
+                <button class="settings-close" onclick="closeSettingsPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="settings-content">
+            <div class="settings-section">
+                <div class="section-title">
+                    <i class="fas fa-palette"></i>
+                    Giao diện
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Chế độ tối</div>
+                        <div class="setting-description">Chuyển đổi giữa chế độ sáng và tối</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">
+                    <i class="fas fa-bell"></i>
+                    Thông báo
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Thông báo desktop</div>
+                        <div class="setting-description">Hiển thị thông báo trên desktop</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="desktopNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-footer">
+            <button class="btn-secondary" onclick="closeSettingsPanel()">Hủy</button>
+            <button class="btn-primary" id="saveSettingsBtn">Lưu cài đặt</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../../assets/js/sidebar-modern.js"></script>
+    <script src="../../assets/js/navigation-enhanced.js"></script>
+
+    <script src="../dashboard/dashboard-clean.js"></script>
+    <script src="../dashboard/dashboard-lightmode.js"></script>
+    <script src="operations-enhanced.js"></script>
+
     <script>
+        // Cuộn lên đầu trang khi click vào logo
         document.addEventListener('DOMContentLoaded', function () {
-            // Đảm bảo tất cả modal được ẩn khi tải trang
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.style.display = 'none';
-                modal.classList.remove('active');
-            });
-
-            // Initialize operations manager
-            if (typeof OperationsManager !== 'undefined') {
-                const operations = new OperationsManager();
-                operations.init();
+            var logo = document.getElementById('dashboardLogo');
+            if (logo) {
+                logo.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
             }
-
-            // Helper functions
-            window.openSettingsModal = function () {
-                console.log('Opening settings modal...');
-            };
-
-            window.openHelpModal = function () {
-                console.log('Opening help modal...');
-            };
-
-            window.closeModal = function (modalId) {
-                const modal = document.getElementById(modalId);
-                if (modal) {
-                    modal.style.display = 'none';
-                    modal.classList.remove('active');
-                }
-            };
         });
     </script>
+
 </body>
 
 </html>
